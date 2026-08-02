@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Console - Traktor Pro 3 Layout</title>
+  <title>YouTube DJ Console - Pro Traktor Deck Layout</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -24,10 +24,6 @@
       --orange-main: #f97316;
       --orange-gradient: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
       --orange-border: rgba(249, 115, 22, 0.35);
-
-      /* SYNC: Traktor Bright Green */
-      --green-sync: #22c55e;
-      --green-gradient: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
 
       /* Hot Cue Colors */
       --cue-1: #ef4444;
@@ -513,7 +509,7 @@
 
     .btn-tap:active, .btn-tap.tapped { transform: scale(0.95); }
 
-    /* Traktor Bottom Transport & Hot Cues Row (Tight 32px - 36px Height) */
+    /* Traktor Bottom Transport & Hot Cues Row (Tight 32px Height) */
     .bottom-transport-strip {
       display: flex;
       align-items: center;
@@ -531,7 +527,7 @@
 
     .btn-traktor {
       height: 32px;
-      padding: 0 0.6rem;
+      padding: 0 0.65rem;
       border-radius: 3px;
       font-family: inherit;
       font-size: 0.78rem;
@@ -551,7 +547,6 @@
     .btn-play.playing { background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%); }
 
     .btn-cue { background: linear-gradient(180deg, #eab308 0%, #ca8a04 100%); color: #000; }
-    .btn-sync { background: var(--green-gradient); color: #000; }
 
     .btn-traktor:hover { filter: brightness(1.15); }
     .btn-traktor:active { transform: scale(0.96); }
@@ -986,12 +981,11 @@
             </div>
           </div>
 
-          <!-- Bottom Transport Strip: PLAY, CUE, SYNC & 4 Hot Cues in a Tight Row -->
+          <!-- Bottom Transport Strip: PLAY (W), CUE (Q) & 4 Hot Cues in a Tight Row -->
           <div class="bottom-transport-strip">
             <div class="transport-btn-group">
-              <button id="btnPlayA" class="btn-traktor btn-play" title="Play / Pause">▶ PLAY</button>
-              <button id="btnCueA" class="btn-traktor btn-cue" title="Master Cue">CUE</button>
-              <button id="btnSyncA" class="btn-traktor btn-sync" title="Sync BPM to Deck B">SYNC</button>
+              <button id="btnPlayA" class="btn-traktor btn-play" title="Play / Pause Toggle (Key: W)">▶ PLAY (W)</button>
+              <button id="btnCueA" class="btn-traktor btn-cue" title="Master Cue / Hold Preview (Key: Q)">CUE (Q)</button>
             </div>
 
             <div class="traktor-divider"></div>
@@ -1121,12 +1115,11 @@
             </div>
           </div>
 
-          <!-- Bottom Transport Strip: PLAY, CUE, SYNC & 4 Hot Cues in a Tight Row -->
+          <!-- Bottom Transport Strip: PLAY (P), CUE (O) & 4 Hot Cues in a Tight Row -->
           <div class="bottom-transport-strip">
             <div class="transport-btn-group">
-              <button id="btnPlayB" class="btn-traktor btn-play" title="Play / Pause">▶ PLAY</button>
-              <button id="btnCueB" class="btn-traktor btn-cue" title="Master Cue">CUE</button>
-              <button id="btnSyncB" class="btn-traktor btn-sync" title="Sync BPM to Deck A">SYNC</button>
+              <button id="btnPlayB" class="btn-traktor btn-play" title="Play / Pause Toggle (Key: P)">▶ PLAY (P)</button>
+              <button id="btnCueB" class="btn-traktor btn-cue" title="Master Cue / Hold Preview (Key: O)">CUE (O)</button>
             </div>
 
             <div class="traktor-divider"></div>
@@ -1283,11 +1276,14 @@
     }
 
     /**
-     * TRACK LOADER & FALLBACK ENGINE
+     * TRACK LOADER & MEMORY CLEANUP
      */
     function loadTrackToDeck(deck, rawInput) {
       const videoId = extractYouTubeId(rawInput);
       if (!videoId) return alert(`Invalid YouTube Video or Search result for Deck ${deck}!`);
+
+      // Memory Garbage Collection on Peak Summary Cache
+      deckState[deck].peakSummaryCache.length = 0;
 
       // Update State & Re-generate Waveform & BPM
       deckState[deck].id = videoId;
@@ -1553,18 +1549,60 @@
     function handleStateChange(event, deck) {
       const statusText = document.getElementById(`statusText${deck}`);
       const playBtn = document.getElementById(`btnPlay${deck}`);
+      const keyHint = deck === 'A' ? 'W' : 'P';
 
       if (event.data === YT.PlayerState.PLAYING) {
         if (statusText) statusText.textContent = `Deck ${deck}: Playing`;
-        if (playBtn) { playBtn.textContent = '⏸ PAUSE'; playBtn.classList.add('playing'); }
+        if (playBtn) { playBtn.textContent = `⏸ PAUSE (${keyHint})`; playBtn.classList.add('playing'); }
       } else if (event.data === YT.PlayerState.PAUSED) {
         if (statusText) statusText.textContent = `Deck ${deck}: Paused`;
-        if (playBtn) { playBtn.textContent = '▶ PLAY'; playBtn.classList.remove('playing'); }
+        if (playBtn) { playBtn.textContent = `▶ PLAY (${keyHint})`; playBtn.classList.remove('playing'); }
       } else if (event.data === YT.PlayerState.BUFFERING) {
         if (statusText) statusText.textContent = `Deck ${deck}: Buffering`;
       } else if (event.data === YT.PlayerState.ENDED) {
         if (statusText) statusText.textContent = `Deck ${deck}: Ended`;
-        if (playBtn) { playBtn.textContent = '▶ PLAY'; playBtn.classList.remove('playing'); }
+        if (playBtn) { playBtn.textContent = `▶ PLAY (${keyHint})`; playBtn.classList.remove('playing'); }
+      }
+    }
+
+    function togglePlay(deck) {
+      const player = deck === 'A' ? playerA : playerB;
+      if (!player || typeof player.getPlayerState !== 'function') return;
+
+      const state = player.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    }
+
+    function startCuePreview(deck) {
+      const player = deck === 'A' ? playerA : playerB;
+      if (!player || typeof player.getPlayerState !== 'function') return;
+
+      const state = player.getPlayerState();
+      const deckObj = deckState[deck];
+
+      if (state === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+        player.seekTo(deckObj.masterCue, true);
+      } else {
+        deckObj.isCuePreview = true;
+        player.seekTo(deckObj.masterCue, true);
+        player.playVideo();
+      }
+    }
+
+    function stopCuePreview(deck) {
+      const deckObj = deckState[deck];
+      if (deckObj.isCuePreview) {
+        deckObj.isCuePreview = false;
+        const player = deck === 'A' ? playerA : playerB;
+        if (player && typeof player.pauseVideo === 'function') {
+          player.pauseVideo();
+          player.seekTo(deckObj.masterCue, true);
+        }
       }
     }
 
@@ -1601,26 +1639,6 @@
         const bpm = parseFloat((60000 / avgMs).toFixed(1));
         state.bpm = bpm;
         document.getElementById(`bpmVal${deck}`).textContent = `${bpm.toFixed(1)}`;
-      }
-    }
-
-    function syncDecks(targetDeck, sourceDeck) {
-      const targetBPM = deckState[sourceDeck].bpm;
-      const sourceBPM = deckState[targetDeck].bpm;
-
-      if (targetBPM && sourceBPM) {
-        const ratio = targetBPM / sourceBPM;
-        const requiredPitch = (ratio - 1.0) * 100.0;
-        applyPitchShift(targetDeck, requiredPitch);
-
-        const btnSync = document.getElementById(`btnSync${targetDeck}`);
-        if (btnSync) {
-          const origText = btnSync.textContent;
-          btnSync.textContent = 'SYNCED';
-          setTimeout(() => btnSync.textContent = origText, 1200);
-        }
-      } else if (targetBPM) {
-        applyPitchShift(targetDeck, 0.0);
       }
     }
 
@@ -1850,53 +1868,14 @@
       });
 
       // Traktor Play / Pause Toggle Button
-      btnPlay.addEventListener('click', () => {
-        const player = deck === 'A' ? playerA : playerB;
-        if (!player || typeof player.getPlayerState !== 'function') return;
+      btnPlay.addEventListener('click', () => togglePlay(deck));
 
-        const state = player.getPlayerState();
-        if (state === YT.PlayerState.PLAYING) {
-          player.pauseVideo();
-        } else {
-          player.playVideo();
-        }
-      });
-
-      // Master CUE & Cue Previewing Engine
-      const startCuePreview = () => {
-        const player = deck === 'A' ? playerA : playerB;
-        if (!player || typeof player.getPlayerState !== 'function') return;
-
-        const state = player.getPlayerState();
-        const deckObj = deckState[deck];
-
-        if (state === YT.PlayerState.PLAYING) {
-          player.pauseVideo();
-          player.seekTo(deckObj.masterCue, true);
-        } else {
-          deckObj.isCuePreview = true;
-          player.seekTo(deckObj.masterCue, true);
-          player.playVideo();
-        }
-      };
-
-      const stopCuePreview = () => {
-        const deckObj = deckState[deck];
-        if (deckObj.isCuePreview) {
-          deckObj.isCuePreview = false;
-          const player = deck === 'A' ? playerA : playerB;
-          if (player && typeof player.pauseVideo === 'function') {
-            player.pauseVideo();
-            player.seekTo(deckObj.masterCue, true);
-          }
-        }
-      };
-
-      btnCue.addEventListener('mousedown', startCuePreview);
-      btnCue.addEventListener('mouseup', stopCuePreview);
-      btnCue.addEventListener('mouseleave', stopCuePreview);
-      btnCue.addEventListener('touchstart', startCuePreview);
-      btnCue.addEventListener('touchend', stopCuePreview);
+      // Master CUE & Cue Previewing Engine Mouse/Touch Events
+      btnCue.addEventListener('mousedown', () => startCuePreview(deck));
+      btnCue.addEventListener('mouseup', () => stopCuePreview(deck));
+      btnCue.addEventListener('mouseleave', () => stopCuePreview(deck));
+      btnCue.addEventListener('touchstart', (e) => { e.preventDefault(); startCuePreview(deck); });
+      btnCue.addEventListener('touchend', () => stopCuePreview(deck));
 
       // Pitch Slider & Reset
       pitchSlider.addEventListener('input', (e) => {
@@ -1945,14 +1924,8 @@
         document.getElementById(`cueDel${deck}${slot}`).addEventListener('click', (e) => deleteHotCue(deck, slot, e));
       }
 
-      // Tap Tempo & Pitch Fine Tuning
+      // Tap Tempo
       document.getElementById(`btnTap${deck}`).addEventListener('click', () => handleTap(deck));
-      
-      if (deck === 'B') {
-        document.getElementById('btnSyncB').addEventListener('click', () => syncDecks('B', 'A'));
-      } else {
-        document.getElementById('btnSyncA').addEventListener('click', () => syncDecks('A', 'B'));
-      }
 
       // Synchronized Scrubbing
       const canvas = document.getElementById(`waveform${deck}`);
@@ -2026,43 +1999,69 @@
       document.getElementById('btnXfadeCenter').addEventListener('click', () => { xf.value = 50; updateCrossfade(); });
       document.getElementById('btnXfadeB').addEventListener('click', () => { xf.value = 100; updateCrossfade(); });
 
-      // Keyboard Shortcuts
+      // Keyboard Shortcuts Guarded Engine
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
 
+        const key = e.key.toLowerCase();
+
+        // Deck A Transport Shortcuts (Q = CUE, W = PLAY)
+        if (key === 'w') {
+          if (!e.repeat) togglePlay('A');
+        } else if (key === 'q') {
+          if (!e.repeat) startCuePreview('A');
+        }
+
+        // Deck B Transport Shortcuts (O = CUE, P = PLAY)
+        else if (key === 'p') {
+          if (!e.repeat) togglePlay('B');
+        } else if (key === 'o') {
+          if (!e.repeat) startCuePreview('B');
+        }
+
         // Deck A Hot Cues (Keys 1, 2, 3, 4)
-        if (e.key === '1') handleHotCue('A', 1);
-        else if (e.key === '2') handleHotCue('A', 2);
-        else if (e.key === '3') handleHotCue('A', 3);
-        else if (e.key === '4') handleHotCue('A', 4);
+        else if (key === '1') handleHotCue('A', 1);
+        else if (key === '2') handleHotCue('A', 2);
+        else if (key === '3') handleHotCue('A', 3);
+        else if (key === '4') handleHotCue('A', 4);
 
         // Deck B Hot Cues (Keys 7, 8, 9, 0)
-        else if (e.key === '7') handleHotCue('B', 1);
-        else if (e.key === '8') handleHotCue('B', 2);
-        else if (e.key === '9') handleHotCue('B', 3);
-        else if (e.key === '0') handleHotCue('B', 4);
+        else if (key === '7') handleHotCue('B', 1);
+        else if (key === '8') handleHotCue('B', 2);
+        else if (key === '9') handleHotCue('B', 3);
+        else if (key === '0') handleHotCue('B', 4);
 
-        // Tap Tempos
-        else if (e.key === 't' || e.key === 'T') handleTap('A');
-        else if (e.key === 'y' || e.key === 'Y') handleTap('B');
+        // Tap Tempos (T = Deck A, Y = Deck B)
+        else if (key === 't') handleTap('A');
+        else if (key === 'y') handleTap('B');
       });
 
-      // Render Loop
+      window.addEventListener('keyup', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+
+        const key = e.key.toLowerCase();
+        if (key === 'q') stopCuePreview('A');
+        else if (key === 'o') stopCuePreview('B');
+      });
+
+      // Optimized Canvas Render Loop
       function animLoop() {
         renderWaveformCanvas('A', playerA);
         renderWaveformCanvas('B', playerB);
 
-        const updateState = (deck, player) => {
+        const updateTimeDisplays = (deck, player) => {
           if (!player || typeof player.getCurrentTime !== 'function') return;
           const currTime = player.getCurrentTime() || 0;
           const dur = player.getDuration() || 0;
 
-          document.getElementById(`currTime${deck}`).textContent = formatTime(currTime);
-          document.getElementById(`durTime${deck}`).textContent = formatTime(dur);
+          const currEl = document.getElementById(`currTime${deck}`);
+          const durEl = document.getElementById(`durTime${deck}`);
+          if (currEl) currEl.textContent = formatTime(currTime);
+          if (durEl) durEl.textContent = formatTime(dur);
         };
 
-        updateState('A', playerA);
-        updateState('B', playerB);
+        updateTimeDisplays('A', playerA);
+        updateTimeDisplays('B', playerB);
 
         requestAnimationFrame(animLoop);
       }
