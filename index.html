@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - Real-Track DJ Waveforms</title>
+  <title>YouTube DJ Deck - Serato DJ Static Waveforms</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -236,9 +236,9 @@
       pointer-events: none;
     }
 
-    /* Professional DJ Multi-Frequency Waveform Container */
+    /* Serato DJ Static Overview Waveform Container */
     .waveform-card {
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(10, 10, 14, 0.95);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 0.75rem 0.85rem;
@@ -271,6 +271,7 @@
       height: 100%;
       border-radius: 6px;
       display: block;
+      background: #0a0a0e;
     }
 
     /* BPM & Tap Tempo Card */
@@ -581,11 +582,11 @@
           <div id="yt-player-a" class="yt-player"></div>
         </div>
 
-        <!-- Real-Track Multi-Frequency DJ Waveform Canvas Deck A -->
+        <!-- Serato DJ Static Symmetrical Waveform Canvas Deck A -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeA">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">DJ Multi-Freq Waveform A</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Serato Overview Waveform A</span>
             <span id="durTimeA">00:00</span>
           </div>
           <div class="waveform-canvas-wrap">
@@ -662,11 +663,11 @@
           <div id="yt-player-b" class="yt-player"></div>
         </div>
 
-        <!-- Real-Track Multi-Frequency DJ Waveform Canvas Deck B -->
+        <!-- Serato DJ Static Symmetrical Waveform Canvas Deck B -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeB">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">DJ Multi-Freq Waveform B</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Serato Overview Waveform B</span>
             <span id="durTimeB">00:00</span>
           </div>
           <div class="waveform-canvas-wrap">
@@ -755,10 +756,11 @@
     };
 
     /**
-     * REAL-TRACK AUDIO PEAK GENERATOR (Intro, Build-up, Heavy Drop, Outro)
+     * STATIC SERATO DJ-STYLE OVERVIEW WAVEFORM PEAK GENERATOR
+     * (Red/Orange = Bass, Cyan/Blue = Mids, White = Highs)
      */
     function generateTrackWaveform(id) {
-      const bars = 150;
+      const bars = 180;
       const arr = [];
       let hash = 0;
       for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
@@ -766,22 +768,22 @@
       for (let i = 0; i < bars; i++) {
         const pct = i / bars; // 0.0 to 1.0
 
-        let sectionFactor = 0.3; // Intro
-        if (pct >= 0.20 && pct < 0.45) { // Build-up
-          sectionFactor = 0.3 + (pct - 0.20) * 2.2;
-        } else if (pct >= 0.45 && pct < 0.75) { // Heavy Drop / Chorus
-          sectionFactor = 0.85 + Math.sin(i * 0.4) * 0.15;
-        } else if (pct >= 0.75) { // Outro
-          sectionFactor = 0.7 - (pct - 0.75) * 2.2;
+        let sectionFactor = 0.35; // Intro
+        if (pct >= 0.18 && pct < 0.42) { // Build-up
+          sectionFactor = 0.35 + (pct - 0.18) * 2.2;
+        } else if (pct >= 0.42 && pct < 0.78) { // Heavy Drop / Chorus Peak
+          sectionFactor = 0.88 + Math.sin(i * 0.45) * 0.12;
+        } else if (pct >= 0.78) { // Outro
+          sectionFactor = 0.75 - (pct - 0.78) * 2.5;
         }
 
-        const rawVal = Math.abs(Math.sin(hash * 0.1 + i * 0.28) * 0.7 + Math.cos(i * 0.14) * 0.3);
-        const height = Math.max(0.12, Math.min(1.0, rawVal * sectionFactor));
+        const rawVal = Math.abs(Math.sin(hash * 0.12 + i * 0.3) * 0.7 + Math.cos(i * 0.16) * 0.3);
+        const height = Math.max(0.15, Math.min(0.95, rawVal * sectionFactor));
 
-        // Frequency type: 'high' (cyan/magenta), 'bass' (blue/purple), 'mid' (turquoise/pink)
-        let freqType = 'mid';
-        if ((i % 3 === 0) || height > 0.75) freqType = 'high';
-        else if (i % 2 === 0) freqType = 'bass';
+        // Serato Frequency Types
+        let freqType = 'mid'; // Cyan / Blue
+        if (height > 0.72 || i % 4 === 0) freqType = 'bass'; // Red / Orange
+        else if (i % 5 === 0 || (height > 0.55 && height < 0.70)) freqType = 'high'; // White / Light Cyan
 
         arr.push({ height, freqType });
       }
@@ -959,71 +961,71 @@
     }
 
     /**
-     * PROFESSIONAL DUAL-COLOR DJ WAVEFORM CANVAS RENDERER
+     * STATIC SERATO DJ-STYLE SYMMETRICAL WAVEFORM RENDERER
+     * (NO height fluctuating animations! Pure static overview with Serato color mapping)
      */
-    function renderWaveformCanvas(deck, player, timestamp) {
+    function renderWaveformCanvas(deck, player) {
       const canvas = document.getElementById(`waveform${deck}`);
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const w = canvas.width;
       const h = canvas.height;
+      const yCenter = h / 2;
 
       ctx.clearRect(0, 0, w, h);
 
       const currTime = (player && typeof player.getCurrentTime === 'function') ? (player.getCurrentTime() || 0) : 0;
       const dur = (player && typeof player.getDuration === 'function') ? (player.getDuration() || 0) : 0;
-      const isPlaying = (player && player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING);
 
       const progress = dur > 0 ? Math.min(Math.max(currTime / dur, 0), 1.0) : 0;
       const playheadX = progress * w;
 
       const peaks = deckState[deck].peaks;
       const barCount = peaks.length;
-      const barGap = 1.5;
+      const barGap = 1.2;
       const barWidth = (w - (barCount * barGap)) / barCount;
 
       for (let i = 0; i < barCount; i++) {
         const x = i * (barWidth + barGap);
         const peak = peaks[i];
-        let barHFactor = peak.height;
 
-        if (isPlaying) {
-          const distToPlayhead = Math.abs(x - playheadX);
-          if (distToPlayhead < 75) {
-            const bounce = Math.sin((timestamp / 100) + (i * 0.5)) * 0.18;
-            barHFactor = Math.min(1.0, barHFactor + bounce);
-          }
-        }
-
-        const barH = Math.max(4, barHFactor * (h - 6));
-        const y = (h - barH) / 2;
+        // Symmetrical Height (Top & Bottom mirrored from center line)
+        const barHalfH = Math.max(2, (peak.height * (h - 6)) / 2);
         const isPast = (x <= playheadX);
 
-        // Dual-Color Frequency Palette
-        let color = '#00f2fe';
-        if (deck === 'A') {
-          if (peak.freqType === 'high') color = isPast ? '#00f2fe' : 'rgba(0, 242, 254, 0.28)';
-          else if (peak.freqType === 'bass') color = isPast ? '#3b82f6' : 'rgba(59, 130, 246, 0.28)';
-          else color = isPast ? '#38bdf8' : 'rgba(56, 189, 248, 0.28)';
+        // Serato DJ Frequency Color Palette
+        let color = '#06b6d4';
+        if (peak.freqType === 'bass') {
+          // Low Frequencies: Heavy Red / Orange Bass
+          color = isPast ? '#ef4444' : 'rgba(239, 68, 68, 0.40)';
+        } else if (peak.freqType === 'high') {
+          // High Frequencies: Pure White / Crisp Percussion
+          color = isPast ? '#ffffff' : 'rgba(255, 255, 255, 0.40)';
         } else {
-          if (peak.freqType === 'high') color = isPast ? '#ec4899' : 'rgba(236, 72, 153, 0.28)';
-          else if (peak.freqType === 'bass') color = isPast ? '#a855f7' : 'rgba(168, 85, 247, 0.28)';
-          else color = isPast ? '#f43f5e' : 'rgba(244, 63, 94, 0.28)';
+          // Mid Frequencies: Electric Cyan / Synths & Vocals
+          color = isPast ? '#00f2fe' : 'rgba(0, 242, 254, 0.40)';
         }
 
         ctx.fillStyle = color;
         if (isPast) {
           ctx.shadowColor = color;
-          ctx.shadowBlur = 6;
+          ctx.shadowBlur = 4;
         } else {
           ctx.shadowColor = 'transparent';
           ctx.shadowBlur = 0;
         }
 
-        ctx.fillRect(x, y, barWidth, barH);
+        // Draw symmetrical peak centered horizontally
+        ctx.fillRect(x, yCenter - barHalfH, barWidth, barHalfH * 2);
       }
 
-      // Draw Glowing Playhead Bar
+      // Draw Center Axis Guide Line
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.fillRect(0, yCenter - 0.5, w, 1);
+      ctx.restore();
+
+      // Draw Glowing Serato Playhead Cursor Line
       ctx.save();
       ctx.beginPath();
       ctx.fillStyle = '#ffffff';
@@ -1136,10 +1138,10 @@
         }
       });
 
-      // RequestAnimationFrame Loop
-      function animLoop(t) {
-        renderWaveformCanvas('A', playerA, t);
-        renderWaveformCanvas('B', playerB, t);
+      // Render Loop for Static Serato Waveforms & Equalizer VU Meters
+      function animLoop() {
+        renderWaveformCanvas('A', playerA);
+        renderWaveformCanvas('B', playerB);
 
         const updateState = (deck, player) => {
           if (!player || typeof player.getCurrentTime !== 'function') return;
