@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - High-Density Transients & Serato Beat Grid</title>
+  <title>YouTube DJ Deck - Zoomable Waveforms & Overview Scrollbar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -236,7 +236,7 @@
       pointer-events: none;
     }
 
-    /* Serato DJ High-Density Transient Waveform & Beat Grid Container */
+    /* Serato DJ Zoomable Waveform & Overview Scrollbar Card */
     .waveform-card {
       background: rgba(8, 8, 12, 0.95);
       border: 1px solid var(--card-border);
@@ -244,13 +244,14 @@
       padding: 0.75rem 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.5rem;
       position: relative;
     }
 
     .time-display {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 0.8rem;
       font-weight: 700;
       font-family: monospace;
@@ -259,11 +260,49 @@
     .deck-a .time-display { color: var(--cyan-main); }
     .deck-b .time-display { color: var(--magenta-main); }
 
+    .zoom-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .zoom-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .zoom-slider {
+      width: 80px;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    .zoom-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--text-main);
+      cursor: pointer;
+    }
+
     .waveform-canvas-wrap {
       width: 100%;
       height: 68px;
       position: relative;
       cursor: pointer;
+      overflow: hidden;
     }
 
     .waveform-canvas {
@@ -272,6 +311,44 @@
       border-radius: 6px;
       display: block;
       background: #08080c;
+    }
+
+    /* Overview Navigation Pan Scrollbar */
+    .overview-scroll-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .overview-scroll {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .deck-a .overview-scroll::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 14px;
+      border-radius: 3px;
+      background: var(--cyan-gradient);
+      box-shadow: 0 0 8px var(--cyan-glow);
+      cursor: grab;
+    }
+
+    .deck-b .overview-scroll::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 14px;
+      border-radius: 3px;
+      background: var(--magenta-gradient);
+      box-shadow: 0 0 8px var(--magenta-glow);
+      cursor: grab;
     }
 
     /* BPM & Tap Tempo Card */
@@ -582,15 +659,27 @@
           <div id="yt-player-a" class="yt-player"></div>
         </div>
 
-        <!-- High-Density Transient Waveform & Serato Beat Grid Deck A -->
+        <!-- Zoomable Serato Waveform & Overview Scrollbar Card Deck A -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeA">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Serato Beat Grid Waveform A</span>
+            
+            <div class="zoom-controls-row">
+              <span class="zoom-label">ZOOM</span>
+              <input id="zoomSliderA" type="range" class="zoom-slider" min="1" max="8" step="0.5" value="1">
+              <span id="zoomTextA" style="font-size:0.75rem; color:var(--cyan-main); font-family:monospace; font-weight:800;">1.0x</span>
+            </div>
+
             <span id="durTimeA">00:00</span>
           </div>
+
           <div class="waveform-canvas-wrap">
             <canvas id="waveformA" class="waveform-canvas"></canvas>
+          </div>
+
+          <!-- Overview Pan Scrollbar Slider -->
+          <div class="overview-scroll-wrap">
+            <input id="panScrollA" type="range" class="overview-scroll" min="0" max="100" value="0">
           </div>
         </div>
 
@@ -663,15 +752,27 @@
           <div id="yt-player-b" class="yt-player"></div>
         </div>
 
-        <!-- High-Density Transient Waveform & Serato Beat Grid Deck B -->
+        <!-- Zoomable Serato Waveform & Overview Scrollbar Card Deck B -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeB">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Serato Beat Grid Waveform B</span>
+            
+            <div class="zoom-controls-row">
+              <span class="zoom-label">ZOOM</span>
+              <input id="zoomSliderB" type="range" class="zoom-slider" min="1" max="8" step="0.5" value="1">
+              <span id="zoomTextB" style="font-size:0.75rem; color:var(--magenta-main); font-family:monospace; font-weight:800;">1.0x</span>
+            </div>
+
             <span id="durTimeB">00:00</span>
           </div>
+
           <div class="waveform-canvas-wrap">
             <canvas id="waveformB" class="waveform-canvas"></canvas>
+          </div>
+
+          <!-- Overview Pan Scrollbar Slider -->
+          <div class="overview-scroll-wrap">
+            <input id="panScrollB" type="range" class="overview-scroll" min="0" max="100" value="0">
           </div>
         </div>
 
@@ -749,17 +850,17 @@
     let playerA = null;
     let playerB = null;
 
-    // Waveform & Tap Tempo State
+    // Waveform & Deck State
     const deckState = {
-      A: { peaks: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120 },
-      B: { peaks: [], id: '4xDzrJKXOOY', taps: [], bpm: 128 }
+      A: { peaks: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120, zoom: 1.0, panPct: 0.0, userPanning: false },
+      B: { peaks: [], id: '4xDzrJKXOOY', taps: [], bpm: 128, zoom: 1.0, panPct: 0.0, userPanning: false }
     };
 
     /**
-     * HIGH-DENSITY 500-BAR TRANSIENT WAVEFORM GENERATOR
+     * HIGH-DENSITY 2000-POINT TRANSIENT WAVEFORM GENERATOR
      */
     function generateTrackWaveform(id) {
-      const bars = 500; // Ultra-high density 500 bars
+      const bars = 2000; // Ultra high-density 2000 data points for smooth zoom
       const arr = [];
       let hash = 0;
       for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
@@ -769,17 +870,15 @@
 
         let sectionFactor = 0.35;
         if (pct >= 0.18 && pct < 0.42) sectionFactor = 0.35 + (pct - 0.18) * 2.2;
-        else if (pct >= 0.42 && pct < 0.78) sectionFactor = 0.88 + Math.sin(i * 0.12) * 0.12;
+        else if (pct >= 0.42 && pct < 0.78) sectionFactor = 0.88 + Math.sin(i * 0.03) * 0.12;
         else if (pct >= 0.78) sectionFactor = 0.75 - (pct - 0.78) * 2.5;
 
-        // Sharp beat hit spikes (kick/snare hits) with decay valleys
-        const spike = Math.pow(Math.abs(Math.sin(i * 0.28 + hash * 0.05)), 5.5);
+        const spike = Math.pow(Math.abs(Math.sin(i * 0.07 + hash * 0.05)), 5.5);
         const height = Math.max(0.08, Math.min(0.98, (spike * 0.85 + 0.15) * sectionFactor));
 
-        // High-contrast frequency colors
         let freqType = 'mid'; // Cyan
-        if (height > 0.65 || i % 12 === 0) freqType = 'kick'; // Heavy Orange/Red
-        else if (i % 6 === 3) freqType = 'high'; // Pure White
+        if (height > 0.65 || i % 48 === 0) freqType = 'kick'; // Orange/Red
+        else if (i % 24 === 12) freqType = 'high'; // Pure White
 
         arr.push({ height, freqType });
       }
@@ -951,7 +1050,7 @@
     }
 
     /**
-     * HIGH-DPI RETINA CANVAS RENDERER & SERATO BEAT GRID OVERLAY
+     * DYNAMIC ZOOM & PAN OVERVIEW WAVEFORM CANVAS ENGINE
      */
     function renderWaveformCanvas(deck, player) {
       const canvas = document.getElementById(`waveform${deck}`);
@@ -975,23 +1074,43 @@
 
       const currTime = (player && typeof player.getCurrentTime === 'function') ? (player.getCurrentTime() || 0) : 0;
       const dur = (player && typeof player.getDuration === 'function') ? (player.getDuration() || 0) : 0;
+      const isPlaying = (player && player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING);
 
-      const progress = dur > 0 ? Math.min(Math.max(currTime / dur, 0), 1.0) : 0;
-      const playheadX = progress * w;
+      const state = deckState[deck];
+      const zoom = state.zoom || 1.0;
+      const visibleFraction = 1.0 / zoom; // e.g. 0.25 for 4x zoom
 
-      const peaks = deckState[deck].peaks;
-      const barCount = peaks.length;
-      const barWidth = w / barCount;
+      // Auto-follow playhead if playing and user is not manually dragging pan scrollbar
+      const playheadPct = dur > 0 ? (currTime / dur) : 0;
 
-      // 1. Draw High-Density Symmetrical Transients
-      for (let i = 0; i < barCount; i++) {
+      if (isPlaying && !state.userPanning && zoom > 1.0) {
+        state.panPct = Math.max(0, Math.min(playheadPct - (visibleFraction / 2), 1.0 - visibleFraction));
+        const panScroll = document.getElementById(`panScroll${deck}`);
+        if (panScroll) panScroll.value = (state.panPct / (1.0 - visibleFraction)) * 100;
+      }
+
+      const startPct = Math.max(0, Math.min(state.panPct, 1.0 - visibleFraction));
+      const endPct = startPct + visibleFraction;
+
+      const peaks = state.peaks;
+      const totalPeaks = peaks.length;
+
+      const startIdx = Math.floor(startPct * totalPeaks);
+      const endIdx = Math.min(totalPeaks, Math.ceil(endPct * totalPeaks));
+
+      const visiblePeaks = peaks.slice(startIdx, endIdx);
+      const visibleCount = visiblePeaks.length;
+      const barWidth = w / visibleCount;
+
+      // 1. Draw Visible Peak Subset
+      for (let i = 0; i < visibleCount; i++) {
         const x = i * barWidth;
-        const peak = peaks[i];
+        const peak = visiblePeaks[i];
+        const barPct = startPct + (i / visibleCount) * visibleFraction;
+        const isPast = (barPct <= playheadPct);
 
         const barHalfH = Math.max(1.5, (peak.height * (h - 6)) / 2);
-        const isPast = (x <= playheadX);
 
-        // Serato High Contrast Colors
         let color = '#00f2fe';
         if (peak.freqType === 'kick') {
           color = isPast ? '#f97316' : 'rgba(249, 115, 22, 0.38)';
@@ -1005,21 +1124,24 @@
         ctx.fillRect(x, yCenter - barHalfH, Math.max(1, barWidth - 0.2), barHalfH * 2);
       }
 
-      // 2. Draw Serato BPM Beat Grid Lines Overlay (T_beat = 60 / BPM)
-      const bpm = deckState[deck].bpm || 120;
+      // 2. Draw Serato BPM Beat Grid Lines for Visible Time Range
+      const bpm = state.bpm || 120;
       if (dur > 0 && bpm > 0) {
         const totalBeats = (dur / 60.0) * bpm;
         ctx.save();
         for (let b = 0; b < totalBeats; b++) {
-          const beatX = (b / totalBeats) * w;
-          const isDownbeat = (b % 4 === 0);
+          const beatPct = b / totalBeats;
+          if (beatPct >= startPct && beatPct <= endPct) {
+            const beatX = ((beatPct - startPct) / visibleFraction) * w;
+            const isDownbeat = (b % 4 === 0);
 
-          ctx.beginPath();
-          ctx.strokeStyle = isDownbeat ? 'rgba(255, 255, 255, 0.70)' : 'rgba(255, 255, 255, 0.22)';
-          ctx.lineWidth = isDownbeat ? 1.5 : 0.8;
-          ctx.moveTo(beatX, 0);
-          ctx.lineTo(beatX, h);
-          ctx.stroke();
+            ctx.beginPath();
+            ctx.strokeStyle = isDownbeat ? 'rgba(255, 255, 255, 0.70)' : 'rgba(255, 255, 255, 0.22)';
+            ctx.lineWidth = isDownbeat ? 1.5 : 0.8;
+            ctx.moveTo(beatX, 0);
+            ctx.lineTo(beatX, h);
+            ctx.stroke();
+          }
         }
         ctx.restore();
       }
@@ -1030,14 +1152,17 @@
       ctx.fillRect(0, yCenter - 0.5, w, 1);
       ctx.restore();
 
-      // 4. Glowing Playhead Line
-      ctx.save();
-      ctx.beginPath();
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = '#ffffff';
-      ctx.shadowBlur = 14;
-      ctx.fillRect(playheadX - 1.5, 0, 3, h);
-      ctx.restore();
+      // 4. Glowing Playhead Line if within Visible Range
+      if (playheadPct >= startPct && playheadPct <= endPct) {
+        const playheadX = ((playheadPct - startPct) / visibleFraction) * w;
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 14;
+        ctx.fillRect(playheadX - 1.5, 0, 3, h);
+        ctx.restore();
+      }
     }
 
     function setupDeckEvents(deck) {
@@ -1048,6 +1173,9 @@
       const volSlider = document.getElementById(`volSlider${deck}`);
       const volValText = document.getElementById(`volValText${deck}`);
       const speedSlider = document.getElementById(`speedSlider${deck}`);
+      const zoomSlider = document.getElementById(`zoomSlider${deck}`);
+      const zoomText = document.getElementById(`zoomText${deck}`);
+      const panScroll = document.getElementById(`panScroll${deck}`);
 
       btnLoad.addEventListener('click', () => {
         const id = extractVideoId(input.value);
@@ -1081,6 +1209,21 @@
         setSpeed(deck, parseFloat(e.target.value));
       });
 
+      // Zoom & Pan Scroll Controls
+      zoomSlider.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        deckState[deck].zoom = val;
+        if (zoomText) zoomText.textContent = `${val.toFixed(1)}x`;
+      });
+
+      panScroll.addEventListener('mousedown', () => deckState[deck].userPanning = true);
+      panScroll.addEventListener('mouseup', () => deckState[deck].userPanning = false);
+      panScroll.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value); // 0 to 100
+        const visibleFraction = 1.0 / deckState[deck].zoom;
+        deckState[deck].panPct = (val / 100.0) * (1.0 - visibleFraction);
+      });
+
       // Tap Tempo & Pitch Fine Tuning
       document.getElementById(`btnTap${deck}`).addEventListener('click', () => handleTap(deck));
       document.getElementById(`btnNudgeMinus${deck}`).addEventListener('click', () => nudgeSpeed(deck, -0.01));
@@ -1092,19 +1235,24 @@
         document.getElementById('btnSyncA').addEventListener('click', () => syncDecks('A', 'B'));
       }
 
-      // Waveform Canvas Click & Drag Scrubbing
+      // Synchronized Click & Drag Scrubbing on Zoomed Waveform
       const canvas = document.getElementById(`waveform${deck}`);
       let isDragging = false;
 
       const handleScrub = (e) => {
         const rect = canvas.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
-        const ratio = Math.max(0, Math.min(clickX / rect.width, 1.0));
+        const clickRatio = Math.max(0, Math.min(clickX / rect.width, 1.0));
+        
+        const state = deckState[deck];
+        const visibleFraction = 1.0 / state.zoom;
+        const targetPct = state.panPct + (clickRatio * visibleFraction);
+
         const player = deck === 'A' ? playerA : playerB;
 
         if (player && typeof player.getDuration === 'function') {
           const dur = player.getDuration() || 0;
-          player.seekTo(ratio * dur, true);
+          player.seekTo(targetPct * dur, true);
         }
       };
 
