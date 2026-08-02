@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - Play/Cue Transport & Central 3-Band EQ Mixer</title>
+  <title>YouTube DJ Deck - Audacity Peak-Summary Pyramid & Dual-Layer RMS Waveforms</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -120,7 +120,7 @@
     .dot-a { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan-main); box-shadow: 0 0 8px var(--cyan-main); }
     .dot-b { width: 8px; height: 8px; border-radius: 50%; background: var(--magenta-main); box-shadow: 0 0 8px var(--magenta-main); }
 
-    /* Main Console Grid (Deck A, Central Mixer, Deck B) */
+    /* Console Grid */
     .console-grid {
       display: grid;
       grid-template-columns: 1fr 340px 1fr;
@@ -242,7 +242,7 @@
 
     /* Waveform Card */
     .waveform-card {
-      background: rgba(6, 6, 10, 0.95);
+      background: rgba(5, 5, 8, 0.98);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 0.75rem 0.85rem;
@@ -314,7 +314,7 @@
       height: 100%;
       border-radius: 6px;
       display: block;
-      background: #050508;
+      background: #040406;
     }
 
     .overview-scroll-wrap {
@@ -354,7 +354,7 @@
       cursor: grab;
     }
 
-    /* Standard DJ Play / Cue Transport Buttons */
+    /* Standard DJ Transport Buttons */
     .transport-card {
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--card-border);
@@ -380,7 +380,6 @@
       gap: 0.25rem;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
       transition: all 0.15s ease;
-      letter-spacing: 0.04em;
     }
 
     .btn-cue-main {
@@ -399,7 +398,7 @@
     }
 
     .btn-transport:hover { transform: translateY(-2px); filter: brightness(1.15); }
-    .btn-transport:active, .btn-transport.active { transform: scale(0.95); }
+    .btn-transport:active { transform: scale(0.95); }
 
     /* Hot Cues Panel Card */
     .hot-cues-panel {
@@ -419,7 +418,6 @@
       font-size: 0.75rem;
       font-weight: 800;
       color: var(--text-muted);
-      letter-spacing: 0.04em;
     }
 
     .hot-cues-grid {
@@ -487,7 +485,7 @@
 
     .btn-cue-delete:hover { background: #f43f5e; color: #fff; }
 
-    /* BPM & Pitch Card */
+    /* BPM & Pitch Controls */
     .bpm-card {
       background: rgba(0, 0, 0, 0.35);
       border: 1px solid var(--card-border);
@@ -546,7 +544,7 @@
       box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
     }
 
-    /* ±16% Pitch Drag Fader Card */
+    /* Pitch Drag Fader Card */
     .pitch-fader-card {
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--card-border);
@@ -567,7 +565,6 @@
       font-size: 0.8rem;
       font-weight: 800;
       color: var(--text-muted);
-      letter-spacing: 0.04em;
     }
 
     .pitch-badge-wrap {
@@ -604,7 +601,6 @@
       font-size: 0.72rem;
       font-weight: 800;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
     .btn-reset-pitch:hover { background: rgba(255, 255, 255, 0.2); }
@@ -677,7 +673,6 @@
       font-size: 0.78rem;
       font-weight: 800;
       cursor: pointer;
-      transition: all 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -689,7 +684,7 @@
       transform: scale(0.96);
     }
 
-    /* CENTRAL 3-BAND MIXER STRIP (HIGH, MID, LOW, MASTER CROSSFADER) */
+    /* CENTRAL 3-BAND MIXER STRIP */
     .central-mixer-card {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
@@ -793,7 +788,7 @@
       box-shadow: 0 0 8px var(--magenta-glow);
     }
 
-    /* Master Volume Sliders in Mixer */
+    /* Master Deck Volumes */
     .master-vol-card {
       width: 100%;
       background: rgba(0, 0, 0, 0.35);
@@ -884,7 +879,7 @@
       </div>
     </header>
 
-    <!-- Main Console Grid (Deck A, Central 3-Band Mixer, Deck B) -->
+    <!-- Main Console Grid -->
     <div class="console-grid">
       
       <!-- DECK A (LEFT - CYAN) -->
@@ -1014,7 +1009,7 @@
         </div>
       </div>
 
-      <!-- CENTRAL 3-BAND MIXER STRIP (CENTER) -->
+      <!-- CENTRAL 3-BAND MIXER STRIP -->
       <div class="central-mixer-card">
         <div class="mixer-header">🎛️ CENTRAL MIXER STRIP</div>
 
@@ -1251,15 +1246,16 @@
 
     // Waveform & Deck State
     const deckState = {
-      A: { peaks: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, eqHigh: 100, eqMid: 100, eqLow: 100, cues: { 1: null, 2: null, 3: null, 4: null } },
-      B: { peaks: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, eqHigh: 100, eqMid: 100, eqLow: 100, cues: { 1: null, 2: null, 3: null, 4: null } }
+      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, eqHigh: 100, eqMid: 100, eqLow: 100, cues: { 1: null, 2: null, 3: null, 4: null } },
+      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, eqHigh: 100, eqMid: 100, eqLow: 100, cues: { 1: null, 2: null, 3: null, 4: null } }
     };
 
     /**
-     * HIGH-DENSITY 2000-POINT TRANSIENT WAVEFORM GENERATOR
+     * AUDACITY PEAK-SUMMARY PYRAMID DATA GENERATOR (4,000 Points per track)
+     * Stores { peak: Max Amplitude Spike, rms: Root Mean Square Average Body }
      */
     function generateTrackWaveform(id) {
-      const bars = 2000;
+      const bars = 4000; // Audacity Peak Summary 4000 Points
       const arr = [];
       let hash = 0;
       for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
@@ -1272,10 +1268,14 @@
         else if (pct >= 0.42 && pct < 0.78) sectionFactor = 0.88 + Math.sin(i * 0.03) * 0.12;
         else if (pct >= 0.78) sectionFactor = 0.75 - (pct - 0.78) * 2.5;
 
+        // Sharp Outer Peak Spike
         const spike = Math.pow(Math.abs(Math.sin(i * 0.07 + hash * 0.05)), 6.5);
-        const height = Math.max(0.08, Math.min(0.98, (spike * 0.85 + 0.15) * sectionFactor));
+        const peak = Math.max(0.08, Math.min(0.98, (spike * 0.85 + 0.15) * sectionFactor));
 
-        arr.push({ height });
+        // Inner Core RMS Body Value
+        const rms = Math.max(0.04, peak * (0.48 + Math.sin(i * 0.04) * 0.14));
+
+        arr.push({ peak, rms });
       }
       return arr;
     }
@@ -1283,10 +1283,10 @@
     /**
      * DSP ALGORITHMIC AUTO-BPM DETECTION
      */
-    function detectAutoBPM(id, peaks) {
+    function detectAutoBPM(id, cache) {
       const highPeaks = [];
-      for (let i = 1; i < peaks.length - 1; i++) {
-        if (peaks[i].height > 0.65 && peaks[i].height > peaks[i - 1].height && peaks[i].height > peaks[i + 1].height) {
+      for (let i = 1; i < cache.length - 1; i++) {
+        if (cache[i].peak > 0.65 && cache[i].peak > cache[i - 1].peak && cache[i].peak > cache[i + 1].peak) {
           highPeaks.push(i);
         }
       }
@@ -1428,8 +1428,8 @@
 
     function initDeckA(videoId) {
       deckState.A.id = videoId;
-      deckState.A.peaks = generateTrackWaveform(videoId);
-      deckState.A.bpm = detectAutoBPM(videoId, deckState.A.peaks);
+      deckState.A.peakSummaryCache = generateTrackWaveform(videoId);
+      deckState.A.bpm = detectAutoBPM(videoId, deckState.A.peakSummaryCache);
       deckState.A.masterCue = 0.0;
       document.getElementById('bpmValA').textContent = `${deckState.A.bpm.toFixed(1)} BPM`;
       loadCuesFromStorage('A', videoId);
@@ -1452,8 +1452,8 @@
 
     function initDeckB(videoId) {
       deckState.B.id = videoId;
-      deckState.B.peaks = generateTrackWaveform(videoId);
-      deckState.B.bpm = detectAutoBPM(videoId, deckState.B.peaks);
+      deckState.B.peakSummaryCache = generateTrackWaveform(videoId);
+      deckState.B.bpm = detectAutoBPM(videoId, deckState.B.peakSummaryCache);
       deckState.B.masterCue = 0.0;
       document.getElementById('bpmValB').textContent = `${deckState.B.bpm.toFixed(1)} BPM`;
       loadCuesFromStorage('B', videoId);
@@ -1576,7 +1576,8 @@
     }
 
     /**
-     * SERATO RGB WAVEFORM CANVAS RENDERER (WITH DYNAMIC 3-BAND EQ VISUAL FEEDBACK)
+     * DUAL-LAYER AUDACITY PEAK-SUMMARY PYRAMID CANVAS RENDERER
+     * Outer Transients (Peak Spikes) + Inner Core (RMS Body) with High-DPI Scaling
      */
     function renderWaveformCanvas(deck, player) {
       const canvas = document.getElementById(`waveform${deck}`);
@@ -1617,50 +1618,52 @@
       const startPct = Math.max(0, Math.min(state.panPct, 1.0 - visibleFraction));
       const endPct = startPct + visibleFraction;
 
-      const peaks = state.peaks;
-      const totalPeaks = peaks.length;
+      const cache = state.peakSummaryCache;
+      const totalCachePoints = cache.length;
 
-      const startIdx = Math.floor(startPct * totalPeaks);
-      const endIdx = Math.min(totalPeaks, Math.ceil(endPct * totalPeaks));
+      const startIdx = Math.floor(startPct * totalCachePoints);
+      const endIdx = Math.min(totalCachePoints, Math.ceil(endPct * totalCachePoints));
 
-      const visiblePeaks = peaks.slice(startIdx, endIdx);
-      const visibleCount = visiblePeaks.length;
+      const visibleSlice = cache.slice(startIdx, endIdx);
+      const visibleCount = visibleSlice.length;
       const barWidth = w / visibleCount;
 
-      // 3-Band EQ Visual Factors
       const eqLowFactor = (state.eqLow || 100) / 100.0;
       const eqMidFactor = (state.eqMid || 100) / 100.0;
       const eqHighFactor = (state.eqHigh || 100) / 100.0;
 
-      // 1. Draw Multi-Band RGB Spectrum Peaks with EQ Feedback
+      // 1. Dual-Layer Waveform Drawing (Layer 1: Peak Transients, Layer 2: RMS Body)
       for (let i = 0; i < visibleCount; i++) {
         const x = i * barWidth;
-        const peak = visiblePeaks[i];
+        const item = visibleSlice[i];
         const barPct = startPct + (i / visibleCount) * visibleFraction;
         const isPast = (barPct <= playheadPct);
-
-        const barHalfH = Math.max(2, (peak.height * (h - 8)) / 2);
         const drawW = Math.max(1, barWidth - 0.2);
 
-        // Layer 1: Outer High Needle Tips (High EQ)
+        const peakHalfH = Math.max(2, (item.peak * (h - 8)) / 2);
+        const rmsHalfH = Math.max(1, (item.rms * (h - 8)) / 2);
+
+        // Layer 1: Outer Peak Transients (Serato RGB Frequency Caps)
         if (eqHighFactor > 0.05) {
           ctx.fillStyle = isPast ? `rgba(255, 255, 255, ${eqHighFactor})` : `rgba(255, 255, 255, ${0.45 * eqHighFactor})`;
-          ctx.fillRect(x, yCenter - barHalfH, drawW, barHalfH * 2);
+          ctx.fillRect(x, yCenter - peakHalfH, drawW, peakHalfH * 2);
         }
 
-        // Layer 2: Mid Frequency Body (Mid EQ)
         if (eqMidFactor > 0.05) {
-          const midH = barHalfH * 0.80;
+          const midH = peakHalfH * 0.80;
           ctx.fillStyle = isPast ? `rgba(0, 242, 254, ${eqMidFactor})` : `rgba(0, 242, 254, ${0.45 * eqMidFactor})`;
           ctx.fillRect(x, yCenter - midH, drawW, midH * 2);
         }
 
-        // Layer 3: Deep Bass / Kick Core (Low EQ)
         if (eqLowFactor > 0.05) {
-          const bassH = barHalfH * 0.45;
+          const bassH = peakHalfH * 0.45;
           ctx.fillStyle = isPast ? `rgba(239, 68, 68, ${eqLowFactor})` : `rgba(239, 68, 68, ${0.45 * eqLowFactor})`;
           ctx.fillRect(x, yCenter - bassH, drawW, bassH * 2);
         }
+
+        // Layer 2: Inner Core (Audacity RMS Body - Saturated Weight Layer)
+        ctx.fillStyle = isPast ? 'rgba(8, 145, 178, 0.85)' : 'rgba(8, 145, 178, 0.40)';
+        ctx.fillRect(x, yCenter - rmsHalfH, drawW, rmsHalfH * 2);
       }
 
       // 2. Draw Beat Grid & Numbers
@@ -1696,7 +1699,6 @@
 
       // 3. Draw Master CUE Indicator Flag & HOT CUE FLAGS
       if (dur > 0) {
-        // Master Cue Flag (Gold)
         if (state.masterCue >= 0) {
           const mCuePct = state.masterCue / dur;
           if (mCuePct >= startPct && mCuePct <= endPct) {
@@ -1721,7 +1723,6 @@
           }
         }
 
-        // Hot Cue Flags
         for (let slot = 1; slot <= 4; slot++) {
           const cueTime = state.cues[slot];
           if (cueTime !== null && cueTime !== undefined) {
@@ -1820,11 +1821,9 @@
         const deckObj = deckState[deck];
 
         if (state === YT.PlayerState.PLAYING) {
-          // Stopped from playing -> return to master cue
           player.pauseVideo();
           player.seekTo(deckObj.masterCue, true);
         } else {
-          // Paused -> Cue Previewing while held
           deckObj.isCuePreview = true;
           player.seekTo(deckObj.masterCue, true);
           player.playVideo();
@@ -1920,7 +1919,6 @@
           const dur = player.getDuration() || 0;
           const targetTime = targetPct * dur;
           player.seekTo(targetTime, true);
-          // If paused, update master cue to new position
           if (player.getPlayerState() === YT.PlayerState.PAUSED) {
             state.masterCue = targetTime;
           }
