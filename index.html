@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Console - Pro Traktor Deck Layout</title>
+  <title>YouTube DJ Console - Senior Architecture & Traktor Layout</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -44,30 +44,34 @@
       outline: none !important;
     }
 
+    /* Section 1: Viewport Constraints & Global Grid System */
     body {
       font-family: 'Outfit', sans-serif;
       background: var(--bg-dark);
       color: var(--text-main);
       height: 100vh;
       max-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0.3rem 0.35rem;
       overflow: hidden;
+      box-sizing: border-box;
+      padding: 12px;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .container {
+    .dj-console-container {
       max-width: 1440px;
       width: 100%;
       height: 100%;
-      max-height: calc(100vh - 0.6rem);
+      max-height: calc(100vh - 24px);
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 8px;
+      box-sizing: border-box;
     }
 
-    /* Global Header Bar - Ultra-Tight */
+    /* Global Header Bar */
     header {
       height: 34px;
       flex-shrink: 0;
@@ -265,24 +269,24 @@
     .btn-assign-a { background: var(--cyan-gradient); color: #000; }
     .btn-assign-b { background: var(--orange-gradient); color: #fff; }
 
-    /* Ultra-Tight Traktor Console Grid */
+    /* 3-Column Grid System: Left (Deck A), Center (240px Mixer), Right (Deck B) */
     .console-grid {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 210px 1fr;
-      gap: 0.25rem;
+      grid-template-columns: 1fr 240px 1fr;
+      gap: 8px;
       align-items: stretch;
       min-height: 0;
     }
 
-    /* Deck Card Container */
+    /* Section 2: Deck Layout & YouTube Player Sizing (Decks A & B) */
     .deck-card {
       background: var(--card-bg);
       border-radius: 5px;
-      padding: 0.3rem;
+      padding: 8px;
       display: flex;
       flex-direction: row;
-      gap: 0.25rem;
+      gap: 8px;
       position: relative;
       align-items: stretch;
       border: 1px solid var(--card-border);
@@ -299,20 +303,20 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 0.25rem;
+      gap: 6px;
       min-width: 0;
       height: 100%;
       min-height: 0;
     }
 
-    /* 1. Top Header Panel (Search & Load Bar) */
+    /* 1. Top Header Panel */
     .deck-top-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.25rem;
+      gap: 6px;
       background: #08080a;
-      padding: 0.25rem 0.4rem;
+      padding: 4px 6px;
       border-radius: 3px;
       border: 1px solid var(--card-border);
       flex-shrink: 0;
@@ -321,14 +325,14 @@
     .deck-title-group {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 4px;
       min-width: 0;
     }
 
     .deck-name-badge {
       font-size: 0.62rem;
       font-weight: 900;
-      padding: 0.08rem 0.3rem;
+      padding: 1px 5px;
       border-radius: 2px;
       text-transform: uppercase;
       flex-shrink: 0;
@@ -349,7 +353,7 @@
     .deck-loader-group {
       display: flex;
       align-items: center;
-      gap: 0.2rem;
+      gap: 4px;
       flex-shrink: 0;
     }
 
@@ -357,12 +361,12 @@
       background: var(--input-bg);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0 0.4rem;
+      padding: 0 6px;
       height: 24px;
       border-radius: 2px;
       font-family: inherit;
       font-size: 0.7rem;
-      width: 130px;
+      width: 120px;
     }
 
     .search-input:focus { border-color: rgba(255, 255, 255, 0.3); }
@@ -370,7 +374,7 @@
     .search-btn {
       border: none;
       height: 24px;
-      padding: 0 0.45rem;
+      padding: 0 6px;
       border-radius: 2px;
       font-family: inherit;
       font-size: 0.65rem;
@@ -382,11 +386,11 @@
     .deck-a .search-btn { background: var(--cyan-gradient); color: #000; }
     .deck-b .search-btn { background: var(--orange-gradient); color: #fff; }
 
-    /* 2. Waveform Canvas Row & Docked BPM Panel */
+    /* 2. Waveform Canvas Area (Explicit 85px Height) */
     .waveform-canvas-row {
       display: flex;
-      gap: 0.25rem;
-      align-items: stretch;
+      gap: 8px;
+      align-items: center;
       flex-shrink: 0;
     }
 
@@ -395,17 +399,17 @@
       background: #030304;
       border: 1px solid var(--card-border);
       border-radius: 3px;
-      padding: 0.25rem 0.35rem;
+      padding: 4px 6px;
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
+      gap: 3px;
     }
 
     .time-display {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       font-family: monospace;
     }
@@ -415,7 +419,7 @@
 
     .waveform-canvas-wrap {
       width: 100%;
-      height: 48px;
+      height: 85px;
       position: relative;
       cursor: pointer;
       overflow: hidden;
@@ -432,24 +436,24 @@
     .under-waveform-bar {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 6px;
     }
 
     .zoom-box {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 4px;
       background: rgba(0, 0, 0, 0.4);
-      padding: 0.08rem 0.3rem;
+      padding: 1px 4px;
       border-radius: 2px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       flex-shrink: 0;
     }
 
     .zoom-label { font-size: 0.58rem; font-weight: 800; color: var(--text-muted); }
-    .zoom-slider { width: 48px; -webkit-appearance: none; height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; }
+    .zoom-slider { width: 44px; -webkit-appearance: none; height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; }
     .zoom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
-    .zoom-val { font-size: 0.62rem; font-family: monospace; font-weight: 800; }
+    .zoom-val { font-size: 0.6rem; font-family: monospace; font-weight: 800; }
 
     .overview-scroll {
       flex: 1;
@@ -463,19 +467,19 @@
     .deck-a .overview-scroll::-webkit-slider-thumb { -webkit-appearance: none; height: 8px; width: 14px; border-radius: 2px; background: var(--cyan-main); }
     .deck-b .overview-scroll::-webkit-slider-thumb { -webkit-appearance: none; height: 8px; width: 14px; border-radius: 2px; background: var(--orange-main); }
 
-    /* Docked BPM Panel */
+    /* Docked BPM Panel (Adjacent to Canvas) */
     .bpm-docked-panel {
-      width: 58px;
+      width: 62px;
       flex-shrink: 0;
       background: #08080a;
       border: 1px solid var(--card-border);
       border-radius: 3px;
-      padding: 0.2rem 0.15rem;
+      padding: 4px 3px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      gap: 0.15rem;
+      gap: 3px;
     }
 
     .bpm-title { font-size: 0.58rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.05em; }
@@ -484,7 +488,7 @@
       font-size: 0.75rem;
       font-weight: 900;
       font-family: monospace;
-      padding: 0.05rem 0.15rem;
+      padding: 1px 3px;
       border-radius: 2px;
       background: rgba(0, 0, 0, 0.5);
       width: 100%;
@@ -530,18 +534,18 @@
       box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
     }
 
-    /* 3. Prominent YouTube Video Viewport */
+    /* 3. YouTube Video Player Embed Wrapper (16:9 Aspect Ratio / Max-Height 200px) */
     .video-viewport {
       width: 100%;
-      flex: 1;
-      min-height: 175px;
-      max-height: 220px;
       aspect-ratio: 16 / 9;
+      max-height: 200px;
+      object-fit: contain;
       background: #000;
-      border-radius: 3px;
+      border-radius: 4px;
       overflow: hidden;
       position: relative;
       border: 1px solid var(--card-border);
+      flex-shrink: 0;
     }
 
     .yt-player { width: 100%; height: 100%; pointer-events: none; }
@@ -550,11 +554,11 @@
     .hot-cues-section {
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      gap: 3px;
       background: #08080a;
       border: 1px solid var(--card-border);
       border-radius: 3px;
-      padding: 0.25rem;
+      padding: 4px;
       flex-shrink: 0;
     }
 
@@ -569,7 +573,7 @@
     .hot-cues-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.25rem;
+      gap: 4px;
     }
 
     .cue-slot-wrap {
@@ -591,7 +595,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.1rem;
+      gap: 2px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
@@ -632,9 +636,9 @@
       background: #08080a;
       border: 1px solid var(--card-border);
       border-radius: 3px;
-      padding: 0.25rem;
+      padding: 4px;
       display: flex;
-      gap: 0.35rem;
+      gap: 6px;
       flex-shrink: 0;
     }
 
@@ -651,7 +655,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.2rem;
+      gap: 4px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.4);
       transition: all 0.15s ease;
     }
@@ -663,27 +667,28 @@
     .btn-traktor:hover { filter: brightness(1.15); }
     .btn-traktor:active { transform: scale(0.96); }
 
-    /* PITCH STRIP WITH THICK BOLD TRACK (GRAPHIC AUDIO SLIDER STYLE) */
+    /* Section 4: Side Tempo/Pitch Fader Restructuring (Max-Height 260px & 10px Margined Scale) */
     .pitch-fader-card.outer-pitch {
       width: 72px;
       flex-shrink: 0;
       background: #08080a;
       border: 1px solid var(--card-border);
       border-radius: 3px;
-      padding: 0.3rem 0.1rem;
+      padding: 6px 2px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      gap: 0.25rem;
+      gap: 4px;
       height: 100%;
+      max-height: 260px;
     }
 
     .pitch-fader-header-vertical {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.08rem;
+      gap: 1px;
       width: 100%;
       text-align: center;
     }
@@ -694,7 +699,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.05rem;
+      gap: 1px;
       width: 100%;
     }
 
@@ -702,7 +707,7 @@
       font-size: 0.7rem;
       font-weight: 900;
       font-family: monospace;
-      padding: 0.05rem 0.15rem;
+      padding: 1px 2px;
       border-radius: 2px;
       background: rgba(0, 0, 0, 0.6);
       width: 100%;
@@ -718,7 +723,7 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.08rem 0.2rem;
+      padding: 1px 3px;
       border-radius: 2px;
       font-size: 0.55rem;
       font-weight: 800;
@@ -726,20 +731,19 @@
       width: 100%;
     }
 
-    /* Vertical Pitch Slider Track Container */
+    /* Vertical Pitch Slider Track Container (Restrained to max-height 260px) */
     .pitch-slider-vertical-wrap {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: 0.2rem;
+      gap: 4px;
       width: 100%;
       flex: 1;
-      height: 180px;
-      max-height: 200px;
-      min-height: 160px;
+      height: 100%;
+      max-height: 260px;
       background: rgba(0, 0, 0, 0.4);
-      padding: 0.25rem 0.1rem;
+      padding: 6px 2px;
       border-radius: 3px;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
@@ -749,13 +753,13 @@
       flex-direction: column;
       justify-content: space-between;
       height: 90%;
-      font-size: 0.52rem;
+      font-size: 10px;
       font-weight: 700;
       color: var(--text-muted);
       font-family: monospace;
+      opacity: 0.7;
     }
 
-    /* THICK BOLD TRACK FOR VERTICAL SLIDERS (GRAPHIC MINIMALIST SLIDER STYLE) */
     .pitch-drag-slider-vertical,
     .dj-vertical-vol-slider {
       -webkit-appearance: slider-vertical;
@@ -770,31 +774,10 @@
       outline: none;
     }
 
-    /* FLAT RECTANGULAR SLIDER CAPS WITH WHITE NOTCH */
-    .pitch-drag-slider-vertical::-webkit-slider-thumb,
-    .dj-vertical-vol-slider::-webkit-slider-thumb,
-    .pitch-drag-slider-vertical::-moz-range-thumb,
-    .dj-vertical-vol-slider::-moz-range-thumb {
-      -webkit-appearance: none;
-      width: 32px;
-      height: 12px;
-      border-radius: 2px;
-      background: linear-gradient(180deg, #363642 0%, #1f1f26 45%, #ffffff 48%, #ffffff 52%, #1f1f26 55%, #2a2a34 100%);
-      border: 1px solid #4a4a58;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.85);
-      cursor: grab;
-    }
-
-    .pitch-drag-slider-vertical::-webkit-slider-thumb:active,
-    .dj-vertical-vol-slider::-webkit-slider-thumb:active {
-      cursor: grabbing;
-      background: linear-gradient(180deg, #444452 0%, #22222a 45%, #00f2fe 48%, #00f2fe 52%, #22222a 55%, #33333e 100%);
-    }
-
     .pitch-bend-vertical-actions {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
+      gap: 3px;
       width: 100%;
     }
 
@@ -817,18 +800,18 @@
       background: rgba(255, 255, 255, 0.25);
     }
 
-    /* CENTRAL MIXER STRIP (TIGHTLY FITTED VOLUMES SIDE-BY-SIDE) */
+    /* Section 3: Central Mixer & Volume Fader Heights + 3-Band EQs */
     .central-mixer-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 5px;
-      padding: 0.35rem 0.35rem;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       height: 100%;
+      gap: 6px;
     }
 
     .mixer-header {
@@ -841,19 +824,102 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Master Deck Volume Card */
+    /* 3-Band EQ Knobs Block (-12dB to +6dB) */
+    .eq-section-card {
+      width: 100%;
+      background: #08080a;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .eq-header-title {
+      font-size: 0.6rem;
+      font-weight: 900;
+      color: var(--text-muted);
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    .eq-channels-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .eq-channel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .eq-channel.col-a { border-color: rgba(0, 242, 254, 0.2); }
+    .eq-channel.col-b { border-color: rgba(249, 115, 22, 0.2); }
+
+    .eq-deck-label {
+      font-size: 0.58rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .eq-knob-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .eq-knob-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 4px;
+      background: #18181c;
+      border-radius: 2px;
+      border: 1px solid #2e2e38;
+      cursor: pointer;
+    }
+
+    .eq-knob-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      cursor: pointer;
+    }
+
+    .eq-label {
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-family: monospace;
+    }
+
+    /* Master Deck Volume Card (Explicit height: 180px; min-height: 180px; max-height: 200px;) */
     .master-vol-card {
       width: 100%;
       background: #08080a;
       border: 1px solid var(--card-border);
-      border-radius: 3px;
-      padding: 0.3rem 0.25rem;
+      border-radius: 4px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.3rem;
+      gap: 4px;
       flex: 1;
-      min-height: 220px;
     }
 
     .vol-header-title { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; }
@@ -863,20 +929,18 @@
       justify-content: space-around;
       align-items: stretch;
       width: 100%;
-      gap: 0.25rem;
+      gap: 6px;
       flex: 1;
-      height: 100%;
     }
 
     .vol-channel {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.2rem;
+      gap: 4px;
       flex: 1;
-      height: 100%;
       background: rgba(0, 0, 0, 0.3);
-      padding: 0.25rem 0.15rem;
+      padding: 4px 2px;
       border-radius: 3px;
       border: 1px solid rgba(255, 255, 255, 0.05);
       justify-content: space-between;
@@ -885,27 +949,42 @@
     .vol-channel.col-a { border-color: rgba(0, 242, 254, 0.2); }
     .vol-channel.col-b { border-color: rgba(249, 115, 22, 0.2); }
 
-    .vol-label-badge { display: flex; flex-direction: column; align-items: center; gap: 0.05rem; font-size: 0.6rem; font-weight: 800; }
+    .vol-label-badge { display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 0.6rem; font-weight: 800; }
     .vol-val-text { font-family: monospace; font-size: 0.65rem; color: var(--text-main); }
 
+    /* Explicit Height Constraint Container for Volume Sliders */
     .vol-slider-wrap {
       width: 100%;
-      flex: 1;
       height: 180px;
+      min-height: 180px;
       max-height: 200px;
-      min-height: 160px;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0.2rem 0;
+      padding: 4px 0;
     }
 
-    /* CROSSFADER BOX & THICK HORIZONTAL TRACK WITH STANDING VERTICAL CAP */
+    /* Section 5: Custom CSS DJ Fader Caps & Thumb Styles */
+    .pitch-drag-slider-vertical::-webkit-slider-thumb,
+    .dj-vertical-vol-slider::-webkit-slider-thumb,
+    .pitch-drag-slider-vertical::-moz-range-thumb,
+    .dj-vertical-vol-slider::-moz-range-thumb {
+      -webkit-appearance: none;
+      width: 34px !important;
+      height: 14px !important;
+      border-radius: 2px !important;
+      background: linear-gradient(180deg, #444 0%, #111 100%) !important;
+      border: 1px solid #666 !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.3);
+      background-image: linear-gradient(to right, transparent 45%, #fff 45%, #fff 55%, transparent 55%) !important;
+      cursor: ns-resize;
+    }
+
     .crossfader-box {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 4px;
       align-items: center;
     }
 
@@ -919,32 +998,26 @@
       cursor: pointer;
     }
 
-    /* Standing Vertical Crossfader Knob */
     .crossfader-slider::-webkit-slider-thumb,
     .crossfader-slider::-moz-range-thumb {
       -webkit-appearance: none;
-      width: 12px;
-      height: 28px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, #363642 0%, #1f1f26 45%, #ffffff 48%, #ffffff 52%, #1f1f26 55%, #2a2a34 100%);
-      border: 1px solid #4a4a58;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.85);
-      cursor: grab;
+      width: 14px !important;
+      height: 28px !important;
+      border-radius: 2px !important;
+      background: linear-gradient(90deg, #444 0%, #111 100%) !important;
+      border: 1px solid #666 !important;
+      background-image: linear-gradient(to bottom, transparent 45%, #fff 45%, #fff 55%, transparent 55%) !important;
+      cursor: ew-resize;
     }
 
-    .crossfader-slider::-webkit-slider-thumb:active {
-      cursor: grabbing;
-      background: linear-gradient(90deg, #444452 0%, #22222a 45%, #f97316 48%, #f97316 52%, #22222a 55%, #33333e 100%);
-    }
-
-    .xfade-mini-actions { display: flex; gap: 0.15rem; width: 100%; }
+    .xfade-mini-actions { display: flex; gap: 3px; width: 100%; }
 
     .xfade-mini-btn {
       flex: 1;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.15rem 0.1rem;
+      padding: 2px 1px;
       border-radius: 2px;
       font-size: 0.58rem;
       font-weight: 800;
@@ -963,7 +1036,8 @@
 </head>
 <body>
 
-  <div class="container">
+  <!-- Root Console Container with Fixed 100vh Viewport Constraint -->
+  <div class="dj-console-container">
     
     <!-- Global Header Bar -->
     <header>
@@ -989,13 +1063,13 @@
       </div>
     </header>
 
-    <!-- Main Console Grid (Ultra-Tight Layout) -->
+    <!-- Main Console 3-Column Grid Layout -->
     <div class="console-grid">
       
       <!-- DECK A (LEFT - NEON CYAN) -->
       <div class="deck-card deck-a">
         
-        <!-- Capped Outer Left Pitch Strip (Deck A) -->
+        <!-- Restrained Outer Left Pitch Strip (Deck A) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
             <span class="pitch-title">PITCH</span>
@@ -1023,7 +1097,7 @@
           </div>
         </div>
 
-        <!-- Deck A Main Content Body -->
+        <!-- Deck A Main Flex Structure -->
         <div class="deck-main-body">
           
           <!-- 1. Top Header Panel (Search & Load Bar) -->
@@ -1038,7 +1112,7 @@
             </div>
           </div>
 
-          <!-- 2. Waveform Canvas Row & Docked BPM Panel -->
+          <!-- 2. Waveform Canvas Area & Docked BPM Panel -->
           <div class="waveform-canvas-row">
             <div class="waveform-main-wrap">
               <div class="time-display">
@@ -1067,12 +1141,12 @@
             </div>
           </div>
 
-          <!-- 3. Prominent YouTube Video Viewport -->
+          <!-- 3. YouTube Video Embed Viewport (16:9 Aspect Ratio / Max-Height 200px) -->
           <div id="viewport-a" class="video-viewport">
             <div id="yt-player-a" class="yt-player"></div>
           </div>
 
-          <!-- 4. Hot Cue Buttons Row (Placed ABOVE Play & Cue) -->
+          <!-- 4. Hot Cue Buttons Row -->
           <div class="hot-cues-section">
             <div class="hot-cues-header">
               <span>🔥 HOT CUES (KEYS: 1, 2, 3, 4)</span>
@@ -1108,11 +1182,51 @@
 
       </div>
 
-      <!-- CENTRAL MIXER STRIP (Tight Vol Sliders Side-by-Side) -->
-      <div class="central-mixer-card">
+      <!-- CENTRAL MIXER STRIP (WITH 3-BAND EQ KNOBS SECTION) -->
+      <div class="central-mixer-card central-mixer">
         <div class="mixer-header">🎛️ CENTRAL MIXER</div>
 
-        <!-- Master Deck Volumes -->
+        <!-- 3-Band EQ Section (-12dB to +6dB) -->
+        <div class="eq-section-card">
+          <div class="eq-header-title">3-BAND EQ</div>
+          <div class="eq-channels-container">
+            <!-- Channel A EQs -->
+            <div class="eq-channel col-a">
+              <span class="eq-deck-label" style="color:var(--cyan-main);">CH A</span>
+              <div class="eq-knob-group">
+                <input id="eqHiA" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
+                <span class="eq-label">HI <span id="eqHiValA">0dB</span></span>
+              </div>
+              <div class="eq-knob-group">
+                <input id="eqMidA" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
+                <span class="eq-label">MID <span id="eqMidValA">0dB</span></span>
+              </div>
+              <div class="eq-knob-group">
+                <input id="eqLowA" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
+                <span class="eq-label">LOW <span id="eqLowValA">0dB</span></span>
+              </div>
+            </div>
+
+            <!-- Channel B EQs -->
+            <div class="eq-channel col-b">
+              <span class="eq-deck-label" style="color:var(--orange-main);">CH B</span>
+              <div class="eq-knob-group">
+                <input id="eqHiB" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
+                <span class="eq-label">HI <span id="eqHiValB">0dB</span></span>
+              </div>
+              <div class="eq-knob-group">
+                <input id="eqMidB" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
+                <span class="eq-label">MID <span id="eqMidValB">0dB</span></span>
+              </div>
+              <div class="eq-knob-group">
+                <input id="eqLowB" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
+                <span class="eq-label">LOW <span id="eqLowValB">0dB</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Master Deck Volume Card -->
         <div class="master-vol-card">
           <div class="vol-header-title">CHANNEL VOLUMES</div>
           <div class="vertical-vols-container">
@@ -1148,7 +1262,7 @@
             <span style="color:var(--orange-main);">(<span id="crossValTextB">50%</span>) B ►</span>
           </div>
 
-          <input id="masterCrossfader" type="range" class="crossfader-slider" min="0" max="100" value="50">
+          <input id="masterCrossfader" type="range" class="crossfader-slider crossfader" min="0" max="100" value="50">
 
           <div class="xfade-mini-actions">
             <button id="btnXfadeA" class="xfade-mini-btn">◄ FULL A</button>
@@ -1161,7 +1275,7 @@
       <!-- DECK B (RIGHT - NEON ORANGE) -->
       <div class="deck-card deck-b">
         
-        <!-- Deck B Main Content Body -->
+        <!-- Deck B Main Flex Structure -->
         <div class="deck-main-body">
           
           <!-- 1. Top Header Panel (Search & Load Bar) -->
@@ -1176,7 +1290,7 @@
             </div>
           </div>
 
-          <!-- 2. Waveform Canvas Row & Docked BPM Panel -->
+          <!-- 2. Waveform Canvas Area & Docked BPM Panel -->
           <div class="waveform-canvas-row">
             <div class="waveform-main-wrap">
               <div class="time-display">
@@ -1205,12 +1319,12 @@
             </div>
           </div>
 
-          <!-- 3. Prominent YouTube Video Viewport -->
+          <!-- 3. YouTube Video Embed Viewport (16:9 Aspect Ratio / Max-Height 200px) -->
           <div id="viewport-b" class="video-viewport">
             <div id="yt-player-b" class="yt-player"></div>
           </div>
 
-          <!-- 4. Hot Cue Buttons Row (Placed ABOVE Play & Cue) -->
+          <!-- 4. Hot Cue Buttons Row -->
           <div class="hot-cues-section">
             <div class="hot-cues-header">
               <span>🔥 HOT CUES (KEYS: 7, 8, 9, 0)</span>
@@ -1244,7 +1358,7 @@
 
         </div>
 
-        <!-- Capped Outer Right Pitch Strip (Deck B) -->
+        <!-- Restrained Outer Right Pitch Strip (Deck B) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
             <span class="pitch-title">PITCH</span>
@@ -1289,7 +1403,7 @@
     </div>
   </div>
 
-  <!-- YOUTUBE IFRAME DUAL DECK ENGINE -->
+  <!-- YOUTUBE IFRAME DUAL DECK ENGINE WITH 3-BAND EQ PROCESSING -->
   <script>
     let playerA = null;
     let playerB = null;
@@ -1310,8 +1424,8 @@
 
     // Waveform & Deck State
     const deckState = {
-      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null }, cachedTime: 0.0 },
-      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null }, cachedTime: 0.0 }
+      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null }, eq: { hi: 0, mid: 0, low: 0 } },
+      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null }, eq: { hi: 0, mid: 0, low: 0 } }
     };
 
     /**
@@ -1546,6 +1660,39 @@
       if (player && typeof player.setPlaybackRate === 'function') {
         player.setPlaybackRate(rate);
       }
+    }
+
+    /**
+     * 3-BAND EQ PROCESSING ENGINE (-12dB to +6dB)
+     */
+    function setupEQEvents(deck) {
+      ['Hi', 'Mid', 'Low'].forEach(band => {
+        const slider = document.getElementById(`eq${band}${deck}`);
+        const valEl = document.getElementById(`eq${band}Val${deck}`);
+        if (!slider) return;
+
+        slider.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value);
+          const sign = val > 0 ? '+' : '';
+          if (valEl) valEl.textContent = `${sign}${val}dB`;
+
+          deckState[deck].eq[band.toLowerCase()] = val;
+          applyEQFilter(deck);
+        });
+      });
+    }
+
+    function applyEQFilter(deck) {
+      const eq = deckState[deck].eq;
+      const viewport = document.getElementById(`viewport-${deck.toLowerCase()}`);
+      if (!viewport) return;
+
+      // Dynamic Visual Color Filter mapping for EQ bands (HI = Brightness/Contrast, MID = Saturation, LOW = Warmth/Hue)
+      const hiFactor = 1.0 + (eq.hi / 24.0);
+      const midFactor = 1.0 + (eq.mid / 24.0);
+      const lowFactor = 1.0 + (eq.low / 24.0);
+
+      viewport.style.filter = `brightness(${hiFactor.toFixed(2)}) contrast(${midFactor.toFixed(2)}) saturate(${lowFactor.toFixed(2)})`;
     }
 
     /**
@@ -2059,6 +2206,9 @@
       // Tap Tempo & Quantize
       document.getElementById(`btnTap${deck}`).addEventListener('click', () => handleTap(deck));
       document.getElementById(`btnQuant${deck}`).addEventListener('click', () => toggleQuantize(deck));
+
+      // Setup 3-Band EQ Event Listeners
+      setupEQEvents(deck);
 
       // Synchronized Scrubbing
       const canvas = document.getElementById(`waveform${deck}`);
