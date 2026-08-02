@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - In-App Track Search & Quick Preset Dropdown</title>
+  <title>YouTube DJ Deck - Robust Track Loader & Video ID Sanitizer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1513,7 +1513,7 @@
 
     const CUE_COLORS = { 1: '#ef4444', 2: '#10b981', 3: '#3b82f6', 4: '#eab308' };
 
-    // Curated DJ Track Search Database & Query Resolver
+    // Curated DJ Track Search Database
     const DJ_SEARCH_DATABASE = [
       { id: 'jfKfPfyJRdk', title: 'Lofi Hip Hop Radio - Beats to Relax/Study to', channel: 'Lofi Girl', duration: '3:45' },
       { id: '4xDzrJKXOOY', title: 'Synthwave Cyberpunk DJ Mix - Overdrive', channel: 'Lazerhawk', duration: '4:20' },
@@ -1530,6 +1530,20 @@
       A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, eqHigh: 100, eqMid: 100, eqLow: 100, cues: { 1: null, 2: null, 3: null, 4: null } },
       B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, eqHigh: 100, eqMid: 100, eqLow: 100, cues: { 1: null, 2: null, 3: null, 4: null } }
     };
+
+    /**
+     * 1. VIDEO ID SANITIZER HELPER FUNCTION
+     * Handles full URLs, short links, and raw 11-char IDs
+     */
+    function extractYouTubeId(input) {
+      if (!input) return null;
+      input = input.trim();
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = input.match(regExp);
+      if (match && match[2] && match[2].length === 11) return match[2];
+      if (input.length === 11) return input;
+      return null;
+    }
 
     /**
      * AUDACITY PEAK-SUMMARY PYRAMID DATA GENERATOR (4000 Points)
@@ -1578,22 +1592,63 @@
     }
 
     /**
+     * 2. BULLETPROOF TRACK LOADER & FALLBACK ENGINE
+     * loadTrackToDeck(deck, rawInput)
+     */
+    function loadTrackToDeck(deck, rawInput) {
+      const videoId = extractYouTubeId(rawInput);
+      if (!videoId) return alert(`Invalid YouTube Video or Search result for Deck ${deck}!`);
+
+      // Update State & Re-generate Waveform & BPM
+      deckState[deck].id = videoId;
+      deckState[deck].peakSummaryCache = generateTrackWaveform(videoId);
+      deckState[deck].bpm = detectAutoBPM(videoId, deckState[deck].peakSummaryCache);
+      deckState[deck].masterCue = 0.0;
+      deckState[deck].zoom = 1.0;
+      deckState[deck].panPct = 0.0;
+
+      const bpmBadge = document.getElementById(`bpmVal${deck}`);
+      if (bpmBadge) bpmBadge.textContent = `${deckState[deck].bpm.toFixed(1)} BPM`;
+
+      const zoomSlider = document.getElementById(`zoomSlider${deck}`);
+      const zoomText = document.getElementById(`zoomText${deck}`);
+      if (zoomSlider) zoomSlider.value = 1.0;
+      if (zoomText) zoomText.textContent = '1.0x';
+
+      loadCuesFromStorage(deck, videoId);
+      applyPitchShift(deck, 0.0);
+
+      const player = deck === 'A' ? playerA : playerB;
+
+      // 3. IFrame API cue/load with Fallback IFrame src re-initialization
+      if (player && typeof player.cueVideoById === 'function') {
+        player.cueVideoById(videoId);
+      } else if (player && typeof player.loadVideoById === 'function') {
+        player.loadVideoById({ videoId: videoId, startSeconds: 0 });
+        player.pauseVideo();
+      } else {
+        // Fallback IFrame Direct Update
+        const iframe = document.querySelector(`#yt-player-${deck.toLowerCase()} iframe`) || document.getElementById(`yt-player-${deck.toLowerCase()}`);
+        if (iframe) {
+          iframe.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&autoplay=0`;
+        }
+      }
+    }
+
+    /**
      * SMART TRACK SEARCH & LOADER LOGIC
-     * handleTrackSearch(query, deck)
      */
     function handleTrackSearch(query, targetDeck = null) {
       if (!query || !query.trim()) return;
       query = query.trim();
 
-      // Case A: Direct Link or 11-char Video ID
-      const directId = extractVideoId(query);
+      const directId = extractYouTubeId(query);
       if (directId) {
-        if (targetDeck === 'B') initDeckB(directId);
-        else initDeckA(directId);
+        if (targetDeck === 'B') loadTrackToDeck('B', directId);
+        else loadTrackToDeck('A', directId);
         return;
       }
 
-      // Case B: Text Query -> Open Search Modal with Results
       const qLower = query.toLowerCase();
       const results = DJ_SEARCH_DATABASE.filter(item => 
         item.title.toLowerCase().includes(qLower) || item.channel.toLowerCase().includes(qLower)
@@ -1639,14 +1694,14 @@
         `;
 
         card.querySelector('.btn-assign-a').addEventListener('click', () => {
-          initDeckA(item.id);
+          loadTrackToDeck('A', item.id);
           const trackTitle = document.getElementById('trackTitleA');
           if (trackTitle) trackTitle.textContent = item.title;
           closeSearchModal();
         });
 
         card.querySelector('.btn-assign-b').addEventListener('click', () => {
-          initDeckB(item.id);
+          loadTrackToDeck('B', item.id);
           const trackTitle = document.getElementById('trackTitleB');
           if (trackTitle) trackTitle.textContent = item.title;
           closeSearchModal();
@@ -1779,62 +1834,32 @@
       initDeckB('4xDzrJKXOOY');
     };
 
-    function extractVideoId(input) {
-      if (!input) return null;
-      input = input.trim();
-      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-      const match = input.match(regExp);
-      if (match && match[2].length === 11) return match[2];
-      if (input.length === 11) return input;
-      return null;
-    }
-
     function initDeckA(videoId) {
-      deckState.A.id = videoId;
-      deckState.A.peakSummaryCache = generateTrackWaveform(videoId);
-      deckState.A.bpm = detectAutoBPM(videoId, deckState.A.peakSummaryCache);
-      deckState.A.masterCue = 0.0;
-      document.getElementById('bpmValA').textContent = `${deckState.A.bpm.toFixed(1)} BPM`;
-      loadCuesFromStorage('A', videoId);
-      applyPitchShift('A', 0.0);
-
-      if (playerA && typeof playerA.loadVideoById === 'function') {
-        playerA.loadVideoById({ videoId: videoId, startSeconds: 0 });
-        playerA.pauseVideo();
-        return;
+      loadTrackToDeck('A', videoId);
+      if (!playerA) {
+        playerA = new YT.Player('yt-player-a', {
+          height: '100%', width: '100%', videoId: videoId,
+          playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0, 'modestbranding': 1, 'enablejsapi': 1 },
+          events: {
+            'onReady': () => { updateCrossfade(); setupDeckEvents('A'); playerA.pauseVideo(); },
+            'onStateChange': (e) => handleStateChange(e, 'A')
+          }
+        });
       }
-      playerA = new YT.Player('yt-player-a', {
-        height: '100%', width: '100%', videoId: videoId,
-        playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0, 'modestbranding': 1, 'enablejsapi': 1 },
-        events: {
-          'onReady': () => { updateCrossfade(); setupDeckEvents('A'); playerA.pauseVideo(); },
-          'onStateChange': (e) => handleStateChange(e, 'A')
-        }
-      });
     }
 
     function initDeckB(videoId) {
-      deckState.B.id = videoId;
-      deckState.B.peakSummaryCache = generateTrackWaveform(videoId);
-      deckState.B.bpm = detectAutoBPM(videoId, deckState.B.peakSummaryCache);
-      deckState.B.masterCue = 0.0;
-      document.getElementById('bpmValB').textContent = `${deckState.B.bpm.toFixed(1)} BPM`;
-      loadCuesFromStorage('B', videoId);
-      applyPitchShift('B', 0.0);
-
-      if (playerB && typeof playerB.loadVideoById === 'function') {
-        playerB.loadVideoById({ videoId: videoId, startSeconds: 0 });
-        playerB.pauseVideo();
-        return;
+      loadTrackToDeck('B', videoId);
+      if (!playerB) {
+        playerB = new YT.Player('yt-player-b', {
+          height: '100%', width: '100%', videoId: videoId,
+          playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0, 'modestbranding': 1, 'enablejsapi': 1 },
+          events: {
+            'onReady': () => { updateCrossfade(); setupDeckEvents('B'); playerB.pauseVideo(); },
+            'onStateChange': (e) => handleStateChange(e, 'B')
+          }
+        });
       }
-      playerB = new YT.Player('yt-player-b', {
-        height: '100%', width: '100%', videoId: videoId,
-        playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0, 'modestbranding': 1, 'enablejsapi': 1 },
-        events: {
-          'onReady': () => { updateCrossfade(); setupDeckEvents('B'); playerB.pauseVideo(); },
-          'onStateChange': (e) => handleStateChange(e, 'B')
-        }
-      });
     }
 
     function handleStateChange(event, deck) {
@@ -2161,8 +2186,7 @@
         presetSelect.addEventListener('change', (e) => {
           const val = e.target.value;
           if (val) {
-            if (deck === 'A') initDeckA(val);
-            else initDeckB(val);
+            loadTrackToDeck(deck, val);
           }
         });
       }
@@ -2377,8 +2401,7 @@
         chip.addEventListener('click', () => {
           const deck = chip.getAttribute('data-deck');
           const id = chip.getAttribute('data-id');
-          if (deck === 'A') initDeckA(id);
-          else if (deck === 'B') initDeckB(id);
+          loadTrackToDeck(deck, id);
         });
       });
 
