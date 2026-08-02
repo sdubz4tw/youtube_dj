@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - Serato DJ Static Waveforms</title>
+  <title>YouTube DJ Deck - High-Density Transients & Serato Beat Grid</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -236,9 +236,9 @@
       pointer-events: none;
     }
 
-    /* Serato DJ Static Overview Waveform Container */
+    /* Serato DJ High-Density Transient Waveform & Beat Grid Container */
     .waveform-card {
-      background: rgba(10, 10, 14, 0.95);
+      background: rgba(8, 8, 12, 0.95);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 0.75rem 0.85rem;
@@ -261,7 +261,7 @@
 
     .waveform-canvas-wrap {
       width: 100%;
-      height: 64px;
+      height: 68px;
       position: relative;
       cursor: pointer;
     }
@@ -271,7 +271,7 @@
       height: 100%;
       border-radius: 6px;
       display: block;
-      background: #0a0a0e;
+      background: #08080c;
     }
 
     /* BPM & Tap Tempo Card */
@@ -582,15 +582,15 @@
           <div id="yt-player-a" class="yt-player"></div>
         </div>
 
-        <!-- Serato DJ Static Symmetrical Waveform Canvas Deck A -->
+        <!-- High-Density Transient Waveform & Serato Beat Grid Deck A -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeA">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Serato Overview Waveform A</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Serato Beat Grid Waveform A</span>
             <span id="durTimeA">00:00</span>
           </div>
           <div class="waveform-canvas-wrap">
-            <canvas id="waveformA" class="waveform-canvas" width="600" height="64"></canvas>
+            <canvas id="waveformA" class="waveform-canvas"></canvas>
           </div>
         </div>
 
@@ -598,7 +598,7 @@
         <div class="bpm-card">
           <div class="bpm-badge-wrap">
             <button id="btnTapA" class="btn-tap">TAP (Key: T)</button>
-            <span id="bpmValA" class="bpm-badge">--- BPM</span>
+            <span id="bpmValA" class="bpm-badge">120 BPM</span>
           </div>
           <div class="pitch-nudge-group">
             <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">PITCH</span>
@@ -663,15 +663,15 @@
           <div id="yt-player-b" class="yt-player"></div>
         </div>
 
-        <!-- Serato DJ Static Symmetrical Waveform Canvas Deck B -->
+        <!-- High-Density Transient Waveform & Serato Beat Grid Deck B -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeB">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Serato Overview Waveform B</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Serato Beat Grid Waveform B</span>
             <span id="durTimeB">00:00</span>
           </div>
           <div class="waveform-canvas-wrap">
-            <canvas id="waveformB" class="waveform-canvas" width="600" height="64"></canvas>
+            <canvas id="waveformB" class="waveform-canvas"></canvas>
           </div>
         </div>
 
@@ -679,7 +679,7 @@
         <div class="bpm-card">
           <div class="bpm-badge-wrap">
             <button id="btnTapB" class="btn-tap">TAP (Key: Y)</button>
-            <span id="bpmValB" class="bpm-badge">--- BPM</span>
+            <span id="bpmValB" class="bpm-badge">128 BPM</span>
           </div>
           <div class="pitch-nudge-group">
             <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">PITCH</span>
@@ -751,16 +751,15 @@
 
     // Waveform & Tap Tempo State
     const deckState = {
-      A: { peaks: [], id: 'jfKfPfyJRdk', taps: [], bpm: null },
-      B: { peaks: [], id: '4xDzrJKXOOY', taps: [], bpm: null }
+      A: { peaks: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120 },
+      B: { peaks: [], id: '4xDzrJKXOOY', taps: [], bpm: 128 }
     };
 
     /**
-     * STATIC SERATO DJ-STYLE OVERVIEW WAVEFORM PEAK GENERATOR
-     * (Red/Orange = Bass, Cyan/Blue = Mids, White = Highs)
+     * HIGH-DENSITY 500-BAR TRANSIENT WAVEFORM GENERATOR
      */
     function generateTrackWaveform(id) {
-      const bars = 180;
+      const bars = 500; // Ultra-high density 500 bars
       const arr = [];
       let hash = 0;
       for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
@@ -768,22 +767,19 @@
       for (let i = 0; i < bars; i++) {
         const pct = i / bars; // 0.0 to 1.0
 
-        let sectionFactor = 0.35; // Intro
-        if (pct >= 0.18 && pct < 0.42) { // Build-up
-          sectionFactor = 0.35 + (pct - 0.18) * 2.2;
-        } else if (pct >= 0.42 && pct < 0.78) { // Heavy Drop / Chorus Peak
-          sectionFactor = 0.88 + Math.sin(i * 0.45) * 0.12;
-        } else if (pct >= 0.78) { // Outro
-          sectionFactor = 0.75 - (pct - 0.78) * 2.5;
-        }
+        let sectionFactor = 0.35;
+        if (pct >= 0.18 && pct < 0.42) sectionFactor = 0.35 + (pct - 0.18) * 2.2;
+        else if (pct >= 0.42 && pct < 0.78) sectionFactor = 0.88 + Math.sin(i * 0.12) * 0.12;
+        else if (pct >= 0.78) sectionFactor = 0.75 - (pct - 0.78) * 2.5;
 
-        const rawVal = Math.abs(Math.sin(hash * 0.12 + i * 0.3) * 0.7 + Math.cos(i * 0.16) * 0.3);
-        const height = Math.max(0.15, Math.min(0.95, rawVal * sectionFactor));
+        // Sharp beat hit spikes (kick/snare hits) with decay valleys
+        const spike = Math.pow(Math.abs(Math.sin(i * 0.28 + hash * 0.05)), 5.5);
+        const height = Math.max(0.08, Math.min(0.98, (spike * 0.85 + 0.15) * sectionFactor));
 
-        // Serato Frequency Types
-        let freqType = 'mid'; // Cyan / Blue
-        if (height > 0.72 || i % 4 === 0) freqType = 'bass'; // Red / Orange
-        else if (i % 5 === 0 || (height > 0.55 && height < 0.70)) freqType = 'high'; // White / Light Cyan
+        // High-contrast frequency colors
+        let freqType = 'mid'; // Cyan
+        if (height > 0.65 || i % 12 === 0) freqType = 'kick'; // Heavy Orange/Red
+        else if (i % 6 === 3) freqType = 'high'; // Pure White
 
         arr.push({ height, freqType });
       }
@@ -814,9 +810,6 @@
     function initDeckA(videoId) {
       deckState.A.id = videoId;
       deckState.A.peaks = generateTrackWaveform(videoId);
-      deckState.A.taps = [];
-      deckState.A.bpm = null;
-      document.getElementById('bpmValA').textContent = '--- BPM';
 
       if (playerA && typeof playerA.loadVideoById === 'function') {
         playerA.loadVideoById(videoId);
@@ -835,9 +828,6 @@
     function initDeckB(videoId) {
       deckState.B.id = videoId;
       deckState.B.peaks = generateTrackWaveform(videoId);
-      deckState.B.taps = [];
-      deckState.B.bpm = null;
-      document.getElementById('bpmValB').textContent = '--- BPM';
 
       if (playerB && typeof playerB.loadVideoById === 'function') {
         playerB.loadVideoById(videoId);
@@ -961,15 +951,24 @@
     }
 
     /**
-     * STATIC SERATO DJ-STYLE SYMMETRICAL WAVEFORM RENDERER
-     * (NO height fluctuating animations! Pure static overview with Serato color mapping)
+     * HIGH-DPI RETINA CANVAS RENDERER & SERATO BEAT GRID OVERLAY
      */
     function renderWaveformCanvas(deck, player) {
       const canvas = document.getElementById(`waveform${deck}`);
       if (!canvas) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+
       const ctx = canvas.getContext('2d');
-      const w = canvas.width;
-      const h = canvas.height;
+      ctx.scale(dpr, dpr);
+
+      const w = rect.width;
+      const h = rect.height;
       const yCenter = h / 2;
 
       ctx.clearRect(0, 0, w, h);
@@ -982,50 +981,56 @@
 
       const peaks = deckState[deck].peaks;
       const barCount = peaks.length;
-      const barGap = 1.2;
-      const barWidth = (w - (barCount * barGap)) / barCount;
+      const barWidth = w / barCount;
 
+      // 1. Draw High-Density Symmetrical Transients
       for (let i = 0; i < barCount; i++) {
-        const x = i * (barWidth + barGap);
+        const x = i * barWidth;
         const peak = peaks[i];
 
-        // Symmetrical Height (Top & Bottom mirrored from center line)
-        const barHalfH = Math.max(2, (peak.height * (h - 6)) / 2);
+        const barHalfH = Math.max(1.5, (peak.height * (h - 6)) / 2);
         const isPast = (x <= playheadX);
 
-        // Serato DJ Frequency Color Palette
-        let color = '#06b6d4';
-        if (peak.freqType === 'bass') {
-          // Low Frequencies: Heavy Red / Orange Bass
-          color = isPast ? '#ef4444' : 'rgba(239, 68, 68, 0.40)';
+        // Serato High Contrast Colors
+        let color = '#00f2fe';
+        if (peak.freqType === 'kick') {
+          color = isPast ? '#f97316' : 'rgba(249, 115, 22, 0.38)';
         } else if (peak.freqType === 'high') {
-          // High Frequencies: Pure White / Crisp Percussion
-          color = isPast ? '#ffffff' : 'rgba(255, 255, 255, 0.40)';
+          color = isPast ? '#ffffff' : 'rgba(255, 255, 255, 0.38)';
         } else {
-          // Mid Frequencies: Electric Cyan / Synths & Vocals
-          color = isPast ? '#00f2fe' : 'rgba(0, 242, 254, 0.40)';
+          color = isPast ? '#00f2fe' : 'rgba(0, 242, 254, 0.38)';
         }
 
         ctx.fillStyle = color;
-        if (isPast) {
-          ctx.shadowColor = color;
-          ctx.shadowBlur = 4;
-        } else {
-          ctx.shadowColor = 'transparent';
-          ctx.shadowBlur = 0;
-        }
-
-        // Draw symmetrical peak centered horizontally
-        ctx.fillRect(x, yCenter - barHalfH, barWidth, barHalfH * 2);
+        ctx.fillRect(x, yCenter - barHalfH, Math.max(1, barWidth - 0.2), barHalfH * 2);
       }
 
-      // Draw Center Axis Guide Line
+      // 2. Draw Serato BPM Beat Grid Lines Overlay (T_beat = 60 / BPM)
+      const bpm = deckState[deck].bpm || 120;
+      if (dur > 0 && bpm > 0) {
+        const totalBeats = (dur / 60.0) * bpm;
+        ctx.save();
+        for (let b = 0; b < totalBeats; b++) {
+          const beatX = (b / totalBeats) * w;
+          const isDownbeat = (b % 4 === 0);
+
+          ctx.beginPath();
+          ctx.strokeStyle = isDownbeat ? 'rgba(255, 255, 255, 0.70)' : 'rgba(255, 255, 255, 0.22)';
+          ctx.lineWidth = isDownbeat ? 1.5 : 0.8;
+          ctx.moveTo(beatX, 0);
+          ctx.lineTo(beatX, h);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // 3. Center Guide Line
       ctx.save();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.fillRect(0, yCenter - 0.5, w, 1);
       ctx.restore();
 
-      // Draw Glowing Serato Playhead Cursor Line
+      // 4. Glowing Playhead Line
       ctx.save();
       ctx.beginPath();
       ctx.fillStyle = '#ffffff';
