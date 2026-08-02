@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - Dual Deck & Master Crossfader</title>
+  <title>YouTube DJ Deck - Interactive Waveforms & Dual Decks</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -236,11 +236,16 @@
       pointer-events: none;
     }
 
-    /* Timeline Scrub Bar */
-    .timeline-box {
+    /* Waveform Canvas & Interactive Timeline Container */
+    .waveform-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.75rem 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.4rem;
+      position: relative;
     }
 
     .time-display {
@@ -254,18 +259,19 @@
     .deck-a .time-display { color: var(--cyan-main); }
     .deck-b .time-display { color: var(--magenta-main); }
 
-    .scrub-bar {
+    .waveform-canvas-wrap {
       width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
+      height: 54px;
+      position: relative;
       cursor: pointer;
     }
 
-    .deck-a .scrub-bar::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--cyan-main); box-shadow: 0 0 10px var(--cyan-main); }
-    .deck-b .scrub-bar::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--magenta-main); box-shadow: 0 0 10px var(--magenta-main); }
+    .waveform-canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+      display: block;
+    }
 
     /* Controls Grid inside Deck */
     .controls-grid {
@@ -480,12 +486,16 @@
           <div id="yt-player-a" class="yt-player"></div>
         </div>
 
-        <div class="timeline-box">
+        <!-- Interactive Waveform Overlay & Scrubbing Track A -->
+        <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeA">00:00</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Waveform Scrub Track A</span>
             <span id="durTimeA">00:00</span>
           </div>
-          <input id="scrubA" type="range" class="scrub-bar" min="0" max="100" value="0">
+          <div class="waveform-canvas-wrap">
+            <canvas id="waveformA" class="waveform-canvas" width="600" height="54"></canvas>
+          </div>
         </div>
 
         <div class="controls-grid">
@@ -543,12 +553,16 @@
           <div id="yt-player-b" class="yt-player"></div>
         </div>
 
-        <div class="timeline-box">
+        <!-- Interactive Waveform Overlay & Scrubbing Track B -->
+        <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeB">00:00</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Waveform Scrub Track B</span>
             <span id="durTimeB">00:00</span>
           </div>
-          <input id="scrubB" type="range" class="scrub-bar" min="0" max="100" value="0">
+          <div class="waveform-canvas-wrap">
+            <canvas id="waveformB" class="waveform-canvas" width="600" height="54"></canvas>
+          </div>
         </div>
 
         <div class="controls-grid">
@@ -606,12 +620,28 @@
 
   </div>
 
-  <!-- YOUTUBE IFRAME DUAL DECK ENGINE -->
+  <!-- YOUTUBE IFRAME DUAL DECK & WAVEFORM ENGINE -->
   <script>
     let playerA = null;
     let playerB = null;
-    let isScrubbingA = false;
-    let isScrubbingB = false;
+
+    // Waveform Seeds & Data
+    const waveformData = {
+      A: { seed: [], id: 'jfKfPfyJRdk' },
+      B: { seed: [], id: '4xDzrJKXOOY' }
+    };
+
+    function generateWaveformSeed(id) {
+      const bars = 90;
+      const arr = [];
+      let hash = 0;
+      for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
+      for (let i = 0; i < bars; i++) {
+        const val = Math.abs(Math.sin(hash * 0.1 + i * 0.35) * 0.75 + Math.cos(i * 0.18) * 0.25);
+        arr.push(Math.max(0.15, Math.min(1.0, val)));
+      }
+      return arr;
+    }
 
     // Load YouTube IFrame API
     const tag = document.createElement('script');
@@ -635,6 +665,8 @@
     }
 
     function initDeckA(videoId) {
+      waveformData.A.id = videoId;
+      waveformData.A.seed = generateWaveformSeed(videoId);
       if (playerA && typeof playerA.loadVideoById === 'function') {
         playerA.loadVideoById(videoId);
         return;
@@ -650,6 +682,8 @@
     }
 
     function initDeckB(videoId) {
+      waveformData.B.id = videoId;
+      waveformData.B.seed = generateWaveformSeed(videoId);
       if (playerB && typeof playerB.loadVideoById === 'function') {
         playerB.loadVideoById(videoId);
         return;
@@ -704,6 +738,72 @@
       document.getElementById('crossValTextB').textContent = `${Math.round(factorB * 100)}%`;
     }
 
+    /**
+     * RENDER REAL-TIME WAVEFORM CANVAS & PLAYHEAD
+     */
+    function renderWaveformCanvas(deck, player, timestamp) {
+      const canvas = document.getElementById(`waveform${deck}`);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const currTime = (player && typeof player.getCurrentTime === 'function') ? (player.getCurrentTime() || 0) : 0;
+      const dur = (player && typeof player.getDuration === 'function') ? (player.getDuration() || 0) : 0;
+      const isPlaying = (player && player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING);
+
+      const progress = dur > 0 ? Math.min(Math.max(currTime / dur, 0), 1.0) : 0;
+      const playheadX = progress * w;
+
+      const seed = waveformData[deck].seed;
+      const barCount = seed.length;
+      const barGap = 2;
+      const barWidth = (w - (barCount * barGap)) / barCount;
+
+      const mainColor = deck === 'A' ? '#00f2fe' : '#ec4899';
+      const mutedColor = deck === 'A' ? 'rgba(0, 242, 254, 0.22)' : 'rgba(236, 72, 153, 0.22)';
+
+      for (let i = 0; i < barCount; i++) {
+        const x = i * (barWidth + barGap);
+        let barHeightFactor = seed[i];
+
+        // Micro-pulse dynamic height animation while playing
+        if (isPlaying) {
+          const distToPlayhead = Math.abs(x - playheadX);
+          if (distToPlayhead < 60) {
+            const bounce = Math.sin((timestamp / 120) + (i * 0.4)) * 0.2;
+            barHeightFactor = Math.min(1.0, barHeightFactor + bounce);
+          }
+        }
+
+        const barH = Math.max(4, barHeightFactor * (h - 8));
+        const y = (h - barH) / 2;
+
+        if (x <= playheadX) {
+          ctx.fillStyle = mainColor;
+          ctx.shadowColor = mainColor;
+          ctx.shadowBlur = 6;
+        } else {
+          ctx.fillStyle = mutedColor;
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+        }
+
+        ctx.fillRect(x, y, barWidth, barH);
+      }
+
+      // Draw Glowing Playhead Bar
+      ctx.save();
+      ctx.beginPath();
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 12;
+      ctx.fillRect(playheadX - 1.5, 0, 3, h);
+      ctx.restore();
+    }
+
     function setupDeckEvents(deck) {
       const btnLoad = document.getElementById(`btnLoad${deck}`);
       const input = document.getElementById(`input${deck}`);
@@ -748,9 +848,29 @@
         const player = deck === 'A' ? playerA : playerB;
         if (player && typeof player.setPlaybackRate === 'function') player.setPlaybackRate(val);
       });
+
+      // Waveform Canvas Click & Drag Scrubbing
+      const canvas = document.getElementById(`waveform${deck}`);
+      let isDragging = false;
+
+      const handleScrub = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const ratio = Math.max(0, Math.min(clickX / rect.width, 1.0));
+        const player = deck === 'A' ? playerA : playerB;
+
+        if (player && typeof player.getDuration === 'function') {
+          const dur = player.getDuration() || 0;
+          player.seekTo(ratio * dur, true);
+        }
+      };
+
+      canvas.addEventListener('mousedown', (e) => { isDragging = true; handleScrub(e); });
+      window.addEventListener('mousemove', (e) => { if (isDragging) handleScrub(e); });
+      window.addEventListener('mouseup', () => isDragging = false);
     }
 
-    // Global Controls Setup
+    // Global Setup & Animation Loop
     document.addEventListener('DOMContentLoaded', () => {
       // Master Crossfader
       const xf = document.getElementById('masterCrossfader');
@@ -770,35 +890,18 @@
         });
       });
 
-      // Scrub Bars
-      const setupScrub = (deck) => {
-        const scrub = document.getElementById(`scrub${deck}`);
-        scrub.addEventListener('mousedown', () => { if (deck === 'A') isScrubbingA = true; else isScrubbingB = true; });
-        scrub.addEventListener('mouseup', () => {
-          if (deck === 'A') isScrubbingA = false; else isScrubbingB = false;
-          const player = deck === 'A' ? playerA : playerB;
-          if (player && typeof player.getDuration === 'function') {
-            const dur = player.getDuration();
-            player.seekTo((scrub.value / 100) * dur, true);
-          }
-        });
-      };
-      setupScrub('A');
-      setupScrub('B');
+      // RequestAnimationFrame Loop for Waveforms & VU Meters
+      function animLoop(t) {
+        renderWaveformCanvas('A', playerA, t);
+        renderWaveformCanvas('B', playerB, t);
 
-      // Global Update Loop (Timers & Equalizer Visualizer)
-      setInterval(() => {
-        const updateDeckState = (deck, player, isScrubbing) => {
-          if (!player || typeof player.getCurrentTime !== 'function' || isScrubbing) return;
+        const updateState = (deck, player) => {
+          if (!player || typeof player.getCurrentTime !== 'function') return;
           const currTime = player.getCurrentTime() || 0;
           const dur = player.getDuration() || 0;
 
           document.getElementById(`currTime${deck}`).textContent = formatTime(currTime);
           document.getElementById(`durTime${deck}`).textContent = formatTime(dur);
-
-          if (dur > 0) {
-            document.getElementById(`scrub${deck}`).value = (currTime / dur) * 100;
-          }
 
           const isPlaying = (player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING);
           const bars = document.querySelectorAll(`#eqBars${deck} .eq-bar`);
@@ -812,9 +915,13 @@
           });
         };
 
-        updateDeckState('A', playerA, isScrubbingA);
-        updateDeckState('B', playerB, isScrubbingB);
-      }, 200);
+        updateState('A', playerA);
+        updateState('B', playerB);
+
+        requestAnimationFrame(animLoop);
+      }
+
+      requestAnimationFrame(animLoop);
     });
   </script>
 </body>
