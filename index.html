@@ -10,10 +10,10 @@
 
   <style>
     :root {
-      --bg-dark: #0a0a0c;
-      --card-bg: #141416;
-      --card-border: #2a2a2e;
-      --input-bg: #0d0d0f;
+      --bg-dark: #070709;
+      --card-bg: #121214;
+      --card-border: #242428;
+      --input-bg: #0a0a0c;
       
       /* Deck A: Neon Cyan */
       --cyan-main: #00f2fe;
@@ -32,7 +32,7 @@
       --cue-4: #f59e0b;
 
       --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
+      --text-muted: #8e9aaf;
     }
 
     * {
@@ -52,44 +52,44 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0.5rem;
+      padding: 0.35rem 0.4rem;
       overflow-x: hidden;
     }
 
     .container {
-      max-width: 1440px;
+      max-width: 1380px;
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.35rem;
     }
 
-    /* Global Header Bar */
+    /* Global Header Bar - Tight & Low-Profile */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      padding: 0.35rem 0.75rem;
+      padding: 0.25rem 0.6rem;
       border-radius: 4px;
-      gap: 0.75rem;
+      gap: 0.5rem;
       flex-wrap: wrap;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
 
     .brand-icon {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--cyan-main);
     }
 
     .brand h1 {
-      font-size: 1rem;
+      font-size: 0.92rem;
       font-weight: 900;
       letter-spacing: 0.05em;
       background: linear-gradient(90deg, #00f2fe, #f97316);
@@ -100,7 +100,7 @@
 
     .global-search-box {
       flex: 1;
-      max-width: 440px;
+      max-width: 400px;
       position: relative;
       display: flex;
       align-items: center;
@@ -111,11 +111,11 @@
       background: var(--input-bg);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.3rem 2.5rem 0.3rem 0.65rem;
-      border-radius: 4px;
+      padding: 0.25rem 2.4rem 0.25rem 0.55rem;
+      border-radius: 3px;
       font-family: inherit;
-      font-size: 0.78rem;
-      height: 28px;
+      font-size: 0.75rem;
+      height: 26px;
     }
 
     .header-search-input:focus {
@@ -124,14 +124,14 @@
 
     .btn-global-search {
       position: absolute;
-      right: 3px;
+      right: 2px;
       background: linear-gradient(90deg, #00f2fe, #f97316);
       border: none;
       color: #000;
-      padding: 0 0.6rem;
+      padding: 0 0.5rem;
       height: 22px;
-      border-radius: 3px;
-      font-size: 0.7rem;
+      border-radius: 2px;
+      font-size: 0.68rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -139,35 +139,35 @@
     .master-status {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      font-size: 0.75rem;
+      gap: 0.45rem;
+      font-size: 0.7rem;
       font-weight: 700;
     }
 
     .deck-badge {
       display: flex;
       align-items: center;
-      gap: 0.3rem;
-      padding: 0.2rem 0.5rem;
+      gap: 0.25rem;
+      padding: 0.15rem 0.4rem;
       border-radius: 3px;
-      background: #08080a;
+      background: #060608;
       border: 1px solid var(--card-border);
     }
 
-    .dot-a { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan-main); box-shadow: 0 0 5px var(--cyan-main); }
-    .dot-b { width: 6px; height: 6px; border-radius: 50%; background: var(--orange-main); box-shadow: 0 0 5px var(--orange-main); }
+    .dot-a { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan-main); box-shadow: 0 0 5px var(--cyan-main); }
+    .dot-b { width: 5px; height: 5px; border-radius: 50%; background: var(--orange-main); box-shadow: 0 0 5px var(--orange-main); }
 
     /* Search Results Modal */
     .search-modal-backdrop {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.82);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(6px);
       z-index: 9999;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding-top: 3.5rem;
+      padding-top: 3rem;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease;
@@ -179,28 +179,28 @@
     }
 
     .search-results-modal {
-      background: #18181c;
+      background: #16161a;
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 6px;
-      max-width: 640px;
+      max-width: 600px;
       width: 90%;
-      padding: 0.85rem;
+      padding: 0.75rem;
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      gap: 0.55rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.85);
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.35rem;
+      padding-bottom: 0.3rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .modal-title {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 800;
     }
 
@@ -208,8 +208,8 @@
       background: rgba(255, 255, 255, 0.1);
       border: none;
       color: var(--text-main);
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       font-weight: 800;
       cursor: pointer;
@@ -218,23 +218,23 @@
     .results-list {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      max-height: 400px;
+      gap: 0.45rem;
+      max-height: 380px;
       overflow-y: auto;
     }
 
     .result-card {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      background: #0d0d0f;
+      gap: 0.55rem;
+      background: #0a0a0c;
       border: 1px solid var(--card-border);
-      padding: 0.45rem;
+      padding: 0.4rem;
       border-radius: 4px;
     }
 
     .result-thumb-wrap {
-      width: 85px;
+      width: 80px;
       aspect-ratio: 16 / 9;
       border-radius: 3px;
       overflow: hidden;
@@ -245,18 +245,18 @@
     .result-thumb { width: 100%; height: 100%; object-fit: cover; }
 
     .result-info { flex: 1; display: flex; flex-direction: column; gap: 0.1rem; }
-    .result-title { font-size: 0.78rem; font-weight: 700; line-height: 1.2; }
-    .result-channel { font-size: 0.68rem; color: var(--text-muted); }
-    .result-dur { font-size: 0.65rem; font-family: monospace; color: var(--cyan-main); }
+    .result-title { font-size: 0.75rem; font-weight: 700; line-height: 1.2; }
+    .result-channel { font-size: 0.65rem; color: var(--text-muted); }
+    .result-dur { font-size: 0.62rem; font-family: monospace; color: var(--cyan-main); }
 
-    .result-actions { display: flex; gap: 0.3rem; }
+    .result-actions { display: flex; gap: 0.25rem; }
 
     .btn-assign-deck {
       border: none;
-      height: 26px;
-      padding: 0 0.55rem;
+      height: 24px;
+      padding: 0 0.5rem;
       border-radius: 3px;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -264,22 +264,22 @@
     .btn-assign-a { background: var(--cyan-gradient); color: #000; }
     .btn-assign-b { background: var(--orange-gradient); color: #fff; }
 
-    /* Traktor Console Grid (Low-Profile & Fitted) */
+    /* Traktor Console Grid (Ultra-Tight Layout) */
     .console-grid {
       display: grid;
-      grid-template-columns: 1fr 260px 1fr;
-      gap: 0.6rem;
+      grid-template-columns: 1fr 220px 1fr;
+      gap: 0.35rem;
       align-items: stretch;
     }
 
     /* Deck Card Container */
     .deck-card {
       background: var(--card-bg);
-      border-radius: 6px;
-      padding: 0.55rem;
+      border-radius: 5px;
+      padding: 0.35rem;
       display: flex;
       flex-direction: row;
-      gap: 0.55rem;
+      gap: 0.35rem;
       position: relative;
       align-items: stretch;
       border: 1px solid var(--card-border);
@@ -292,7 +292,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.3rem;
       min-width: 0;
     }
 
@@ -301,25 +301,25 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.4rem;
-      background: #0d0d0f;
-      padding: 0.3rem 0.5rem;
-      border-radius: 4px;
+      gap: 0.3rem;
+      background: #09090b;
+      padding: 0.25rem 0.4rem;
+      border-radius: 3px;
       border: 1px solid var(--card-border);
     }
 
     .deck-title-group {
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.3rem;
       min-width: 0;
     }
 
     .deck-name-badge {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 900;
-      padding: 0.1rem 0.35rem;
-      border-radius: 3px;
+      padding: 0.08rem 0.3rem;
+      border-radius: 2px;
       text-transform: uppercase;
       flex-shrink: 0;
     }
@@ -328,7 +328,7 @@
     .deck-b .deck-name-badge { background: var(--orange-main); color: #fff; }
 
     .track-title-text {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: var(--text-main);
       white-space: nowrap;
@@ -339,7 +339,7 @@
     .deck-loader-group {
       display: flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.25rem;
       flex-shrink: 0;
     }
 
@@ -347,23 +347,23 @@
       background: var(--input-bg);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0 0.45rem;
-      height: 26px;
+      padding: 0 0.4rem;
+      height: 24px;
       border-radius: 3px;
       font-family: inherit;
-      font-size: 0.72rem;
-      width: 145px;
+      font-size: 0.7rem;
+      width: 130px;
     }
 
     .search-input:focus { border-color: rgba(255, 255, 255, 0.3); }
 
     .search-btn {
       border: none;
-      height: 26px;
-      padding: 0 0.55rem;
+      height: 24px;
+      padding: 0 0.5rem;
       border-radius: 3px;
       font-family: inherit;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
@@ -375,26 +375,26 @@
     /* 2. Waveform Canvas Row & Docked BPM Panel */
     .waveform-canvas-row {
       display: flex;
-      gap: 0.45rem;
+      gap: 0.3rem;
       align-items: stretch;
     }
 
     .waveform-main-wrap {
       flex: 1;
-      background: #050507;
+      background: #040406;
       border: 1px solid var(--card-border);
-      border-radius: 4px;
-      padding: 0.3rem 0.45rem;
+      border-radius: 3px;
+      padding: 0.25rem 0.35rem;
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.2rem;
     }
 
     .time-display {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
       font-family: monospace;
     }
@@ -404,7 +404,7 @@
 
     .waveform-canvas-wrap {
       width: 100%;
-      height: 54px;
+      height: 48px;
       position: relative;
       cursor: pointer;
       overflow: hidden;
@@ -413,68 +413,68 @@
     .waveform-canvas {
       width: 100%;
       height: 100%;
-      border-radius: 3px;
+      border-radius: 2px;
       display: block;
-      background: #040406;
+      background: #030304;
     }
 
     .under-waveform-bar {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
     .zoom-box {
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.25rem;
       background: rgba(0, 0, 0, 0.4);
-      padding: 0.1rem 0.35rem;
-      border-radius: 3px;
+      padding: 0.08rem 0.3rem;
+      border-radius: 2px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       flex-shrink: 0;
     }
 
-    .zoom-label { font-size: 0.62rem; font-weight: 800; color: var(--text-muted); }
-    .zoom-slider { width: 55px; -webkit-appearance: none; height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; }
-    .zoom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
-    .zoom-val { font-size: 0.65rem; font-family: monospace; font-weight: 800; }
+    .zoom-label { font-size: 0.58rem; font-weight: 800; color: var(--text-muted); }
+    .zoom-slider { width: 48px; -webkit-appearance: none; height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; }
+    .zoom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
+    .zoom-val { font-size: 0.62rem; font-family: monospace; font-weight: 800; }
 
     .overview-scroll {
       flex: 1;
       -webkit-appearance: none;
-      height: 5px;
+      height: 4px;
       background: rgba(255, 255, 255, 0.08);
-      border-radius: 3px;
+      border-radius: 2px;
       cursor: pointer;
     }
 
-    .deck-a .overview-scroll::-webkit-slider-thumb { -webkit-appearance: none; height: 9px; width: 16px; border-radius: 2px; background: var(--cyan-main); }
-    .deck-b .overview-scroll::-webkit-slider-thumb { -webkit-appearance: none; height: 9px; width: 16px; border-radius: 2px; background: var(--orange-main); }
+    .deck-a .overview-scroll::-webkit-slider-thumb { -webkit-appearance: none; height: 8px; width: 14px; border-radius: 2px; background: var(--cyan-main); }
+    .deck-b .overview-scroll::-webkit-slider-thumb { -webkit-appearance: none; height: 8px; width: 14px; border-radius: 2px; background: var(--orange-main); }
 
     /* Docked BPM Panel */
     .bpm-docked-panel {
-      width: 68px;
+      width: 60px;
       flex-shrink: 0;
-      background: #0d0d0f;
+      background: #09090b;
       border: 1px solid var(--card-border);
-      border-radius: 4px;
-      padding: 0.3rem 0.25rem;
+      border-radius: 3px;
+      padding: 0.2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      gap: 0.2rem;
+      gap: 0.15rem;
     }
 
-    .bpm-title { font-size: 0.62rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.05em; }
+    .bpm-title { font-size: 0.58rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.05em; }
 
     .bpm-badge {
-      font-size: 0.82rem;
+      font-size: 0.75rem;
       font-weight: 900;
       font-family: monospace;
-      padding: 0.08rem 0.2rem;
-      border-radius: 3px;
+      padding: 0.05rem 0.15rem;
+      border-radius: 2px;
       background: rgba(0, 0, 0, 0.5);
       width: 100%;
       text-align: center;
@@ -485,13 +485,13 @@
 
     .btn-tap {
       width: 100%;
-      height: 22px;
+      height: 20px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      border-radius: 3px;
+      border-radius: 2px;
       font-family: inherit;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -500,13 +500,13 @@
 
     .btn-quant {
       width: 100%;
-      height: 20px;
+      height: 18px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      border-radius: 3px;
+      border-radius: 2px;
       font-family: inherit;
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       font-weight: 800;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -516,15 +516,15 @@
       background: #10b981;
       color: #000;
       border-color: #10b981;
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+      box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
     }
 
     /* 3. Compact Video Viewport */
     .video-viewport {
       width: 100%;
-      height: 140px;
+      height: 125px;
       background: #000;
-      border-radius: 4px;
+      border-radius: 3px;
       overflow: hidden;
       position: relative;
       border: 1px solid var(--card-border);
@@ -536,17 +536,17 @@
     .hot-cues-section {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
-      background: #0d0d0f;
+      gap: 0.15rem;
+      background: #09090b;
       border: 1px solid var(--card-border);
-      border-radius: 4px;
-      padding: 0.3rem 0.35rem;
+      border-radius: 3px;
+      padding: 0.25rem 0.3rem;
     }
 
     .hot-cues-header {
       display: flex;
       justify-content: space-between;
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       font-weight: 800;
       color: var(--text-muted);
     }
@@ -554,7 +554,7 @@
     .hot-cues-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.35rem;
+      gap: 0.25rem;
     }
 
     .cue-slot-wrap {
@@ -565,19 +565,19 @@
 
     .btn-hotcue {
       width: 100%;
-      height: 30px;
+      height: 26px;
       border: none;
-      border-radius: 3px;
+      border-radius: 2px;
       font-weight: 800;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-family: monospace;
       cursor: pointer;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.15rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      gap: 0.1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
     .btn-hotcue.cue-1 { background: linear-gradient(180deg, #ef4444, #dc2626); }
@@ -586,8 +586,8 @@
     .btn-hotcue.cue-4 { background: linear-gradient(180deg, #f59e0b, #d97706); }
 
     .btn-hotcue.empty {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px dashed rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed rgba(255, 255, 255, 0.18);
       color: var(--text-muted);
       box-shadow: none;
     }
@@ -596,13 +596,13 @@
       position: absolute;
       top: -3px;
       right: -3px;
-      width: 14px;
-      height: 14px;
+      width: 13px;
+      height: 13px;
       border-radius: 50%;
       background: #1e293b;
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: #f43f5e;
-      font-size: 0.58rem;
+      font-size: 0.55rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
@@ -614,20 +614,20 @@
 
     /* 5. Transport Buttons (Placed BELOW Hot Cues) */
     .transport-card {
-      background: #0d0d0f;
+      background: #09090b;
       border: 1px solid var(--card-border);
-      border-radius: 4px;
-      padding: 0.35rem;
+      border-radius: 3px;
+      padding: 0.25rem;
       display: flex;
-      gap: 0.45rem;
+      gap: 0.35rem;
     }
 
     .btn-traktor {
       flex: 1;
-      height: 34px;
+      height: 30px;
       border-radius: 3px;
       font-family: inherit;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 900;
       border: none;
       cursor: pointer;
@@ -635,7 +635,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.25rem;
+      gap: 0.2rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.4);
       transition: all 0.15s ease;
     }
@@ -647,19 +647,19 @@
     .btn-traktor:hover { filter: brightness(1.15); }
     .btn-traktor:active { transform: scale(0.96); }
 
-    /* SHORTENED PITCH SIDE STRIP (~125px Height) */
+    /* PITCH STRIP WITH MPC/PIONEER DJ KNOB CAP & WHITE MARKER STRIPE */
     .pitch-fader-card.outer-pitch {
-      width: 100px;
+      width: 78px;
       flex-shrink: 0;
-      background: #0d0d0f;
+      background: #09090b;
       border: 1px solid var(--card-border);
-      border-radius: 4px;
-      padding: 0.4rem 0.25rem;
+      border-radius: 3px;
+      padding: 0.3rem 0.15rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      gap: 0.35rem;
+      gap: 0.25rem;
       height: 100%;
     }
 
@@ -667,27 +667,27 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.1rem;
+      gap: 0.08rem;
       width: 100%;
       text-align: center;
     }
 
-    .pitch-title { font-size: 0.62rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.05em; }
+    .pitch-title { font-size: 0.58rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.05em; }
 
     .pitch-badge-wrap-vertical {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.08rem;
+      gap: 0.05rem;
       width: 100%;
     }
 
     .pitch-badge {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 900;
       font-family: monospace;
-      padding: 0.08rem 0.2rem;
-      border-radius: 3px;
+      padding: 0.05rem 0.15rem;
+      border-radius: 2px;
       background: rgba(0, 0, 0, 0.6);
       width: 100%;
       text-align: center;
@@ -696,33 +696,33 @@
     .deck-a .pitch-badge { color: var(--cyan-main); border: 1px solid var(--cyan-main); }
     .deck-b .pitch-badge { color: var(--orange-main); border: 1px solid var(--orange-main); }
 
-    .rate-text { font-size: 0.62rem; color: var(--text-muted); font-family: monospace; font-weight: 700; }
+    .rate-text { font-size: 0.58rem; color: var(--text-muted); font-family: monospace; font-weight: 700; }
 
     .btn-reset-pitch {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.1rem 0.25rem;
-      border-radius: 3px;
-      font-size: 0.6rem;
+      padding: 0.08rem 0.2rem;
+      border-radius: 2px;
+      font-size: 0.55rem;
       font-weight: 800;
       cursor: pointer;
       width: 100%;
     }
 
-    /* Shortened Vertical Pitch Slider Track (125px Height with Metallic Notch Thumb) */
+    /* Vertical Pitch Slider Track */
     .pitch-slider-vertical-wrap {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: 0.3rem;
+      gap: 0.2rem;
       width: 100%;
-      height: 125px;
-      min-height: 125px;
+      height: 110px;
+      min-height: 110px;
       background: rgba(0, 0, 0, 0.4);
-      padding: 0.35rem 0.2rem;
-      border-radius: 4px;
+      padding: 0.25rem 0.1rem;
+      border-radius: 3px;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
@@ -731,7 +731,7 @@
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
-      font-size: 0.58rem;
+      font-size: 0.52rem;
       font-weight: 700;
       color: var(--text-muted);
       font-family: monospace;
@@ -741,39 +741,47 @@
       -webkit-appearance: slider-vertical;
       writing-mode: vertical-lr;
       direction: rtl;
-      width: 10px;
+      width: 12px;
       height: 100%;
       background: transparent;
       cursor: pointer;
       outline: none;
     }
 
-    .pitch-drag-slider-vertical::-webkit-slider-thumb {
+    /* HARDWARE DJ FADER KNOB CAP (MPC / PIONEER DJ STYLE WITH WHITE STRIPE) */
+    .pitch-drag-slider-vertical::-webkit-slider-thumb,
+    .dj-vertical-vol-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 18px;
-      height: 10px;
+      width: 22px;
+      height: 14px;
       border-radius: 2px;
-      background: linear-gradient(180deg, #f1f5f9 0%, #64748b 100%);
-      border: 1px solid #334155;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.7);
+      background: linear-gradient(180deg, #383842 0%, #1e1e24 45%, #ffffff 48%, #ffffff 52%, #1e1e24 55%, #2a2a32 100%);
+      border: 1px solid #4a4a56;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       cursor: grab;
+    }
+
+    .pitch-drag-slider-vertical::-webkit-slider-thumb:active,
+    .dj-vertical-vol-slider::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      background: linear-gradient(180deg, #444452 0%, #22222a 45%, #00f2fe 48%, #00f2fe 52%, #22222a 55%, #33333e 100%);
     }
 
     .pitch-bend-vertical-actions {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.2rem;
       width: 100%;
     }
 
     .btn-pitch-bend {
       width: 100%;
-      height: 24px;
+      height: 20px;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      border-radius: 3px;
-      font-size: 0.62rem;
+      border-radius: 2px;
+      font-size: 0.58rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -785,22 +793,22 @@
       background: rgba(255, 255, 255, 0.25);
     }
 
-    /* CENTRAL MIXER STRIP (Cohesive Height) */
+    /* CENTRAL MIXER STRIP (Tight & Fitted) */
     .central-mixer-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 6px;
-      padding: 0.55rem 0.5rem;
+      border-radius: 5px;
+      padding: 0.35rem 0.4rem;
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.35rem;
       align-items: center;
       justify-content: space-between;
       height: 100%;
     }
 
     .mixer-header {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 900;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -812,25 +820,25 @@
     /* Master Deck Volumes */
     .master-vol-card {
       width: 100%;
-      background: #0d0d0f;
+      background: #09090b;
       border: 1px solid var(--card-border);
-      border-radius: 4px;
-      padding: 0.4rem;
+      border-radius: 3px;
+      padding: 0.3rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.3rem;
       flex: 1;
     }
 
-    .vol-header-title { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; }
+    .vol-header-title { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; }
 
     .vertical-vols-container {
       display: flex;
       justify-content: space-around;
       align-items: center;
       width: 100%;
-      gap: 0.5rem;
+      gap: 0.35rem;
       flex: 1;
     }
 
@@ -838,12 +846,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.2rem;
       flex: 1;
       height: 100%;
       background: rgba(0, 0, 0, 0.3);
-      padding: 0.35rem 0.2rem;
-      border-radius: 4px;
+      padding: 0.25rem 0.15rem;
+      border-radius: 3px;
       border: 1px solid rgba(255, 255, 255, 0.05);
       justify-content: space-between;
     }
@@ -851,78 +859,68 @@
     .vol-channel.col-a { border-color: rgba(0, 242, 254, 0.2); }
     .vol-channel.col-b { border-color: rgba(249, 115, 22, 0.2); }
 
-    .vol-label-badge { display: flex; flex-direction: column; align-items: center; gap: 0.08rem; font-size: 0.65rem; font-weight: 800; }
-    .vol-val-text { font-family: monospace; font-size: 0.68rem; color: var(--text-main); }
+    .vol-label-badge { display: flex; flex-direction: column; align-items: center; gap: 0.05rem; font-size: 0.6rem; font-weight: 800; }
+    .vol-val-text { font-family: monospace; font-size: 0.65rem; color: var(--text-main); }
 
     .vol-slider-wrap {
       width: 100%;
-      height: 120px;
-      min-height: 120px;
+      height: 110px;
+      min-height: 110px;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0.3rem 0;
+      padding: 0.25rem 0;
     }
 
     .dj-vertical-vol-slider {
       -webkit-appearance: slider-vertical;
       writing-mode: vertical-lr;
       direction: rtl;
-      width: 10px;
+      width: 12px;
       height: 100%;
       background: transparent;
       cursor: pointer;
       outline: none;
     }
 
-    .dj-vertical-vol-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 10px;
-      border-radius: 2px;
-      background: linear-gradient(180deg, #f1f5f9 0%, #64748b 100%);
-      border: 1px solid #334155;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.7);
-      cursor: grab;
-    }
-
     .crossfader-box {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.25rem;
       align-items: center;
     }
 
     .crossfader-slider {
       width: 100%;
       -webkit-appearance: none;
-      height: 8px;
+      height: 7px;
       background: linear-gradient(90deg, var(--cyan-main) 0%, rgba(255,255,255,0.1) 50%, var(--orange-main) 100%);
-      border-radius: 4px;
+      border-radius: 3px;
       cursor: pointer;
     }
 
     .crossfader-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 16px;
-      height: 22px;
-      border-radius: 3px;
-      background: #ffffff;
-      border: 2px solid #1e293b;
-      cursor: pointer;
+      width: 22px;
+      height: 14px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #383842 0%, #1e1e24 45%, #ffffff 48%, #ffffff 52%, #1e1e24 55%, #2a2a32 100%);
+      border: 1px solid #4a4a56;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.85);
+      cursor: grab;
     }
 
-    .xfade-mini-actions { display: flex; gap: 0.2rem; width: 100%; }
+    .xfade-mini-actions { display: flex; gap: 0.15rem; width: 100%; }
 
     .xfade-mini-btn {
       flex: 1;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.2rem 0.1rem;
-      border-radius: 3px;
-      font-size: 0.62rem;
+      padding: 0.15rem 0.1rem;
+      border-radius: 2px;
+      font-size: 0.58rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -931,8 +929,8 @@
       .console-grid { grid-template-columns: 1fr; }
       .deck-card { flex-direction: column; }
       .pitch-fader-card.outer-pitch { width: 100%; height: auto; }
-      .pitch-slider-vertical-wrap { height: 110px; min-height: 110px; }
-      .vol-slider-wrap { height: 110px; min-height: 110px; }
+      .pitch-slider-vertical-wrap { height: 100px; min-height: 100px; }
+      .vol-slider-wrap { height: 100px; min-height: 100px; }
     }
   </style>
 </head>
@@ -964,7 +962,7 @@
       </div>
     </header>
 
-    <!-- Main Console Grid (Tighter Low-Profile Layout) -->
+    <!-- Main Console Grid (Ultra-Dense Hardware Layout) -->
     <div class="console-grid">
       
       <!-- DECK A (LEFT - NEON CYAN) -->
@@ -1083,7 +1081,7 @@
 
       </div>
 
-      <!-- CENTRAL MIXER STRIP (Tighter Low-Profile) -->
+      <!-- CENTRAL MIXER STRIP (Ultra-Dense Layout) -->
       <div class="central-mixer-card">
         <div class="mixer-header">🎛️ CENTRAL MIXER</div>
 
@@ -1117,7 +1115,7 @@
 
         <!-- Master Crossfader Bar -->
         <div class="crossfader-box">
-          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.7rem; font-weight:800;">
+          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.65rem; font-weight:800;">
             <span style="color:var(--cyan-main);">◄ A (<span id="crossValTextA">50%</span>)</span>
             <span style="color:var(--text-main);">CROSSFADER</span>
             <span style="color:var(--orange-main);">(<span id="crossValTextB">50%</span>) B ►</span>
