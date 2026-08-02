@@ -702,16 +702,38 @@
       background: transparent;
       border: 1px solid var(--card-border);
       border-radius: 3px;
-      padding: 8px 4px !important;
+      padding: 6px 4px !important;
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
       justify-content: space-between !important;
       gap: 4px;
       height: fit-content !important;
-      max-height: 380px !important;
+      max-height: 460px !important;
       align-self: flex-start !important;
       box-sizing: border-box;
+    }
+
+    .side-transport-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .side-transport-stack .btn-pioneer-round {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      margin: 2px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
     }
 
     .pitch-fader-header-vertical {
@@ -1087,6 +1109,18 @@
             <button id="btnBendPlusA" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▲</button>
             <button id="btnBendMinusA" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2% ▼</button>
           </div>
+
+          <!-- Side Transport Stack (CUE & PLAY circular buttons) -->
+          <div class="side-transport-stack">
+            <button id="btnCueA" class="btn-pioneer-round btn-cue" title="Master Cue / Hold Preview (Key: Q)">
+              <div class="led-dot"></div>
+              <span>CUE</span>
+            </button>
+            <button id="btnPlayA" class="btn-pioneer-round btn-play" title="Play / Pause Toggle (Key: W)">
+              <div class="led-dot"></div>
+              <span>▶/⏸</span>
+            </button>
+          </div>
         </div>
 
         <!-- Deck A Main Flex Structure -->
@@ -1138,7 +1172,7 @@
             </div>
           </div>
 
-          <!-- 4. Hot Cue Buttons Row -->
+          <!-- 4. Hot Cue Buttons Row (Main Deck Column Ends Cleanly Here) -->
           <div class="hot-cues-section">
             <div class="hot-cues-header">
               <span>HOT CUES (KEYS: 1, 2, 3, 4)</span>
@@ -1162,18 +1196,6 @@
                 <button id="cueDelA4" class="btn-hotcue-delete" style="display:none;">✕</button>
               </div>
             </div>
-          </div>
-
-          <!-- 5. Pioneer Round Transport & Cue Buttons (CUE & PLAY with LED Dots) -->
-          <div class="transport-card">
-            <button id="btnCueA" class="btn-pioneer-round btn-cue" title="Master Cue / Hold Preview (Key: Q)">
-              <div class="led-dot"></div>
-              <span>CUE</span>
-            </button>
-            <button id="btnPlayA" class="btn-pioneer-round btn-play" title="Play / Pause Toggle (Key: W)">
-              <div class="led-dot"></div>
-              <span>▶/⏸</span>
-            </button>
           </div>
 
         </div>
@@ -1282,7 +1304,7 @@
             </div>
           </div>
 
-          <!-- 4. Hot Cue Buttons Row -->
+          <!-- 4. Hot Cue Buttons Row (Main Deck Column Ends Cleanly Here) -->
           <div class="hot-cues-section">
             <div class="hot-cues-header">
               <span>HOT CUES (KEYS: 7, 8, 9, 0)</span>
@@ -1306,18 +1328,6 @@
                 <button id="cueDelB4" class="btn-hotcue-delete" style="display:none;">✕</button>
               </div>
             </div>
-          </div>
-
-          <!-- 5. Pioneer Round Transport & Cue Buttons (CUE & PLAY with LED Dots) -->
-          <div class="transport-card">
-            <button id="btnCueB" class="btn-pioneer-round btn-cue" title="Master Cue / Hold Preview (Key: O)">
-              <div class="led-dot"></div>
-              <span>CUE</span>
-            </button>
-            <button id="btnPlayB" class="btn-pioneer-round btn-play" title="Play / Pause Toggle (Key: P)">
-              <div class="led-dot"></div>
-              <span>▶/⏸</span>
-            </button>
           </div>
 
         </div>
@@ -1347,6 +1357,18 @@
           <div class="pitch-bend-vertical-actions">
             <button id="btnBendPlusB" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▲</button>
             <button id="btnBendMinusB" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2% ▼</button>
+          </div>
+
+          <!-- Side Transport Stack (CUE & PLAY circular buttons) -->
+          <div class="side-transport-stack">
+            <button id="btnCueB" class="btn-pioneer-round btn-cue" title="Master Cue / Hold Preview (Key: O)">
+              <div class="led-dot"></div>
+              <span>CUE</span>
+            </button>
+            <button id="btnPlayB" class="btn-pioneer-round btn-play" title="Play / Pause Toggle (Key: P)">
+              <div class="led-dot"></div>
+              <span>▶/⏸</span>
+            </button>
           </div>
         </div>
 
