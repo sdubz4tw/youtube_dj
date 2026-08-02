@@ -272,16 +272,15 @@
 
     /* 3-Column Grid System: Left (Deck A), Center (240px Mixer), Right (Deck B) */
     .console-grid {
-      flex: 1;
       display: grid;
       grid-template-columns: 1fr 240px 1fr;
       gap: 8px;
-      align-items: stretch;
+      align-items: flex-start;
       min-height: 0;
     }
 
     /* Deck Layout & Metallic Silver Inset Card */
-    .deck-card {
+    .deck-card, .deck-container {
       background: linear-gradient(135deg, #e6e8eb 0%, #d0d4d9 50%, #b8bcc2 100%);
       border: 1px solid #999eab;
       border-radius: 6px;
@@ -291,11 +290,13 @@
       flex-direction: row;
       gap: 8px;
       position: relative;
-      align-items: stretch;
-      height: 100%;
+      align-items: flex-start;
+      align-self: flex-start !important;
+      height: fit-content !important;
       min-height: 0;
       overflow: hidden;
       color: #111111;
+      box-sizing: border-box;
     }
 
     .deck-main-body {
@@ -305,7 +306,7 @@
       justify-content: flex-start;
       gap: 8px;
       min-width: 0;
-      height: 100%;
+      height: auto;
       min-height: 0;
     }
 
@@ -851,7 +852,7 @@
     }
 
     /* Central Mixer Metallic Silver Panel */
-    .central-mixer-card {
+    .central-mixer-card, .pioneer-dj-mixer {
       background: linear-gradient(135deg, #e6e8eb 0%, #d0d4d9 50%, #b8bcc2 100%);
       border: 1px solid #999eab;
       border-radius: 6px;
@@ -861,7 +862,8 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      height: auto;
+      align-self: flex-start !important;
+      height: fit-content !important;
       gap: 6px;
       box-sizing: border-box;
     }
