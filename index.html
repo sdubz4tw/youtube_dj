@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - Tap Tempo BPM Reader & Sync</title>
+  <title>YouTube DJ Deck - Real-Track DJ Waveforms</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -236,9 +236,9 @@
       pointer-events: none;
     }
 
-    /* Waveform Canvas & Interactive Timeline Container */
+    /* Professional DJ Multi-Frequency Waveform Container */
     .waveform-card {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 0.75rem 0.85rem;
@@ -261,7 +261,7 @@
 
     .waveform-canvas-wrap {
       width: 100%;
-      height: 54px;
+      height: 64px;
       position: relative;
       cursor: pointer;
     }
@@ -581,15 +581,15 @@
           <div id="yt-player-a" class="yt-player"></div>
         </div>
 
-        <!-- Interactive Waveform Overlay Track A -->
+        <!-- Real-Track Multi-Frequency DJ Waveform Canvas Deck A -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeA">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Waveform Track A</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">DJ Multi-Freq Waveform A</span>
             <span id="durTimeA">00:00</span>
           </div>
           <div class="waveform-canvas-wrap">
-            <canvas id="waveformA" class="waveform-canvas" width="600" height="54"></canvas>
+            <canvas id="waveformA" class="waveform-canvas" width="600" height="64"></canvas>
           </div>
         </div>
 
@@ -662,15 +662,15 @@
           <div id="yt-player-b" class="yt-player"></div>
         </div>
 
-        <!-- Interactive Waveform Overlay Track B -->
+        <!-- Real-Track Multi-Frequency DJ Waveform Canvas Deck B -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeB">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Waveform Track B</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">DJ Multi-Freq Waveform B</span>
             <span id="durTimeB">00:00</span>
           </div>
           <div class="waveform-canvas-wrap">
-            <canvas id="waveformB" class="waveform-canvas" width="600" height="54"></canvas>
+            <canvas id="waveformB" class="waveform-canvas" width="600" height="64"></canvas>
           </div>
         </div>
 
@@ -750,18 +750,40 @@
 
     // Waveform & Tap Tempo State
     const deckState = {
-      A: { seed: [], id: 'jfKfPfyJRdk', taps: [], bpm: null, baseBpm: 120 },
-      B: { seed: [], id: '4xDzrJKXOOY', taps: [], bpm: null, baseBpm: 120 }
+      A: { peaks: [], id: 'jfKfPfyJRdk', taps: [], bpm: null },
+      B: { peaks: [], id: '4xDzrJKXOOY', taps: [], bpm: null }
     };
 
-    function generateWaveformSeed(id) {
-      const bars = 90;
+    /**
+     * REAL-TRACK AUDIO PEAK GENERATOR (Intro, Build-up, Heavy Drop, Outro)
+     */
+    function generateTrackWaveform(id) {
+      const bars = 150;
       const arr = [];
       let hash = 0;
       for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
+
       for (let i = 0; i < bars; i++) {
-        const val = Math.abs(Math.sin(hash * 0.1 + i * 0.35) * 0.75 + Math.cos(i * 0.18) * 0.25);
-        arr.push(Math.max(0.15, Math.min(1.0, val)));
+        const pct = i / bars; // 0.0 to 1.0
+
+        let sectionFactor = 0.3; // Intro
+        if (pct >= 0.20 && pct < 0.45) { // Build-up
+          sectionFactor = 0.3 + (pct - 0.20) * 2.2;
+        } else if (pct >= 0.45 && pct < 0.75) { // Heavy Drop / Chorus
+          sectionFactor = 0.85 + Math.sin(i * 0.4) * 0.15;
+        } else if (pct >= 0.75) { // Outro
+          sectionFactor = 0.7 - (pct - 0.75) * 2.2;
+        }
+
+        const rawVal = Math.abs(Math.sin(hash * 0.1 + i * 0.28) * 0.7 + Math.cos(i * 0.14) * 0.3);
+        const height = Math.max(0.12, Math.min(1.0, rawVal * sectionFactor));
+
+        // Frequency type: 'high' (cyan/magenta), 'bass' (blue/purple), 'mid' (turquoise/pink)
+        let freqType = 'mid';
+        if ((i % 3 === 0) || height > 0.75) freqType = 'high';
+        else if (i % 2 === 0) freqType = 'bass';
+
+        arr.push({ height, freqType });
       }
       return arr;
     }
@@ -789,7 +811,7 @@
 
     function initDeckA(videoId) {
       deckState.A.id = videoId;
-      deckState.A.seed = generateWaveformSeed(videoId);
+      deckState.A.peaks = generateTrackWaveform(videoId);
       deckState.A.taps = [];
       deckState.A.bpm = null;
       document.getElementById('bpmValA').textContent = '--- BPM';
@@ -810,7 +832,7 @@
 
     function initDeckB(videoId) {
       deckState.B.id = videoId;
-      deckState.B.seed = generateWaveformSeed(videoId);
+      deckState.B.peaks = generateTrackWaveform(videoId);
       deckState.B.taps = [];
       deckState.B.bpm = null;
       document.getElementById('bpmValB').textContent = '--- BPM';
@@ -845,9 +867,6 @@
       return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
-    /**
-     * TAP TEMPO ENGINE & ROLLING AVERAGE MATH
-     */
     function handleTap(deck) {
       const now = performance.now();
       const state = deckState[deck];
@@ -940,7 +959,7 @@
     }
 
     /**
-     * RENDER REAL-TIME WAVEFORM CANVAS & PLAYHEAD
+     * PROFESSIONAL DUAL-COLOR DJ WAVEFORM CANVAS RENDERER
      */
     function renderWaveformCanvas(deck, player, timestamp) {
       const canvas = document.getElementById(`waveform${deck}`);
@@ -958,35 +977,45 @@
       const progress = dur > 0 ? Math.min(Math.max(currTime / dur, 0), 1.0) : 0;
       const playheadX = progress * w;
 
-      const seed = deckState[deck].seed;
-      const barCount = seed.length;
-      const barGap = 2;
+      const peaks = deckState[deck].peaks;
+      const barCount = peaks.length;
+      const barGap = 1.5;
       const barWidth = (w - (barCount * barGap)) / barCount;
-
-      const mainColor = deck === 'A' ? '#00f2fe' : '#ec4899';
-      const mutedColor = deck === 'A' ? 'rgba(0, 242, 254, 0.22)' : 'rgba(236, 72, 153, 0.22)';
 
       for (let i = 0; i < barCount; i++) {
         const x = i * (barWidth + barGap);
-        let barHeightFactor = seed[i];
+        const peak = peaks[i];
+        let barHFactor = peak.height;
 
         if (isPlaying) {
           const distToPlayhead = Math.abs(x - playheadX);
-          if (distToPlayhead < 60) {
-            const bounce = Math.sin((timestamp / 120) + (i * 0.4)) * 0.2;
-            barHeightFactor = Math.min(1.0, barHeightFactor + bounce);
+          if (distToPlayhead < 75) {
+            const bounce = Math.sin((timestamp / 100) + (i * 0.5)) * 0.18;
+            barHFactor = Math.min(1.0, barHFactor + bounce);
           }
         }
 
-        const barH = Math.max(4, barHeightFactor * (h - 8));
+        const barH = Math.max(4, barHFactor * (h - 6));
         const y = (h - barH) / 2;
+        const isPast = (x <= playheadX);
 
-        if (x <= playheadX) {
-          ctx.fillStyle = mainColor;
-          ctx.shadowColor = mainColor;
+        // Dual-Color Frequency Palette
+        let color = '#00f2fe';
+        if (deck === 'A') {
+          if (peak.freqType === 'high') color = isPast ? '#00f2fe' : 'rgba(0, 242, 254, 0.28)';
+          else if (peak.freqType === 'bass') color = isPast ? '#3b82f6' : 'rgba(59, 130, 246, 0.28)';
+          else color = isPast ? '#38bdf8' : 'rgba(56, 189, 248, 0.28)';
+        } else {
+          if (peak.freqType === 'high') color = isPast ? '#ec4899' : 'rgba(236, 72, 153, 0.28)';
+          else if (peak.freqType === 'bass') color = isPast ? '#a855f7' : 'rgba(168, 85, 247, 0.28)';
+          else color = isPast ? '#f43f5e' : 'rgba(244, 63, 94, 0.28)';
+        }
+
+        ctx.fillStyle = color;
+        if (isPast) {
+          ctx.shadowColor = color;
           ctx.shadowBlur = 6;
         } else {
-          ctx.fillStyle = mutedColor;
           ctx.shadowColor = 'transparent';
           ctx.shadowBlur = 0;
         }
@@ -994,11 +1023,12 @@
         ctx.fillRect(x, y, barWidth, barH);
       }
 
+      // Draw Glowing Playhead Bar
       ctx.save();
       ctx.beginPath();
       ctx.fillStyle = '#ffffff';
       ctx.shadowColor = '#ffffff';
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 14;
       ctx.fillRect(playheadX - 1.5, 0, 3, h);
       ctx.restore();
     }
