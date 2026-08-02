@@ -3,35 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Console - Compact Pro Layout</title>
+  <title>YouTube DJ Console - Traktor Pro 3 Layout</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-dark: #0d0e12;
-      --card-bg: rgba(18, 18, 24, 0.85);
-      --card-border: rgba(255, 255, 255, 0.1);
+      --bg-dark: #0f0f12;
+      --card-bg: #16161a;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --input-bg: #0c0c0e;
       
-      /* Deck A Theme: Neon Cyan */
+      /* Deck A: Neon Cyan (Traktor Cyan) */
       --cyan-main: #00f2fe;
-      --cyan-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-      --cyan-glow: rgba(0, 242, 254, 0.4);
-      --deck-a-border: rgba(0, 242, 254, 0.3);
+      --cyan-gradient: linear-gradient(180deg, #00f2fe 0%, #00b4d8 100%);
+      --cyan-border: rgba(0, 242, 254, 0.35);
 
-      /* Deck B Theme: Neon Magenta */
-      --magenta-main: #ec4899;
-      --magenta-gradient: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
-      --magenta-glow: rgba(236, 72, 153, 0.4);
-      --deck-b-border: rgba(236, 72, 153, 0.3);
+      /* Deck B: Traktor Neon Orange */
+      --orange-main: #f97316;
+      --orange-gradient: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+      --orange-border: rgba(249, 115, 22, 0.35);
+
+      /* SYNC: Traktor Bright Green */
+      --green-sync: #22c55e;
+      --green-gradient: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
 
       /* Hot Cue Colors */
-      --cue-red: #ef4444;
-      --cue-green: #10b981;
-      --cue-blue: #3b82f6;
+      --cue-1: #ef4444;
+      --cue-2: #10b981;
+      --cue-3: #3b82f6;
+      --cue-4: #f59e0b;
 
-      --text-main: #f8fafc;
+      --text-main: #f1f5f9;
       --text-muted: #94a3b8;
     }
 
@@ -46,13 +50,13 @@
 
     body {
       font-family: 'Outfit', sans-serif;
-      background: radial-gradient(circle at 50% 20%, #161822 0%, #0d0e12 100%);
+      background: #09090b;
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1.5rem 1rem;
+      padding: 1rem 0.75rem;
       overflow-x: hidden;
     }
 
@@ -61,20 +65,18 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 0.85rem;
     }
 
-    /* Header Bar & Global In-App Search */
+    /* Global Header Bar */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--card-bg);
-      backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
-      padding: 0.9rem 1.5rem;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
       gap: 1rem;
       flex-wrap: wrap;
     }
@@ -82,19 +84,19 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
     .brand-icon {
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       color: var(--cyan-main);
     }
 
     .brand h1 {
-      font-size: 1.35rem;
-      font-weight: 800;
+      font-size: 1.1rem;
+      font-weight: 900;
       letter-spacing: 0.05em;
-      background: linear-gradient(90deg, #00f2fe, #ec4899);
+      background: linear-gradient(90deg, #00f2fe, #f97316);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-transform: uppercase;
@@ -102,7 +104,7 @@
 
     .global-search-box {
       flex: 1;
-      max-width: 480px;
+      max-width: 440px;
       position: relative;
       display: flex;
       align-items: center;
@@ -110,30 +112,30 @@
 
     .header-search-input {
       width: 100%;
-      background: rgba(0, 0, 0, 0.45);
+      background: var(--input-bg);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.65rem 2.8rem 0.65rem 1rem;
-      border-radius: 12px;
+      padding: 0.4rem 2.5rem 0.4rem 0.75rem;
+      border-radius: 4px;
       font-family: inherit;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
+      font-size: 0.8rem;
+      height: 32px;
     }
 
     .header-search-input:focus {
       border-color: var(--cyan-main);
-      box-shadow: 0 0 15px var(--cyan-glow);
     }
 
     .btn-global-search {
       position: absolute;
-      right: 6px;
-      background: linear-gradient(90deg, #00f2fe, #ec4899);
+      right: 4px;
+      background: linear-gradient(90deg, #00f2fe, #f97316);
       border: none;
-      color: #fff;
-      padding: 0.4rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
+      color: #000;
+      padding: 0 0.6rem;
+      height: 24px;
+      border-radius: 3px;
+      font-size: 0.72rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -141,38 +143,38 @@
     .master-status {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      font-size: 0.85rem;
+      gap: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 700;
     }
 
     .deck-badge {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.35rem 0.75rem;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.4);
+      gap: 0.35rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      background: #000;
       border: 1px solid var(--card-border);
     }
 
-    .dot-a { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan-main); box-shadow: 0 0 8px var(--cyan-main); }
-    .dot-b { width: 8px; height: 8px; border-radius: 50%; background: var(--magenta-main); box-shadow: 0 0 8px var(--magenta-main); }
+    .dot-a { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan-main); box-shadow: 0 0 6px var(--cyan-main); }
+    .dot-b { width: 7px; height: 7px; border-radius: 50%; background: var(--orange-main); box-shadow: 0 0 6px var(--orange-main); }
 
-    /* Search Results Modal Dropdown Overlay */
+    /* Search Results Modal */
     .search-modal-backdrop {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
       z-index: 9999;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding-top: 5rem;
+      padding-top: 4rem;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.2s ease;
     }
 
     .search-modal-backdrop.active {
@@ -181,177 +183,18 @@
     }
 
     .search-results-modal {
-      background: rgba(18, 18, 26, 0.95);
+      background: #18181c;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      max-width: 680px;
+      border-radius: 8px;
+      max-width: 640px;
       width: 90%;
-      padding: 1.25rem;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .modal-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .btn-close-modal {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .results-list {
+      padding: 1rem;
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      max-height: 480px;
-      overflow-y: auto;
-      padding-right: 0.3rem;
     }
 
-    .result-card {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--card-border);
-      padding: 0.65rem;
-      border-radius: 14px;
-      transition: all 0.2s ease;
-    }
-
-    .result-card:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-
-    .result-thumb-wrap {
-      width: 100px;
-      aspect-ratio: 16 / 9;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #000;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .result-thumb {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .result-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .result-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text-main);
-      line-height: 1.25;
-    }
-
-    .result-channel {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .result-dur {
-      font-size: 0.7rem;
-      font-family: monospace;
-      color: var(--cyan-main);
-    }
-
-    .result-actions {
-      display: flex;
-      gap: 0.4rem;
-      flex-shrink: 0;
-    }
-
-    .btn-assign-deck {
-      border: none;
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      cursor: pointer;
-      color: #fff;
-      transition: all 0.15s ease;
-    }
-
-    .btn-assign-a {
-      background: var(--cyan-gradient);
-      color: #000;
-      box-shadow: 0 4px 10px var(--cyan-glow);
-    }
-
-    .btn-assign-b {
-      background: var(--magenta-gradient);
-      color: #fff;
-      box-shadow: 0 4px 10px var(--magenta-glow);
-    }
-
-    .btn-assign-deck:hover { transform: scale(1.05); }
-
-    /* Console Grid */
-    .console-grid {
-      display: grid;
-      grid-template-columns: 1fr 310px 1fr;
-      gap: 1.25rem;
-      align-items: flex-start;
-    }
-
-    /* Deck Card with Compact Side Pitch Strip */
-    .deck-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      border-radius: 20px;
-      padding: 1.1rem;
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-      position: relative;
-      align-items: flex-start;
-    }
-
-    .deck-card.deck-a { border: 1px solid var(--deck-a-border); }
-    .deck-card.deck-b { border: 1px solid var(--deck-b-border); }
-
-    .deck-main-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-      min-width: 0;
-    }
-
-    .deck-header {
+    .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -359,137 +202,224 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .deck-title {
-      font-size: 1.05rem;
+    .modal-title {
+      font-size: 0.95rem;
       font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
     }
 
-    .deck-a .deck-title { color: var(--cyan-main); text-shadow: 0 0 10px var(--cyan-glow); }
-    .deck-b .deck-title { color: var(--magenta-main); text-shadow: 0 0 10px var(--magenta-glow); }
+    .btn-close-modal {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text-main);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-weight: 800;
+      cursor: pointer;
+    }
 
-    /* Deck Track Loader & Search Bar */
-    .loader-box {
+    .results-list {
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
+      max-height: 420px;
+      overflow-y: auto;
     }
 
-    .input-group {
+    .result-card {
       display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #0f0f12;
+      border: 1px solid var(--card-border);
+      padding: 0.5rem;
+      border-radius: 6px;
+    }
+
+    .result-thumb-wrap {
+      width: 85px;
+      aspect-ratio: 16 / 9;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #000;
+      flex-shrink: 0;
+    }
+
+    .result-thumb { width: 100%; height: 100%; object-fit: cover; }
+
+    .result-info { flex: 1; display: flex; flex-direction: column; gap: 0.15rem; }
+    .result-title { font-size: 0.82rem; font-weight: 700; line-height: 1.2; }
+    .result-channel { font-size: 0.72rem; color: var(--text-muted); }
+    .result-dur { font-size: 0.68rem; font-family: monospace; color: var(--cyan-main); }
+
+    .result-actions { display: flex; gap: 0.35rem; }
+
+    .btn-assign-deck {
+      border: none;
+      height: 28px;
+      padding: 0 0.6rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-assign-a { background: var(--cyan-gradient); color: #000; }
+    .btn-assign-b { background: var(--orange-gradient); color: #fff; }
+
+    /* Traktor Console Grid */
+    .console-grid {
+      display: grid;
+      grid-template-columns: 1fr 280px 1fr;
+      gap: 0.85rem;
+      align-items: flex-start;
+    }
+
+    /* Deck Card Container */
+    .deck-card {
+      background: var(--card-bg);
+      border-radius: 6px;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: row;
+      gap: 0.75rem;
+      position: relative;
+      align-items: flex-start;
+    }
+
+    .deck-card.deck-a { border: 1px solid var(--cyan-border); }
+    .deck-card.deck-b { border: 1px solid var(--orange-border); }
+
+    .deck-main-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      min-width: 0;
+    }
+
+    /* Traktor Header Panel Above Waveform */
+    .deck-top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 0.5rem;
+      background: #0f0f12;
+      padding: 0.4rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+    }
+
+    .deck-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-width: 0;
+    }
+
+    .deck-name-badge {
+      font-size: 0.7rem;
+      font-weight: 900;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .deck-a .deck-name-badge { background: var(--cyan-main); color: #000; }
+    .deck-b .deck-name-badge { background: var(--orange-main); color: #fff; }
+
+    .track-title-text {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .deck-loader-group {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-shrink: 0;
     }
 
     .search-input {
-      flex: 1;
-      background: rgba(0, 0, 0, 0.45);
+      background: var(--input-bg);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.6rem 0.85rem;
-      border-radius: 10px;
+      padding: 0 0.55rem;
+      height: 28px;
+      border-radius: 4px;
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
+      width: 170px;
     }
 
     .search-input:focus { border-color: rgba(255, 255, 255, 0.3); }
 
     .search-btn {
       border: none;
-      padding: 0.6rem 0.95rem;
-      border-radius: 10px;
+      height: 28px;
+      padding: 0 0.65rem;
+      border-radius: 4px;
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.72rem;
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
     }
 
-    .deck-a .search-btn { background: var(--cyan-gradient); color: #000; box-shadow: 0 4px 15px var(--cyan-glow); }
-    .deck-b .search-btn { background: var(--magenta-gradient); color: #fff; box-shadow: 0 4px 15px var(--magenta-glow); }
+    .deck-a .search-btn { background: var(--cyan-gradient); color: #000; }
+    .deck-b .search-btn { background: var(--orange-gradient); color: #fff; }
 
     /* Video Viewport */
     .video-viewport {
       width: 100%;
       aspect-ratio: 16 / 9;
       background: #000;
-      border-radius: 14px;
+      border-radius: 4px;
       overflow: hidden;
       position: relative;
-      border: 2px solid rgba(255, 255, 255, 0.08);
-      transition: opacity 0.25s ease;
-    }
-
-    .yt-player {
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
-    /* Waveform Card */
-    .waveform-card {
-      background: rgba(5, 5, 8, 0.98);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 0.7rem 0.8rem;
+    }
+
+    .yt-player { width: 100%; height: 100%; pointer-events: none; }
+
+    /* Waveform Canvas Row & Docked BPM Panel */
+    .waveform-canvas-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: stretch;
+    }
+
+    .waveform-main-wrap {
+      flex: 1;
+      background: #050507;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 0.4rem 0.55rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      position: relative;
+      gap: 0.35rem;
     }
 
     .time-display {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       font-family: monospace;
     }
 
     .deck-a .time-display { color: var(--cyan-main); }
-    .deck-b .time-display { color: var(--magenta-main); }
-
-    .zoom-controls-row {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 0.2rem 0.55rem;
-      border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .zoom-label {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    .zoom-slider {
-      width: 85px;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 2px;
-      cursor: pointer;
-    }
-
-    .zoom-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--text-main);
-      cursor: pointer;
-    }
+    .deck-b .time-display { color: var(--orange-main); }
 
     .waveform-canvas-wrap {
       width: 100%;
-      height: 72px;
+      height: 64px;
       position: relative;
       cursor: pointer;
       overflow: hidden;
@@ -498,72 +428,147 @@
     .waveform-canvas {
       width: 100%;
       height: 100%;
-      border-radius: 6px;
+      border-radius: 3px;
       display: block;
       background: #040406;
     }
 
-    .overview-scroll-wrap {
+    .under-waveform-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .zoom-box {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    .zoom-label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); }
+    .zoom-slider { width: 65px; -webkit-appearance: none; height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; }
+    .zoom-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+    .zoom-val { font-size: 0.68rem; font-family: monospace; font-weight: 800; }
+
+    .overview-scroll {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .deck-a .overview-scroll::-webkit-slider-thumb { -webkit-appearance: none; height: 10px; width: 18px; border-radius: 2px; background: var(--cyan-main); }
+    .deck-b .overview-scroll::-webkit-slider-thumb { -webkit-appearance: none; height: 10px; width: 18px; border-radius: 2px; background: var(--orange-main); }
+
+    /* Docked BPM Panel (Vertical side panel) */
+    .bpm-docked-panel {
+      width: 72px;
+      flex-shrink: 0;
+      background: #0f0f12;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 0.35rem 0.3rem;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
       gap: 0.25rem;
     }
 
-    .overview-scroll {
+    .bpm-title { font-size: 0.65rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.05em; }
+
+    .bpm-badge {
+      font-size: 0.88rem;
+      font-weight: 900;
+      font-family: monospace;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      background: rgba(0, 0, 0, 0.5);
       width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 8px;
+      text-align: center;
+    }
+
+    .deck-a .bpm-badge { color: var(--cyan-main); border: 1px solid var(--cyan-main); }
+    .deck-b .bpm-badge { color: var(--orange-main); border: 1px solid var(--orange-main); }
+
+    .btn-tap {
+      width: 100%;
+      height: 26px;
       background: rgba(255, 255, 255, 0.08);
-      border-radius: 4px;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .deck-a .overview-scroll::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      height: 14px;
-      border-radius: 3px;
-      background: var(--cyan-gradient);
-      box-shadow: 0 0 8px var(--cyan-glow);
-      cursor: grab;
-    }
-
-    .deck-b .overview-scroll::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      height: 14px;
-      border-radius: 3px;
-      background: var(--magenta-gradient);
-      box-shadow: 0 0 8px var(--magenta-glow);
-      cursor: grab;
-    }
-
-    /* Hot Cues Panel Card (3 Slots) */
-    .hot-cues-panel {
-      background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 0.65rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-    }
-
-    .hot-cues-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.73rem;
+      color: var(--text-main);
+      border-radius: 3px;
+      font-family: inherit;
+      font-size: 0.68rem;
       font-weight: 800;
-      color: var(--text-muted);
+      cursor: pointer;
     }
 
-    .hot-cues-grid {
+    .btn-tap:active, .btn-tap.tapped { transform: scale(0.95); }
+
+    /* Traktor Bottom Transport & Hot Cues Row (Tight 32px - 36px Height) */
+    .bottom-transport-strip {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #0f0f12;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 0.35rem;
+    }
+
+    .transport-btn-group {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .btn-traktor {
+      height: 32px;
+      padding: 0 0.6rem;
+      border-radius: 3px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: all 0.15s ease;
+    }
+
+    .btn-play { background: linear-gradient(180deg, #10b981 0%, #059669 100%); }
+    .btn-play.playing { background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%); }
+
+    .btn-cue { background: linear-gradient(180deg, #eab308 0%, #ca8a04 100%); color: #000; }
+    .btn-sync { background: var(--green-gradient); color: #000; }
+
+    .btn-traktor:hover { filter: brightness(1.15); }
+    .btn-traktor:active { transform: scale(0.96); }
+
+    .traktor-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.15);
+      margin: 0 0.1rem;
+    }
+
+    /* 4 Hot Cue Buttons in a Single Tight Row */
+    .hot-cues-tight-row {
+      flex: 1;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.5rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.3rem;
     }
 
     .cue-slot-wrap {
@@ -572,49 +577,46 @@
       position: relative;
     }
 
-    .btn-cue {
-      flex: 1;
+    .btn-hotcue {
+      width: 100%;
+      height: 32px;
       border: none;
-      padding: 0.55rem 0.3rem;
-      border-radius: 8px;
+      border-radius: 3px;
       font-weight: 800;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-family: monospace;
       cursor: pointer;
       color: #fff;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 0.15rem;
-      transition: all 0.15s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      justify-content: center;
+      gap: 0.2rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
 
-    .btn-cue.cue-1 { background: linear-gradient(135deg, #ef4444, #dc2626); }
-    .btn-cue.cue-2 { background: linear-gradient(135deg, #10b981, #059669); }
-    .btn-cue.cue-3 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .btn-hotcue.cue-1 { background: linear-gradient(180deg, #ef4444, #dc2626); }
+    .btn-hotcue.cue-2 { background: linear-gradient(180deg, #10b981, #059669); }
+    .btn-hotcue.cue-3 { background: linear-gradient(180deg, #3b82f6, #2563eb); }
+    .btn-hotcue.cue-4 { background: linear-gradient(180deg, #f59e0b, #d97706); }
 
-    .btn-cue:hover { transform: translateY(-1px); filter: brightness(1.15); }
-    .btn-cue:active { transform: scale(0.95); }
-
-    .btn-cue.empty {
+    .btn-hotcue.empty {
       background: rgba(255, 255, 255, 0.05);
       border: 1px dashed rgba(255, 255, 255, 0.2);
       color: var(--text-muted);
       box-shadow: none;
     }
 
-    .btn-cue-delete {
+    .btn-hotcue-delete {
       position: absolute;
-      top: -4px;
-      right: -4px;
-      width: 18px;
-      height: 18px;
+      top: -3px;
+      right: -3px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
       background: #1e293b;
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: #f43f5e;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
@@ -622,125 +624,20 @@
       justify-content: center;
     }
 
-    .btn-cue-delete:hover { background: #f43f5e; color: #fff; }
+    .btn-hotcue-delete:hover { background: #f43f5e; color: #fff; }
 
-    /* Transport Card */
-    .transport-card {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 0.7rem;
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .btn-transport {
-      flex: 1;
-      padding: 0.8rem 0.5rem;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: 900;
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.2rem;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-      transition: all 0.15s ease;
-    }
-
-    .btn-cue-main {
-      background: linear-gradient(135deg, #eab308, #ca8a04);
-      box-shadow: 0 0 15px rgba(234, 179, 8, 0.35);
-    }
-
-    .btn-play-main {
-      background: linear-gradient(135deg, #10b981, #059669);
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
-    }
-
-    .btn-play-main.playing {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      box-shadow: 0 0 15px rgba(245, 158, 11, 0.35);
-    }
-
-    .btn-transport:hover { transform: translateY(-2px); filter: brightness(1.15); }
-    .btn-transport:active { transform: scale(0.95); }
-
-    /* BPM & Sync Card */
-    .bpm-card {
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 0.65rem 0.85rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-    }
-
-    .bpm-badge-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .bpm-badge {
-      font-size: 1.1rem;
-      font-weight: 900;
-      font-family: monospace;
-      padding: 0.2rem 0.55rem;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .deck-a .bpm-badge { color: var(--cyan-main); border: 1px solid var(--cyan-main); box-shadow: 0 0 12px var(--cyan-glow); }
-    .deck-b .bpm-badge { color: var(--magenta-main); border: 1px solid var(--magenta-main); box-shadow: 0 0 12px var(--magenta-glow); }
-
-    .btn-tap {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 0.45rem 0.75rem;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.78rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .btn-tap:active, .btn-tap.tapped { transform: scale(0.95); }
-    .deck-a .btn-tap:hover { background: var(--cyan-main); color: #000; }
-    .deck-b .btn-tap:hover { background: var(--magenta-main); color: #fff; }
-
-    .btn-sync {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #fff;
-      border: none;
-      padding: 0.45rem 0.85rem;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-    }
-
-    /* COMPACT PITCH CONTROL STRIP */
+    /* Compact Outer Side Pitch Control Strip */
     .pitch-fader-card.outer-pitch {
-      width: 130px;
+      width: 110px;
       flex-shrink: 0;
-      background: rgba(0, 0, 0, 0.45);
+      background: #0f0f12;
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 0.65rem;
+      border-radius: 4px;
+      padding: 0.45rem 0.35rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
       align-self: flex-start;
     }
 
@@ -748,74 +645,60 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.2rem;
+      gap: 0.15rem;
       width: 100%;
       text-align: center;
     }
 
-    .pitch-title {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-    }
+    .pitch-title { font-size: 0.65rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.05em; }
 
     .pitch-badge-wrap-vertical {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.15rem;
+      gap: 0.1rem;
       width: 100%;
     }
 
     .pitch-badge {
-      font-size: 0.88rem;
+      font-size: 0.8rem;
       font-weight: 900;
       font-family: monospace;
-      padding: 0.12rem 0.4rem;
-      border-radius: 6px;
+      padding: 0.1rem 0.25rem;
+      border-radius: 3px;
       background: rgba(0, 0, 0, 0.6);
       width: 100%;
       text-align: center;
     }
 
     .deck-a .pitch-badge { color: var(--cyan-main); border: 1px solid var(--cyan-main); }
-    .deck-b .pitch-badge { color: var(--magenta-main); border: 1px solid var(--magenta-main); }
+    .deck-b .pitch-badge { color: var(--orange-main); border: 1px solid var(--orange-main); }
 
-    .rate-text {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      font-family: monospace;
-      font-weight: 700;
-    }
+    .rate-text { font-size: 0.65rem; color: var(--text-muted); font-family: monospace; font-weight: 700; }
 
     .btn-reset-pitch {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.2rem 0.4rem;
-      border-radius: 6px;
-      font-size: 0.68rem;
+      padding: 0.15rem 0.3rem;
+      border-radius: 3px;
+      font-size: 0.62rem;
       font-weight: 800;
       cursor: pointer;
       width: 100%;
-      margin-top: 0.1rem;
     }
 
-    .btn-reset-pitch:hover { background: rgba(255, 255, 255, 0.2); }
-
-    /* Compact Vertical Pitch Drag Slider Track (Exact Length) */
     .pitch-slider-vertical-wrap {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.3rem;
       width: 100%;
-      height: 125px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 0.5rem 0.3rem;
-      border-radius: 10px;
+      height: 110px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.4rem 0.25rem;
+      border-radius: 4px;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
@@ -824,7 +707,7 @@
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
       color: var(--text-muted);
       font-family: monospace;
@@ -834,7 +717,7 @@
       -webkit-appearance: slider-vertical;
       writing-mode: vertical-lr;
       direction: rtl;
-      width: 14px;
+      width: 12px;
       height: 100%;
       background: transparent;
       cursor: pointer;
@@ -844,130 +727,100 @@
     .pitch-bend-vertical-actions {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.25rem;
       width: 100%;
     }
 
     .btn-pitch-bend {
       width: 100%;
+      height: 26px;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.38rem 0.2rem;
-      border-radius: 8px;
-      font-size: 0.72rem;
+      border-radius: 3px;
+      font-size: 0.65rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.2rem;
-      transition: all 0.15s ease;
     }
 
     .btn-pitch-bend:active, .btn-pitch-bend.active {
       background: rgba(255, 255, 255, 0.25);
-      transform: scale(0.96);
     }
 
-    /* CENTRAL MIXER STRIP (Compact & Fitted) */
+    /* CENTRAL MIXER STRIP (Traktor DJM Style) */
     .central-mixer-card {
       background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 1.1rem 0.9rem;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 0.75rem 0.65rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      gap: 0.75rem;
       align-items: center;
       align-self: flex-start;
     }
 
     .mixer-header {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 900;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      background: linear-gradient(90deg, var(--cyan-main), var(--magenta-main));
+      background: linear-gradient(90deg, var(--cyan-main), var(--orange-main));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    /* Compact Master Deck Volumes (Vertical Channel Faders) */
+    /* Master Deck Volumes */
     .master-vol-card {
       width: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      background: #0f0f12;
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 0.7rem;
+      border-radius: 4px;
+      padding: 0.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
-    .vol-header-title {
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
+    .vol-header-title { font-size: 0.68rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; }
 
     .vertical-vols-container {
       display: flex;
       justify-content: space-around;
       align-items: center;
       width: 100%;
-      gap: 0.75rem;
+      gap: 0.6rem;
     }
 
     .vol-channel {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.3rem;
       flex: 1;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 0.5rem 0.3rem;
-      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.4rem 0.2rem;
+      border-radius: 4px;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .vol-channel.col-a { border-color: rgba(0, 242, 254, 0.2); }
-    .vol-channel.col-b { border-color: rgba(236, 72, 153, 0.2); }
+    .vol-channel.col-b { border-color: rgba(249, 115, 22, 0.2); }
 
-    .vol-label-badge {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.1rem;
-      font-size: 0.72rem;
-      font-weight: 800;
-    }
+    .vol-label-badge { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; font-size: 0.68rem; font-weight: 800; }
+    .vol-val-text { font-family: monospace; font-size: 0.72rem; color: var(--text-main); }
 
-    .vol-val-text {
-      font-family: monospace;
-      font-size: 0.78rem;
-      color: var(--text-main);
-    }
-
-    /* Compact Vertical Vol Fader Track */
-    .vol-slider-wrap {
-      height: 110px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0.25rem 0;
-    }
+    .vol-slider-wrap { height: 100px; display: flex; justify-content: center; align-items: center; padding: 0.2rem 0; }
 
     .dj-vertical-vol-slider {
       -webkit-appearance: slider-vertical;
       writing-mode: vertical-lr;
       direction: rtl;
-      width: 14px;
+      width: 12px;
       height: 100%;
       background: transparent;
       cursor: pointer;
@@ -978,59 +831,48 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.45rem;
       align-items: center;
     }
 
     .crossfader-slider {
       width: 100%;
       -webkit-appearance: none;
-      appearance: none;
-      height: 10px;
-      background: linear-gradient(90deg, var(--cyan-main) 0%, rgba(255,255,255,0.1) 50%, var(--magenta-main) 100%);
-      border-radius: 5px;
-      outline: none;
+      height: 8px;
+      background: linear-gradient(90deg, var(--cyan-main) 0%, rgba(255,255,255,0.1) 50%, var(--orange-main) 100%);
+      border-radius: 4px;
       cursor: pointer;
     }
 
     .crossfader-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      appearance: none;
-      width: 22px;
-      height: 28px;
-      border-radius: 5px;
+      width: 18px;
+      height: 24px;
+      border-radius: 3px;
       background: #ffffff;
       border: 2px solid #1e293b;
-      box-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
       cursor: pointer;
     }
 
-    .xfade-mini-actions {
-      display: flex;
-      gap: 0.35rem;
-      width: 100%;
-    }
+    .xfade-mini-actions { display: flex; gap: 0.25rem; width: 100%; }
 
     .xfade-mini-btn {
       flex: 1;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.3rem 0.2rem;
-      border-radius: 8px;
-      font-size: 0.68rem;
+      padding: 0.25rem 0.1rem;
+      border-radius: 3px;
+      font-size: 0.65rem;
       font-weight: 800;
       cursor: pointer;
     }
 
-    .xfade-mini-btn:hover { background: rgba(255, 255, 255, 0.18); }
-
     @media (max-width: 1280px) {
       .console-grid { grid-template-columns: 1fr; }
       .deck-card { flex-direction: column; }
-      .pitch-fader-card.outer-pitch { width: 100%; height: auto; min-height: 0; }
-      .pitch-slider-vertical-wrap { height: 110px; }
-      .vol-slider-wrap { height: 100px; }
+      .pitch-fader-card.outer-pitch { width: 100%; height: auto; }
+      .pitch-slider-vertical-wrap { height: 100px; }
     }
   </style>
 </head>
@@ -1038,7 +880,7 @@
 
   <div class="container">
     
-    <!-- Header Bar & Global In-App Search -->
+    <!-- Global Header Bar -->
     <header>
       <div class="brand">
         <div class="brand-icon">🎧</div>
@@ -1062,16 +904,16 @@
       </div>
     </header>
 
-    <!-- Main Console Grid -->
+    <!-- Main Console Grid (Traktor Pro 3 Layout) -->
     <div class="console-grid">
       
-      <!-- DECK A (LEFT - CYAN) -->
+      <!-- DECK A (LEFT - NEON CYAN) -->
       <div class="deck-card deck-a">
         
-        <!-- Compact Outer Left Pitch Strip (Deck A) -->
+        <!-- Outer Left Pitch Strip (Deck A) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
-            <span class="pitch-title">🎚️ PITCH</span>
+            <span class="pitch-title">PITCH</span>
             <div class="pitch-badge-wrap-vertical">
               <span id="pitchValBadgeA" class="pitch-badge">+0.00%</span>
               <span id="rateValTextA" class="rate-text">(1.00x)</span>
@@ -1098,98 +940,93 @@
 
         <!-- Deck A Main Content Body -->
         <div class="deck-main-body">
-          <div class="deck-header">
-            <div class="deck-title">🎛️ Deck A (Left)</div>
-            <span id="trackTitleA" style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Lofi Hip Hop</span>
-          </div>
-
-          <div class="loader-box">
-            <div class="input-group">
-              <input id="inputA" type="text" class="search-input" placeholder="Search track name or paste YouTube URL...">
-              <button id="btnLoadA" class="search-btn">🔍 Search / Load</button>
+          
+          <!-- Top Header Panel -->
+          <div class="deck-top-header">
+            <div class="deck-title-group">
+              <span class="deck-name-badge">DECK A</span>
+              <span id="trackTitleA" class="track-title-text">Lofi Hip Hop Radio</span>
+            </div>
+            <div class="deck-loader-group">
+              <input id="inputA" type="text" class="search-input" placeholder="Search track or YouTube URL...">
+              <button id="btnLoadA" class="search-btn">🔍 Load</button>
             </div>
           </div>
 
+          <!-- Video Viewport -->
           <div id="viewport-a" class="video-viewport">
             <div id="yt-player-a" class="yt-player"></div>
           </div>
 
-          <!-- Serato 20x Zoomable Waveform Deck A -->
-          <div class="waveform-card">
-            <div class="time-display">
-              <span id="currTimeA">00:00</span>
-              
-              <div class="zoom-controls-row">
-                <span class="zoom-label">ZOOM</span>
-                <input id="zoomSliderA" type="range" class="zoom-slider" min="1" max="20" step="0.5" value="1">
-                <span id="zoomTextA" style="font-size:0.75rem; color:var(--cyan-main); font-family:monospace; font-weight:800;">1.0x</span>
+          <!-- Main Waveform Row with Docked BPM Panel -->
+          <div class="waveform-canvas-row">
+            <div class="waveform-main-wrap">
+              <div class="time-display">
+                <span id="currTimeA">00:00</span>
+                <span id="durTimeA">00:00</span>
               </div>
-
-              <span id="durTimeA">00:00</span>
+              <div class="waveform-canvas-wrap">
+                <canvas id="waveformA" class="waveform-canvas"></canvas>
+              </div>
+              <div class="under-waveform-bar">
+                <div class="zoom-box">
+                  <span class="zoom-label">ZOOM</span>
+                  <input id="zoomSliderA" type="range" class="zoom-slider" min="1" max="20" step="0.5" value="1">
+                  <span id="zoomTextA" class="zoom-val">1.0x</span>
+                </div>
+                <input id="panScrollA" type="range" class="overview-scroll" min="0" max="100" value="0">
+              </div>
             </div>
 
-            <div class="waveform-canvas-wrap">
-              <canvas id="waveformA" class="waveform-canvas"></canvas>
-            </div>
-
-            <div class="overview-scroll-wrap">
-              <input id="panScrollA" type="range" class="overview-scroll" min="0" max="100" value="0">
+            <!-- Docked Vertical BPM Panel -->
+            <div class="bpm-docked-panel">
+              <div class="bpm-title">BPM</div>
+              <span id="bpmValA" class="bpm-badge">120.0</span>
+              <button id="btnTapA" class="btn-tap">TAP (T)</button>
             </div>
           </div>
 
-          <!-- Hot Cues Panel (3 Cues - Moved ABOVE Play/Cue) -->
-          <div class="hot-cues-panel">
-            <div class="hot-cues-header">
-              <span>🔥 HOT CUES (KEYS: 1, 2, 3)</span>
-              <span style="font-size:0.7rem; color:var(--cyan-main);">DECK A</span>
+          <!-- Bottom Transport Strip: PLAY, CUE, SYNC & 4 Hot Cues in a Tight Row -->
+          <div class="bottom-transport-strip">
+            <div class="transport-btn-group">
+              <button id="btnPlayA" class="btn-traktor btn-play" title="Play / Pause">▶ PLAY</button>
+              <button id="btnCueA" class="btn-traktor btn-cue" title="Master Cue">CUE</button>
+              <button id="btnSyncA" class="btn-traktor btn-sync" title="Sync BPM to Deck B">SYNC</button>
             </div>
-            <div class="hot-cues-grid">
+
+            <div class="traktor-divider"></div>
+
+            <div class="hot-cues-tight-row">
               <div class="cue-slot-wrap">
-                <button id="cueBtnA1" class="btn-cue cue-1 empty">C1<span>+ Set</span></button>
-                <button id="cueDelA1" class="btn-cue-delete" style="display:none;" title="Delete Cue 1">✕</button>
+                <button id="cueBtnA1" class="btn-hotcue cue-1 empty">C1<span>+Set</span></button>
+                <button id="cueDelA1" class="btn-hotcue-delete" style="display:none;">✕</button>
               </div>
               <div class="cue-slot-wrap">
-                <button id="cueBtnA2" class="btn-cue cue-2 empty">C2<span>+ Set</span></button>
-                <button id="cueDelA2" class="btn-cue-delete" style="display:none;" title="Delete Cue 2">✕</button>
+                <button id="cueBtnA2" class="btn-hotcue cue-2 empty">C2<span>+Set</span></button>
+                <button id="cueDelA2" class="btn-hotcue-delete" style="display:none;">✕</button>
               </div>
               <div class="cue-slot-wrap">
-                <button id="cueBtnA3" class="btn-cue cue-3 empty">C3<span>+ Set</span></button>
-                <button id="cueDelA3" class="btn-cue-delete" style="display:none;" title="Delete Cue 3">✕</button>
+                <button id="cueBtnA3" class="btn-hotcue cue-3 empty">C3<span>+Set</span></button>
+                <button id="cueDelA3" class="btn-hotcue-delete" style="display:none;">✕</button>
+              </div>
+              <div class="cue-slot-wrap">
+                <button id="cueBtnA4" class="btn-hotcue cue-4 empty">C4<span>+Set</span></button>
+                <button id="cueDelA4" class="btn-hotcue-delete" style="display:none;">✕</button>
               </div>
             </div>
           </div>
 
-          <!-- Standard DJ Play / Cue Transport Buttons Deck A -->
-          <div class="transport-card">
-            <button id="btnCueA" class="btn-transport btn-cue-main" title="Master Cue / Cue Previewing">
-              <span>CUE</span>
-              <span style="font-size:0.7rem; font-weight:700; opacity:0.85;">(HOLD PREVIEW)</span>
-            </button>
-            <button id="btnPlayA" class="btn-transport btn-play-main" title="Play / Pause Toggle">
-              <span id="playLabelTextA">▶ PLAY</span>
-              <span style="font-size:0.7rem; font-weight:700; opacity:0.85;">(TOGGLE)</span>
-            </button>
-          </div>
-
-          <!-- BPM & Sync Card A -->
-          <div class="bpm-card">
-            <div class="bpm-badge-wrap">
-              <button id="btnTapA" class="btn-tap">TAP (Key: T)</button>
-              <span id="bpmValA" class="bpm-badge">120.0 BPM</span>
-            </div>
-            <button id="btnSyncA" class="btn-sync" title="Sync Deck A to Deck B BPM">SYNC A</button>
-          </div>
         </div>
 
       </div>
 
-      <!-- CENTRAL MIXER STRIP -->
+      <!-- CENTRAL MIXER STRIP (Traktor Style) -->
       <div class="central-mixer-card">
-        <div class="mixer-header">🎛️ CENTRAL MIXER STRIP</div>
+        <div class="mixer-header">🎛️ CENTRAL MIXER</div>
 
-        <!-- Compact Master Deck Volumes (Vertical Channel Faders Side-by-Side) -->
+        <!-- Master Deck Volumes (Vertical Channel Faders Side-by-Side) -->
         <div class="master-vol-card">
-          <div class="vol-header-title">🎚️ CHANNEL VOLUMES</div>
+          <div class="vol-header-title">CHANNEL VOLUMES</div>
           <div class="vertical-vols-container">
             <!-- Channel A Volume -->
             <div class="vol-channel col-a">
@@ -1205,7 +1042,7 @@
             <!-- Channel B Volume -->
             <div class="vol-channel col-b">
               <div class="vol-label-badge">
-                <span style="color:var(--magenta-main);">VOL B</span>
+                <span style="color:var(--orange-main);">VOL B</span>
                 <span id="volValTextB" class="vol-val-text">100%</span>
               </div>
               <div class="vol-slider-wrap">
@@ -1217,10 +1054,10 @@
 
         <!-- Master Crossfader Bar -->
         <div class="crossfader-box">
-          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.78rem; font-weight:800;">
+          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.72rem; font-weight:800;">
             <span style="color:var(--cyan-main);">◄ A (<span id="crossValTextA">50%</span>)</span>
             <span style="color:var(--text-main);">CROSSFADER</span>
-            <span style="color:var(--magenta-main);">(<span id="crossValTextB">50%</span>) B ►</span>
+            <span style="color:var(--orange-main);">(<span id="crossValTextB">50%</span>) B ►</span>
           </div>
 
           <input id="masterCrossfader" type="range" class="crossfader-slider" min="0" max="100" value="50">
@@ -1233,98 +1070,93 @@
         </div>
       </div>
 
-      <!-- DECK B (RIGHT - MAGENTA) -->
+      <!-- DECK B (RIGHT - NEON ORANGE) -->
       <div class="deck-card deck-b">
         
         <!-- Deck B Main Content Body -->
         <div class="deck-main-body">
-          <div class="deck-header">
-            <div class="deck-title">🎛️ Deck B (Right)</div>
-            <span id="trackTitleB" style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Synthwave Cyberpunk</span>
-          </div>
-
-          <div class="loader-box">
-            <div class="input-group">
-              <input id="inputB" type="text" class="search-input" placeholder="Search track name or paste YouTube URL...">
-              <button id="btnLoadB" class="search-btn">🔍 Search / Load</button>
+          
+          <!-- Top Header Panel -->
+          <div class="deck-top-header">
+            <div class="deck-title-group">
+              <span class="deck-name-badge">DECK B</span>
+              <span id="trackTitleB" class="track-title-text">Synthwave Cyberpunk</span>
+            </div>
+            <div class="deck-loader-group">
+              <input id="inputB" type="text" class="search-input" placeholder="Search track or YouTube URL...">
+              <button id="btnLoadB" class="search-btn">🔍 Load</button>
             </div>
           </div>
 
+          <!-- Video Viewport -->
           <div id="viewport-b" class="video-viewport">
             <div id="yt-player-b" class="yt-player"></div>
           </div>
 
-          <!-- Serato 20x Zoomable Waveform Deck B -->
-          <div class="waveform-card">
-            <div class="time-display">
-              <span id="currTimeB">00:00</span>
-              
-              <div class="zoom-controls-row">
-                <span class="zoom-label">ZOOM</span>
-                <input id="zoomSliderB" type="range" class="zoom-slider" min="1" max="20" step="0.5" value="1">
-                <span id="zoomTextB" style="font-size:0.75rem; color:var(--magenta-main); font-family:monospace; font-weight:800;">1.0x</span>
+          <!-- Main Waveform Row with Docked BPM Panel -->
+          <div class="waveform-canvas-row">
+            <div class="waveform-main-wrap">
+              <div class="time-display">
+                <span id="currTimeB">00:00</span>
+                <span id="durTimeB">00:00</span>
               </div>
-
-              <span id="durTimeB">00:00</span>
+              <div class="waveform-canvas-wrap">
+                <canvas id="waveformB" class="waveform-canvas"></canvas>
+              </div>
+              <div class="under-waveform-bar">
+                <div class="zoom-box">
+                  <span class="zoom-label">ZOOM</span>
+                  <input id="zoomSliderB" type="range" class="zoom-slider" min="1" max="20" step="0.5" value="1">
+                  <span id="zoomTextB" class="zoom-val">1.0x</span>
+                </div>
+                <input id="panScrollB" type="range" class="overview-scroll" min="0" max="100" value="0">
+              </div>
             </div>
 
-            <div class="waveform-canvas-wrap">
-              <canvas id="waveformB" class="waveform-canvas"></canvas>
-            </div>
-
-            <div class="overview-scroll-wrap">
-              <input id="panScrollB" type="range" class="overview-scroll" min="0" max="100" value="0">
+            <!-- Docked Vertical BPM Panel -->
+            <div class="bpm-docked-panel">
+              <div class="bpm-title">BPM</div>
+              <span id="bpmValB" class="bpm-badge">128.0</span>
+              <button id="btnTapB" class="btn-tap">TAP (Y)</button>
             </div>
           </div>
 
-          <!-- Hot Cues Panel (3 Cues - Moved ABOVE Play/Cue) -->
-          <div class="hot-cues-panel">
-            <div class="hot-cues-header">
-              <span>🔥 HOT CUES (KEYS: 7, 8, 9)</span>
-              <span style="font-size:0.7rem; color:var(--magenta-main);">DECK B</span>
+          <!-- Bottom Transport Strip: PLAY, CUE, SYNC & 4 Hot Cues in a Tight Row -->
+          <div class="bottom-transport-strip">
+            <div class="transport-btn-group">
+              <button id="btnPlayB" class="btn-traktor btn-play" title="Play / Pause">▶ PLAY</button>
+              <button id="btnCueB" class="btn-traktor btn-cue" title="Master Cue">CUE</button>
+              <button id="btnSyncB" class="btn-traktor btn-sync" title="Sync BPM to Deck A">SYNC</button>
             </div>
-            <div class="hot-cues-grid">
+
+            <div class="traktor-divider"></div>
+
+            <div class="hot-cues-tight-row">
               <div class="cue-slot-wrap">
-                <button id="cueBtnB1" class="btn-cue cue-1 empty">C1<span>+ Set</span></button>
-                <button id="cueDelB1" class="btn-cue-delete" style="display:none;" title="Delete Cue 1">✕</button>
+                <button id="cueBtnB1" class="btn-hotcue cue-1 empty">C1<span>+Set</span></button>
+                <button id="cueDelB1" class="btn-hotcue-delete" style="display:none;">✕</button>
               </div>
               <div class="cue-slot-wrap">
-                <button id="cueBtnB2" class="btn-cue cue-2 empty">C2<span>+ Set</span></button>
-                <button id="cueDelB2" class="btn-cue-delete" style="display:none;" title="Delete Cue 2">✕</button>
+                <button id="cueBtnB2" class="btn-hotcue cue-2 empty">C2<span>+Set</span></button>
+                <button id="cueDelB2" class="btn-hotcue-delete" style="display:none;">✕</button>
               </div>
               <div class="cue-slot-wrap">
-                <button id="cueBtnB3" class="btn-cue cue-3 empty">C3<span>+ Set</span></button>
-                <button id="cueDelB3" class="btn-cue-delete" style="display:none;" title="Delete Cue 3">✕</button>
+                <button id="cueBtnB3" class="btn-hotcue cue-3 empty">C3<span>+Set</span></button>
+                <button id="cueDelB3" class="btn-hotcue-delete" style="display:none;">✕</button>
+              </div>
+              <div class="cue-slot-wrap">
+                <button id="cueBtnB4" class="btn-hotcue cue-4 empty">C4<span>+Set</span></button>
+                <button id="cueDelB4" class="btn-hotcue-delete" style="display:none;">✕</button>
               </div>
             </div>
           </div>
 
-          <!-- Standard DJ Play / Cue Transport Buttons Deck B -->
-          <div class="transport-card">
-            <button id="btnCueB" class="btn-transport btn-cue-main" title="Master Cue / Cue Previewing">
-              <span>CUE</span>
-              <span style="font-size:0.7rem; font-weight:700; opacity:0.85;">(HOLD PREVIEW)</span>
-            </button>
-            <button id="btnPlayB" class="btn-transport btn-play-main" title="Play / Pause Toggle">
-              <span id="playLabelTextB">▶ PLAY</span>
-              <span style="font-size:0.7rem; font-weight:700; opacity:0.85;">(TOGGLE)</span>
-            </button>
-          </div>
-
-          <!-- BPM & Sync Card B -->
-          <div class="bpm-card">
-            <div class="bpm-badge-wrap">
-              <button id="btnTapB" class="btn-tap">TAP (Key: Y)</button>
-              <span id="bpmValB" class="bpm-badge">128.0 BPM</span>
-            </div>
-            <button id="btnSyncB" class="btn-sync" title="Sync Deck B to Deck A BPM">SYNC B</button>
-          </div>
         </div>
 
-        <!-- Compact Outer Right Pitch Strip (Deck B) -->
+        <!-- Outer Right Pitch Strip (Deck B) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
-            <span class="pitch-title">🎚️ PITCH</span>
+            <span class="pitch-title">PITCH</span>
             <div class="pitch-badge-wrap-vertical">
               <span id="pitchValBadgeB" class="pitch-badge">+0.00%</span>
               <span id="rateValTextB" class="rate-text">(1.00x)</span>
@@ -1371,7 +1203,7 @@
     let playerA = null;
     let playerB = null;
 
-    const CUE_COLORS = { 1: '#ef4444', 2: '#10b981', 3: '#3b82f6' };
+    const CUE_COLORS = { 1: '#ef4444', 2: '#10b981', 3: '#3b82f6', 4: '#f59e0b' };
 
     // Curated DJ Track Search Database
     const DJ_SEARCH_DATABASE = [
@@ -1387,8 +1219,8 @@
 
     // Waveform & Deck State
     const deckState = {
-      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, cues: { 1: null, 2: null, 3: null } },
-      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, cues: { 1: null, 2: null, 3: null } }
+      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, cues: { 1: null, 2: null, 3: null, 4: null } },
+      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, cues: { 1: null, 2: null, 3: null, 4: null } }
     };
 
     /**
@@ -1466,7 +1298,7 @@
       deckState[deck].panPct = 0.0;
 
       const bpmBadge = document.getElementById(`bpmVal${deck}`);
-      if (bpmBadge) bpmBadge.textContent = `${deckState[deck].bpm.toFixed(1)} BPM`;
+      if (bpmBadge) bpmBadge.textContent = `${deckState[deck].bpm.toFixed(1)}`;
 
       const zoomSlider = document.getElementById(`zoomSlider${deck}`);
       const zoomText = document.getElementById(`zoomText${deck}`);
@@ -1605,7 +1437,7 @@
     }
 
     /**
-     * HOT CUE STORAGE PERSISTENCE (3 CUES PER DECK)
+     * HOT CUE STORAGE PERSISTENCE (4 CUES PER DECK)
      */
     function loadCuesFromStorage(deck, videoId) {
       try {
@@ -1613,10 +1445,10 @@
         if (stored) {
           deckState[deck].cues = JSON.parse(stored);
         } else {
-          deckState[deck].cues = { 1: null, 2: null, 3: null };
+          deckState[deck].cues = { 1: null, 2: null, 3: null, 4: null };
         }
       } catch (e) {
-        deckState[deck].cues = { 1: null, 2: null, 3: null };
+        deckState[deck].cues = { 1: null, 2: null, 3: null, 4: null };
       }
       updateCueUI(deck);
     }
@@ -1630,7 +1462,7 @@
 
     function updateCueUI(deck) {
       const cues = deckState[deck].cues;
-      for (let slot = 1; slot <= 3; slot++) {
+      for (let slot = 1; slot <= 4; slot++) {
         const btn = document.getElementById(`cueBtn${deck}${slot}`);
         const delBtn = document.getElementById(`cueDel${deck}${slot}`);
         if (!btn) continue;
@@ -1642,7 +1474,7 @@
           if (delBtn) delBtn.style.display = 'flex';
         } else {
           btn.classList.add('empty');
-          btn.innerHTML = `C${slot}<span>+ Set</span>`;
+          btn.innerHTML = `C${slot}<span>+Set</span>`;
           if (delBtn) delBtn.style.display = 'none';
         }
       }
@@ -1720,23 +1552,19 @@
 
     function handleStateChange(event, deck) {
       const statusText = document.getElementById(`statusText${deck}`);
-      const playLabel = document.getElementById(`playLabelText${deck}`);
       const playBtn = document.getElementById(`btnPlay${deck}`);
 
       if (event.data === YT.PlayerState.PLAYING) {
         if (statusText) statusText.textContent = `Deck ${deck}: Playing`;
-        if (playLabel) playLabel.textContent = '⏸ PAUSE';
-        if (playBtn) playBtn.classList.add('playing');
+        if (playBtn) { playBtn.textContent = '⏸ PAUSE'; playBtn.classList.add('playing'); }
       } else if (event.data === YT.PlayerState.PAUSED) {
         if (statusText) statusText.textContent = `Deck ${deck}: Paused`;
-        if (playLabel) playLabel.textContent = '▶ PLAY';
-        if (playBtn) playBtn.classList.remove('playing');
+        if (playBtn) { playBtn.textContent = '▶ PLAY'; playBtn.classList.remove('playing'); }
       } else if (event.data === YT.PlayerState.BUFFERING) {
         if (statusText) statusText.textContent = `Deck ${deck}: Buffering`;
       } else if (event.data === YT.PlayerState.ENDED) {
         if (statusText) statusText.textContent = `Deck ${deck}: Ended`;
-        if (playLabel) playLabel.textContent = '▶ PLAY';
-        if (playBtn) playBtn.classList.remove('playing');
+        if (playBtn) { playBtn.textContent = '▶ PLAY'; playBtn.classList.remove('playing'); }
       }
     }
 
@@ -1772,7 +1600,7 @@
         const avgMs = diffs.reduce((a, b) => a + b, 0) / diffs.length;
         const bpm = parseFloat((60000 / avgMs).toFixed(1));
         state.bpm = bpm;
-        document.getElementById(`bpmVal${deck}`).textContent = `${bpm.toFixed(1)} BPM`;
+        document.getElementById(`bpmVal${deck}`).textContent = `${bpm.toFixed(1)}`;
       }
     }
 
@@ -1788,7 +1616,7 @@
         const btnSync = document.getElementById(`btnSync${targetDeck}`);
         if (btnSync) {
           const origText = btnSync.textContent;
-          btnSync.textContent = 'SYNCED!';
+          btnSync.textContent = 'SYNCED';
           setTimeout(() => btnSync.textContent = origText, 1200);
         }
       } else if (targetBPM) {
@@ -1871,6 +1699,8 @@
       const visibleCount = visibleSlice.length;
       const barWidth = w / visibleCount;
 
+      const mainColor = deck === 'A' ? 'rgba(0, 242, 254, ' : 'rgba(249, 115, 22, ';
+
       // 1. Dual-Layer Waveform Drawing
       for (let i = 0; i < visibleCount; i++) {
         const x = i * barWidth;
@@ -1879,23 +1709,19 @@
         const isPast = (barPct <= playheadPct);
         const drawW = Math.max(1, barWidth - 0.2);
 
-        const peakHalfH = Math.max(2, (item.peak * (h - 8)) / 2);
-        const rmsHalfH = Math.max(1, (item.rms * (h - 8)) / 2);
+        const peakHalfH = Math.max(2, (item.peak * (h - 6)) / 2);
+        const rmsHalfH = Math.max(1, (item.rms * (h - 6)) / 2);
 
-        // Layer 1: Outer Peak Transients (Serato RGB Frequency Colors)
+        // Layer 1: Outer Peak Transients
         ctx.fillStyle = isPast ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, 0.45)';
         ctx.fillRect(x, yCenter - peakHalfH, drawW, peakHalfH * 2);
 
         const midH = peakHalfH * 0.80;
-        ctx.fillStyle = isPast ? 'rgba(0, 242, 254, 1.0)' : 'rgba(0, 242, 254, 0.45)';
+        ctx.fillStyle = isPast ? `${mainColor}1.0)` : `${mainColor}0.45)`;
         ctx.fillRect(x, yCenter - midH, drawW, midH * 2);
 
-        const bassH = peakHalfH * 0.45;
-        ctx.fillStyle = isPast ? 'rgba(239, 68, 68, 1.0)' : 'rgba(239, 68, 68, 0.45)';
-        ctx.fillRect(x, yCenter - bassH, drawW, bassH * 2);
-
         // Layer 2: Inner Core (RMS Body)
-        ctx.fillStyle = isPast ? 'rgba(8, 145, 178, 0.85)' : 'rgba(8, 145, 178, 0.40)';
+        ctx.fillStyle = isPast ? `${mainColor}0.85)` : `${mainColor}0.40)`;
         ctx.fillRect(x, yCenter - rmsHalfH, drawW, rmsHalfH * 2);
       }
 
@@ -1923,14 +1749,14 @@
 
             if (zoom >= 1.5 || isDownbeat) {
               ctx.fillStyle = isDownbeat ? '#ffffff' : 'rgba(255, 255, 255, 0.5)';
-              ctx.fillText(beatInBar, beatX, 10);
+              ctx.fillText(beatInBar, beatX, 9);
             }
           }
         }
         ctx.restore();
       }
 
-      // 3. Draw Master CUE Indicator Flag & HOT CUE FLAGS (3 Slots)
+      // 3. Draw Master CUE & HOT CUE FLAGS (4 Slots)
       if (dur > 0) {
         if (state.masterCue >= 0) {
           const mCuePct = state.masterCue / dur;
@@ -1939,24 +1765,22 @@
             ctx.save();
             ctx.beginPath();
             ctx.strokeStyle = '#eab308';
-            ctx.lineWidth = 2.5;
-            ctx.shadowColor = '#eab308';
-            ctx.shadowBlur = 10;
+            ctx.lineWidth = 2;
             ctx.moveTo(mCueX, 0);
             ctx.lineTo(mCueX, h);
             ctx.stroke();
 
             ctx.fillStyle = '#eab308';
-            ctx.fillRect(mCueX - 14, 2, 28, 14);
+            ctx.fillRect(mCueX - 12, 2, 24, 12);
             ctx.fillStyle = '#000000';
-            ctx.font = '900 9px Outfit, sans-serif';
+            ctx.font = '900 8px Outfit, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('CUE', mCueX, 12);
+            ctx.fillText('CUE', mCueX, 10);
             ctx.restore();
           }
         }
 
-        for (let slot = 1; slot <= 3; slot++) {
+        for (let slot = 1; slot <= 4; slot++) {
           const cueTime = state.cues[slot];
           if (cueTime !== null && cueTime !== undefined) {
             const cuePct = cueTime / dur;
@@ -1968,19 +1792,17 @@
               ctx.beginPath();
               ctx.strokeStyle = color;
               ctx.lineWidth = 2;
-              ctx.shadowColor = color;
-              ctx.shadowBlur = 8;
               ctx.moveTo(cueX, 0);
               ctx.lineTo(cueX, h);
               ctx.stroke();
 
               ctx.fillStyle = color;
-              ctx.fillRect(cueX - 10, h - 18, 20, 14);
+              ctx.fillRect(cueX - 9, h - 15, 18, 12);
               
               ctx.fillStyle = '#ffffff';
-              ctx.font = '900 9px Outfit, sans-serif';
+              ctx.font = '900 8px Outfit, sans-serif';
               ctx.textAlign = 'center';
-              ctx.fillText(`C${slot}`, cueX, h - 7);
+              ctx.fillText(`C${slot}`, cueX, h - 6);
               ctx.restore();
             }
           }
@@ -2000,8 +1822,8 @@
         ctx.beginPath();
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = '#ffffff';
-        ctx.shadowBlur = 14;
-        ctx.fillRect(playheadX - 1.5, 0, 3, h);
+        ctx.shadowBlur = 10;
+        ctx.fillRect(playheadX - 1, 0, 2, h);
         ctx.restore();
       }
     }
@@ -2027,7 +1849,7 @@
         if (e.key === 'Enter') handleTrackSearch(input.value, deck);
       });
 
-      // Standard DJ Play / Pause Toggle Button
+      // Traktor Play / Pause Toggle Button
       btnPlay.addEventListener('click', () => {
         const player = deck === 'A' ? playerA : playerB;
         if (!player || typeof player.getPlayerState !== 'function') return;
@@ -2040,7 +1862,7 @@
         }
       });
 
-      // Standard DJ Master CUE & Cue Previewing Engine
+      // Master CUE & Cue Previewing Engine
       const startCuePreview = () => {
         const player = deck === 'A' ? playerA : playerB;
         if (!player || typeof player.getPlayerState !== 'function') return;
@@ -2085,7 +1907,7 @@
         applyPitchShift(deck, 0.0);
       });
 
-      // Momentary Pitch Bend Buttons (+2% / -2%) - Mouse & Touch Events
+      // Momentary Pitch Bend Buttons (+2% / -2%)
       const startBendMinus = (e) => { if (e && e.type === 'touchstart') e.preventDefault(); btnBendMinus.classList.add('active'); applyPitchShift(deck, deckState[deck].pitch, -2.0); };
       const stopBendMinus = () => { btnBendMinus.classList.remove('active'); applyPitchShift(deck, deckState[deck].pitch, 0.0); };
       btnBendMinus.addEventListener('mousedown', startBendMinus);
@@ -2117,8 +1939,8 @@
         deckState[deck].panPct = (val / 100.0) * (1.0 - visibleFraction);
       });
 
-      // Hot Cue Buttons & Delete Listeners (3 Slots)
-      for (let slot = 1; slot <= 3; slot++) {
+      // Hot Cue Buttons & Delete Listeners (4 Slots)
+      for (let slot = 1; slot <= 4; slot++) {
         document.getElementById(`cueBtn${deck}${slot}`).addEventListener('click', () => handleHotCue(deck, slot));
         document.getElementById(`cueDel${deck}${slot}`).addEventListener('click', (e) => deleteHotCue(deck, slot, e));
       }
@@ -2132,7 +1954,7 @@
         document.getElementById('btnSyncA').addEventListener('click', () => syncDecks('A', 'B'));
       }
 
-      // Synchronized Click & Drag Scrubbing on Zoomed Waveform
+      // Synchronized Scrubbing
       const canvas = document.getElementById(`waveform${deck}`);
       let isDragging = false;
 
@@ -2208,22 +2030,24 @@
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
 
-        // Deck A Hot Cues (Keys 1, 2, 3)
+        // Deck A Hot Cues (Keys 1, 2, 3, 4)
         if (e.key === '1') handleHotCue('A', 1);
         else if (e.key === '2') handleHotCue('A', 2);
         else if (e.key === '3') handleHotCue('A', 3);
+        else if (e.key === '4') handleHotCue('A', 4);
 
-        // Deck B Hot Cues (Keys 7, 8, 9)
+        // Deck B Hot Cues (Keys 7, 8, 9, 0)
         else if (e.key === '7') handleHotCue('B', 1);
         else if (e.key === '8') handleHotCue('B', 2);
         else if (e.key === '9') handleHotCue('B', 3);
+        else if (e.key === '0') handleHotCue('B', 4);
 
         // Tap Tempos
         else if (e.key === 't' || e.key === 'T') handleTap('A');
         else if (e.key === 'y' || e.key === 'Y') handleTap('B');
       });
 
-      // Render Loop for Static Serato Waveforms & Equalizer VU Meters
+      // Render Loop
       function animLoop() {
         renderWaveformCanvas('A', playerA);
         renderWaveformCanvas('B', playerB);
@@ -2235,17 +2059,6 @@
 
           document.getElementById(`currTime${deck}`).textContent = formatTime(currTime);
           document.getElementById(`durTime${deck}`).textContent = formatTime(dur);
-
-          const isPlaying = (player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING);
-          const bars = document.querySelectorAll(`#eqBars${deck} .eq-bar`);
-          bars.forEach(bar => {
-            if (isPlaying) {
-              const h = Math.floor(15 + Math.random() * 85);
-              bar.style.height = `${h}%`;
-            } else {
-              bar.style.height = '10%';
-            }
-          });
         };
 
         updateState('A', playerA);
