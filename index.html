@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - Hot Cues System</title>
+  <title>YouTube DJ Deck - 20x Zoom & Traktor RGB Multi-Band Waveforms</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -242,9 +242,9 @@
       pointer-events: none;
     }
 
-    /* Serato DJ Zoomable Waveform & Overview Scrollbar Card */
+    /* Serato / Traktor 20x Zoomable RGB Multi-Band Waveform Card */
     .waveform-card {
-      background: rgba(8, 8, 12, 0.95);
+      background: rgba(6, 6, 10, 0.95);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 0.75rem 0.85rem;
@@ -270,10 +270,10 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       padding: 0.25rem 0.6rem;
       border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .zoom-label {
@@ -284,7 +284,7 @@
     }
 
     .zoom-slider {
-      width: 80px;
+      width: 90px;
       -webkit-appearance: none;
       appearance: none;
       height: 4px;
@@ -305,7 +305,7 @@
 
     .waveform-canvas-wrap {
       width: 100%;
-      height: 72px;
+      height: 76px;
       position: relative;
       cursor: pointer;
       overflow: hidden;
@@ -316,7 +316,7 @@
       height: 100%;
       border-radius: 6px;
       display: block;
-      background: #08080c;
+      background: #050508;
     }
 
     /* Overview Navigation Pan Scrollbar */
@@ -766,14 +766,14 @@
           <div id="yt-player-a" class="yt-player"></div>
         </div>
 
-        <!-- Zoomable Serato Waveform & Overview Scrollbar Card Deck A -->
+        <!-- Serato / Traktor 20x Zoomable RGB Multi-Band Waveform Card Deck A -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeA">00:00</span>
             
             <div class="zoom-controls-row">
               <span class="zoom-label">ZOOM</span>
-              <input id="zoomSliderA" type="range" class="zoom-slider" min="1" max="8" step="0.5" value="1">
+              <input id="zoomSliderA" type="range" class="zoom-slider" min="1" max="20" step="0.5" value="1">
               <span id="zoomTextA" style="font-size:0.75rem; color:var(--cyan-main); font-family:monospace; font-weight:800;">1.0x</span>
             </div>
 
@@ -885,14 +885,14 @@
           <div id="yt-player-b" class="yt-player"></div>
         </div>
 
-        <!-- Zoomable Serato Waveform & Overview Scrollbar Card Deck B -->
+        <!-- Serato / Traktor 20x Zoomable RGB Multi-Band Waveform Card Deck B -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeB">00:00</span>
             
             <div class="zoom-controls-row">
               <span class="zoom-label">ZOOM</span>
-              <input id="zoomSliderB" type="range" class="zoom-slider" min="1" max="8" step="0.5" value="1">
+              <input id="zoomSliderB" type="range" class="zoom-slider" min="1" max="20" step="0.5" value="1">
               <span id="zoomTextB" style="font-size:0.75rem; color:var(--magenta-main); font-family:monospace; font-weight:800;">1.0x</span>
             </div>
 
@@ -1009,7 +1009,6 @@
     let playerA = null;
     let playerB = null;
 
-    // Hot Cue Colors
     const CUE_COLORS = { 1: '#ef4444', 2: '#10b981', 3: '#3b82f6', 4: '#eab308' };
 
     // Waveform & Deck State
@@ -1035,14 +1034,11 @@
         else if (pct >= 0.42 && pct < 0.78) sectionFactor = 0.88 + Math.sin(i * 0.03) * 0.12;
         else if (pct >= 0.78) sectionFactor = 0.75 - (pct - 0.78) * 2.5;
 
-        const spike = Math.pow(Math.abs(Math.sin(i * 0.07 + hash * 0.05)), 5.5);
+        // Sharp beat hit spikes (kick/snare hits) with decay valleys
+        const spike = Math.pow(Math.abs(Math.sin(i * 0.07 + hash * 0.05)), 6.5);
         const height = Math.max(0.08, Math.min(0.98, (spike * 0.85 + 0.15) * sectionFactor));
 
-        let freqType = 'mid'; // Cyan
-        if (height > 0.65 || i % 48 === 0) freqType = 'kick'; // Orange/Red
-        else if (i % 24 === 12) freqType = 'high'; // Pure White
-
-        arr.push({ height, freqType });
+        arr.push({ height });
       }
       return arr;
     }
@@ -1116,12 +1112,10 @@
       const cues = deckState[deck].cues;
 
       if (cues[slot] !== null && cues[slot] !== undefined) {
-        // Trigger Cue (Seek)
         if (player && typeof player.seekTo === 'function') {
           player.seekTo(cues[slot], true);
         }
       } else {
-        // Set Cue at current position
         if (player && typeof player.getCurrentTime === 'function') {
           const curr = player.getCurrentTime() || 0;
           cues[slot] = curr;
@@ -1313,7 +1307,7 @@
     }
 
     /**
-     * DYNAMIC ZOOM WAVEFORM RENDERER WITH ON-CANVAS HOT CUE FLAGS (C1, C2, C3, C4)
+     * 20X ZOOMABLE SERATO RGB / TRAKTOR SPECTRUM MULTI-BAND WAVEFORM CANVAS RENDERER
      */
     function renderWaveformCanvas(deck, player) {
       const canvas = document.getElementById(`waveform${deck}`);
@@ -1364,29 +1358,37 @@
       const visibleCount = visiblePeaks.length;
       const barWidth = w / visibleCount;
 
-      // 1. Draw Visible Peak Subset
+      // 1. Draw Serato RGB / Traktor Spectrum Multi-Band Layered Peaks
       for (let i = 0; i < visibleCount; i++) {
         const x = i * barWidth;
         const peak = visiblePeaks[i];
         const barPct = startPct + (i / visibleCount) * visibleFraction;
         const isPast = (barPct <= playheadPct);
 
-        const barHalfH = Math.max(1.5, (peak.height * (h - 8)) / 2);
+        const barHalfH = Math.max(2, (peak.height * (h - 8)) / 2);
+        const drawW = Math.max(1, barWidth - 0.2);
 
-        let color = '#00f2fe';
-        if (peak.freqType === 'kick') {
-          color = isPast ? '#f97316' : 'rgba(249, 115, 22, 0.38)';
-        } else if (peak.freqType === 'high') {
-          color = isPast ? '#ffffff' : 'rgba(255, 255, 255, 0.38)';
-        } else {
-          color = isPast ? '#00f2fe' : 'rgba(0, 242, 254, 0.38)';
-        }
+        // Multi-Band Spectrum Colors (Bass Red, Mid Cyan, High White Tips)
+        const cBass = isPast ? '#ef4444' : 'rgba(239, 68, 68, 0.45)';
+        const cMid = isPast ? '#00f2fe' : 'rgba(0, 242, 254, 0.45)';
+        const cHigh = isPast ? '#ffffff' : 'rgba(255, 255, 255, 0.45)';
 
-        ctx.fillStyle = color;
-        ctx.fillRect(x, yCenter - barHalfH, Math.max(1, barWidth - 0.2), barHalfH * 2);
+        // Layer 1: Outer High Needle Tips (Full Height)
+        ctx.fillStyle = cHigh;
+        ctx.fillRect(x, yCenter - barHalfH, drawW, barHalfH * 2);
+
+        // Layer 2: Mid Frequency Body (80% Height)
+        const midH = barHalfH * 0.80;
+        ctx.fillStyle = cMid;
+        ctx.fillRect(x, yCenter - midH, drawW, midH * 2);
+
+        // Layer 3: Deep Bass / Kick Core (45% Height)
+        const bassH = barHalfH * 0.45;
+        ctx.fillStyle = cBass;
+        ctx.fillRect(x, yCenter - bassH, drawW, bassH * 2);
       }
 
-      // 2. Draw Serato Beat Grid Overlay & Beat Numbers
+      // 2. Draw Serato Beat Grid Overlay & Beat Numbers (1, 2, 3, 4)
       const bpm = state.bpm || 124.0;
       if (dur > 0 && bpm > 0) {
         const totalBeats = (dur / 60.0) * bpm;
@@ -1402,7 +1404,7 @@
             const isDownbeat = (beatInBar === 1);
 
             ctx.beginPath();
-            ctx.strokeStyle = isDownbeat ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.25)';
+            ctx.strokeStyle = isDownbeat ? 'rgba(255, 255, 255, 0.88)' : 'rgba(255, 255, 255, 0.25)';
             ctx.lineWidth = isDownbeat ? 1.5 : 0.8;
             ctx.moveTo(beatX, 0);
             ctx.lineTo(beatX, h);
@@ -1428,7 +1430,6 @@
               const color = CUE_COLORS[slot];
 
               ctx.save();
-              // Cue Vertical Line
               ctx.beginPath();
               ctx.strokeStyle = color;
               ctx.lineWidth = 2;
@@ -1438,7 +1439,6 @@
               ctx.lineTo(cueX, h);
               ctx.stroke();
 
-              // Cue Flag Marker Badge
               ctx.fillStyle = color;
               ctx.fillRect(cueX - 10, h - 18, 20, 14);
               
@@ -1515,7 +1515,7 @@
         setSpeed(deck, parseFloat(e.target.value));
       });
 
-      // Zoom & Pan Scroll Controls
+      // 20x Zoom & Overview Pan Scroll Controls
       zoomSlider.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         deckState[deck].zoom = val;
@@ -1593,7 +1593,7 @@
         });
       });
 
-      // Keyboard Shortcuts (Deck A: Keys 1-4 for Cues, T for Tap. Deck B: Keys 7-0 for Cues, Y for Tap)
+      // Keyboard Shortcuts
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
