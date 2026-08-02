@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Console - Senior Architecture & Traktor Layout</title>
+  <title>YouTube DJ Console - Pro Traktor Deck Layout</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -44,7 +44,7 @@
       outline: none !important;
     }
 
-    /* Section 1: Viewport Constraints & Global Grid System */
+    /* 1. Viewport Constraints & Global Grid System */
     body {
       font-family: 'Outfit', sans-serif;
       background: var(--bg-dark);
@@ -279,7 +279,7 @@
       min-height: 0;
     }
 
-    /* Section 2: Deck Layout & YouTube Player Sizing (Decks A & B) */
+    /* Deck Layout & YouTube Player Sizing */
     .deck-card {
       background: var(--card-bg);
       border-radius: 5px;
@@ -302,14 +302,14 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      gap: 6px;
+      justify-content: flex-start;
+      gap: 8px;
       min-width: 0;
       height: 100%;
       min-height: 0;
     }
 
-    /* 1. Top Header Panel */
+    /* Top Header Panel */
     .deck-top-header {
       display: flex;
       align-items: center;
@@ -386,7 +386,7 @@
     .deck-a .search-btn { background: var(--cyan-gradient); color: #000; }
     .deck-b .search-btn { background: var(--orange-gradient); color: #fff; }
 
-    /* 2. Waveform Canvas Area (Explicit 85px Height) */
+    /* Waveform Canvas Area */
     .waveform-canvas-row {
       display: flex;
       gap: 8px;
@@ -534,7 +534,7 @@
       box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
     }
 
-    /* 3. YouTube Video Player Embed Wrapper (16:9 Aspect Ratio / Max-Height 200px) */
+    /* YouTube Video Player Embed Viewport */
     .video-viewport {
       width: 100%;
       aspect-ratio: 16 / 9;
@@ -550,7 +550,7 @@
 
     .yt-player { width: 100%; height: 100%; pointer-events: none; }
 
-    /* 4. Hot Cue Buttons Row */
+    /* Hot Cue Buttons Row */
     .hot-cues-section {
       display: flex;
       flex-direction: column;
@@ -631,7 +631,7 @@
 
     .btn-hotcue-delete:hover { background: #f43f5e; color: #fff; }
 
-    /* 5. Transport Buttons (Placed BELOW Hot Cues) */
+    /* Bottom Transport Strip: PLAY and CUE */
     .transport-card {
       background: #08080a;
       border: 1px solid var(--card-border);
@@ -667,7 +667,7 @@
     .btn-traktor:hover { filter: brightness(1.15); }
     .btn-traktor:active { transform: scale(0.96); }
 
-    /* Section 4: Side Tempo/Pitch Fader Restructuring (Max-Height 260px & 10px Margined Scale) */
+    /* 4. Side Tempo/Pitch Fader Restructuring (Stretches Full Height Flush with Transport Strip) */
     .pitch-fader-card.outer-pitch {
       width: 72px;
       flex-shrink: 0;
@@ -679,9 +679,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      gap: 4px;
+      gap: 6px;
       height: 100%;
-      max-height: 260px;
     }
 
     .pitch-fader-header-vertical {
@@ -731,7 +730,7 @@
       width: 100%;
     }
 
-    /* Vertical Pitch Slider Track Container (Restrained to max-height 260px) */
+    /* Vertical Pitch Slider Track Container (Stretches Full Height) */
     .pitch-slider-vertical-wrap {
       display: flex;
       flex-direction: row;
@@ -741,7 +740,6 @@
       width: 100%;
       flex: 1;
       height: 100%;
-      max-height: 260px;
       background: rgba(0, 0, 0, 0.4);
       padding: 6px 2px;
       border-radius: 3px;
@@ -766,7 +764,7 @@
       writing-mode: vertical-lr;
       direction: rtl;
       width: 10px;
-      height: 90%;
+      height: 100%;
       background: #18181c;
       border-radius: 4px;
       border: 1px solid #2e2e38;
@@ -800,18 +798,18 @@
       background: rgba(255, 255, 255, 0.25);
     }
 
-    /* Section 3: Central Mixer & Volume Fader Heights + 3-Band EQs */
+    /* 3. Central Mixer & Full Height Volume Faders (3-Band EQ Removed) */
     .central-mixer-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 5px;
-      padding: 10px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       height: 100%;
-      gap: 6px;
+      gap: 8px;
     }
 
     .mixer-header {
@@ -824,102 +822,19 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* 3-Band EQ Knobs Block (-12dB to +6dB) */
-    .eq-section-card {
-      width: 100%;
-      background: #08080a;
-      border: 1px solid var(--card-border);
-      border-radius: 4px;
-      padding: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .eq-header-title {
-      font-size: 0.6rem;
-      font-weight: 900;
-      color: var(--text-muted);
-      text-align: center;
-      letter-spacing: 0.05em;
-    }
-
-    .eq-channels-container {
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      width: 100%;
-    }
-
-    .eq-channel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 4px;
-      border-radius: 3px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .eq-channel.col-a { border-color: rgba(0, 242, 254, 0.2); }
-    .eq-channel.col-b { border-color: rgba(249, 115, 22, 0.2); }
-
-    .eq-deck-label {
-      font-size: 0.58rem;
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .eq-knob-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1px;
-    }
-
-    .eq-knob-slider {
-      width: 100%;
-      -webkit-appearance: none;
-      height: 4px;
-      background: #18181c;
-      border-radius: 2px;
-      border: 1px solid #2e2e38;
-      cursor: pointer;
-    }
-
-    .eq-knob-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.8);
-      cursor: pointer;
-    }
-
-    .eq-label {
-      font-size: 0.55rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      font-family: monospace;
-    }
-
-    /* Master Deck Volume Card (Explicit height: 180px; min-height: 180px; max-height: 200px;) */
+    /* Master Deck Volume Card (Occupies Full Top-to-Bottom Height Above Crossfader) */
     .master-vol-card {
       width: 100%;
       background: #08080a;
       border: 1px solid var(--card-border);
       border-radius: 4px;
-      padding: 6px;
+      padding: 8px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       flex: 1;
+      min-height: 0;
     }
 
     .vol-header-title { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; }
@@ -931,6 +846,7 @@
       width: 100%;
       gap: 6px;
       flex: 1;
+      height: 100%;
     }
 
     .vol-channel {
@@ -939,8 +855,9 @@
       align-items: center;
       gap: 4px;
       flex: 1;
+      height: 100%;
       background: rgba(0, 0, 0, 0.3);
-      padding: 4px 2px;
+      padding: 6px 4px;
       border-radius: 3px;
       border: 1px solid rgba(255, 255, 255, 0.05);
       justify-content: space-between;
@@ -952,19 +869,19 @@
     .vol-label-badge { display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 0.6rem; font-weight: 800; }
     .vol-val-text { font-family: monospace; font-size: 0.65rem; color: var(--text-main); }
 
-    /* Explicit Height Constraint Container for Volume Sliders */
+    /* Full-Height Volume Slider Track Container (Min-Height 380px) */
     .vol-slider-wrap {
       width: 100%;
-      height: 180px;
-      min-height: 180px;
-      max-height: 200px;
+      height: 100%;
+      min-height: 380px;
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 4px 0;
+      padding: 6px 0;
     }
 
-    /* Section 5: Custom CSS DJ Fader Caps & Thumb Styles */
+    /* 5. Custom CSS DJ Fader Caps & Thumb Styles */
     .pitch-drag-slider-vertical::-webkit-slider-thumb,
     .dj-vertical-vol-slider::-webkit-slider-thumb,
     .pitch-drag-slider-vertical::-moz-range-thumb,
@@ -1182,52 +1099,12 @@
 
       </div>
 
-      <!-- CENTRAL MIXER STRIP (WITH 3-BAND EQ KNOBS SECTION) -->
+      <!-- CENTRAL MIXER STRIP (3-BAND EQ DELETED - FULL HEIGHT VOLUME FADERS) -->
       <div class="central-mixer-card central-mixer">
         <div class="mixer-header">🎛️ CENTRAL MIXER</div>
 
-        <!-- 3-Band EQ Section (-12dB to +6dB) -->
-        <div class="eq-section-card">
-          <div class="eq-header-title">3-BAND EQ</div>
-          <div class="eq-channels-container">
-            <!-- Channel A EQs -->
-            <div class="eq-channel col-a">
-              <span class="eq-deck-label" style="color:var(--cyan-main);">CH A</span>
-              <div class="eq-knob-group">
-                <input id="eqHiA" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
-                <span class="eq-label">HI <span id="eqHiValA">0dB</span></span>
-              </div>
-              <div class="eq-knob-group">
-                <input id="eqMidA" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
-                <span class="eq-label">MID <span id="eqMidValA">0dB</span></span>
-              </div>
-              <div class="eq-knob-group">
-                <input id="eqLowA" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
-                <span class="eq-label">LOW <span id="eqLowValA">0dB</span></span>
-              </div>
-            </div>
-
-            <!-- Channel B EQs -->
-            <div class="eq-channel col-b">
-              <span class="eq-deck-label" style="color:var(--orange-main);">CH B</span>
-              <div class="eq-knob-group">
-                <input id="eqHiB" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
-                <span class="eq-label">HI <span id="eqHiValB">0dB</span></span>
-              </div>
-              <div class="eq-knob-group">
-                <input id="eqMidB" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
-                <span class="eq-label">MID <span id="eqMidValB">0dB</span></span>
-              </div>
-              <div class="eq-knob-group">
-                <input id="eqLowB" type="range" class="eq-knob-slider" min="-12" max="6" step="0.5" value="0">
-                <span class="eq-label">LOW <span id="eqLowValB">0dB</span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Master Deck Volume Card -->
-        <div class="master-vol-card">
+        <!-- Master Deck Volume Card (Spans Full Panel Height Above Crossfader) -->
+        <div class="master-vol-card channel-volumes">
           <div class="vol-header-title">CHANNEL VOLUMES</div>
           <div class="vertical-vols-container">
             <!-- Channel A Volume -->
@@ -1237,7 +1114,7 @@
                 <span id="volValTextA" class="vol-val-text">100%</span>
               </div>
               <div class="vol-slider-wrap">
-                <input id="volSliderA" type="range" class="dj-vertical-vol-slider slider-a" min="0" max="100" value="100">
+                <input id="volSliderA" type="range" class="dj-vertical-vol-slider volume-fader slider-a" min="0" max="100" value="100">
               </div>
             </div>
 
@@ -1248,7 +1125,7 @@
                 <span id="volValTextB" class="vol-val-text">100%</span>
               </div>
               <div class="vol-slider-wrap">
-                <input id="volSliderB" type="range" class="dj-vertical-vol-slider slider-b" min="0" max="100" value="100">
+                <input id="volSliderB" type="range" class="dj-vertical-vol-slider volume-fader slider-b" min="0" max="100" value="100">
               </div>
             </div>
           </div>
@@ -1403,7 +1280,7 @@
     </div>
   </div>
 
-  <!-- YOUTUBE IFRAME DUAL DECK ENGINE WITH 3-BAND EQ PROCESSING -->
+  <!-- YOUTUBE IFRAME DUAL DECK ENGINE -->
   <script>
     let playerA = null;
     let playerB = null;
@@ -1424,8 +1301,8 @@
 
     // Waveform & Deck State
     const deckState = {
-      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null }, eq: { hi: 0, mid: 0, low: 0 } },
-      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null }, eq: { hi: 0, mid: 0, low: 0 } }
+      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null } },
+      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null } }
     };
 
     /**
@@ -1660,39 +1537,6 @@
       if (player && typeof player.setPlaybackRate === 'function') {
         player.setPlaybackRate(rate);
       }
-    }
-
-    /**
-     * 3-BAND EQ PROCESSING ENGINE (-12dB to +6dB)
-     */
-    function setupEQEvents(deck) {
-      ['Hi', 'Mid', 'Low'].forEach(band => {
-        const slider = document.getElementById(`eq${band}${deck}`);
-        const valEl = document.getElementById(`eq${band}Val${deck}`);
-        if (!slider) return;
-
-        slider.addEventListener('input', (e) => {
-          const val = parseFloat(e.target.value);
-          const sign = val > 0 ? '+' : '';
-          if (valEl) valEl.textContent = `${sign}${val}dB`;
-
-          deckState[deck].eq[band.toLowerCase()] = val;
-          applyEQFilter(deck);
-        });
-      });
-    }
-
-    function applyEQFilter(deck) {
-      const eq = deckState[deck].eq;
-      const viewport = document.getElementById(`viewport-${deck.toLowerCase()}`);
-      if (!viewport) return;
-
-      // Dynamic Visual Color Filter mapping for EQ bands (HI = Brightness/Contrast, MID = Saturation, LOW = Warmth/Hue)
-      const hiFactor = 1.0 + (eq.hi / 24.0);
-      const midFactor = 1.0 + (eq.mid / 24.0);
-      const lowFactor = 1.0 + (eq.low / 24.0);
-
-      viewport.style.filter = `brightness(${hiFactor.toFixed(2)}) contrast(${midFactor.toFixed(2)}) saturate(${lowFactor.toFixed(2)})`;
     }
 
     /**
@@ -2206,9 +2050,6 @@
       // Tap Tempo & Quantize
       document.getElementById(`btnTap${deck}`).addEventListener('click', () => handleTap(deck));
       document.getElementById(`btnQuant${deck}`).addEventListener('click', () => toggleQuantize(deck));
-
-      // Setup 3-Band EQ Event Listeners
-      setupEQEvents(deck);
 
       // Synchronized Scrubbing
       const canvas = document.getElementById(`waveform${deck}`);
