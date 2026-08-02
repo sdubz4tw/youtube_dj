@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - 20x Zoom & Traktor RGB Multi-Band Waveforms</title>
+  <title>YouTube DJ Deck - ±16% Pitch Drag Faders & Pitch Bend</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -242,7 +242,7 @@
       pointer-events: none;
     }
 
-    /* Serato / Traktor 20x Zoomable RGB Multi-Band Waveform Card */
+    /* Waveform Card */
     .waveform-card {
       background: rgba(6, 6, 10, 0.95);
       border: 1px solid var(--card-border);
@@ -413,25 +413,14 @@
     .btn-cue.cue-3 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
     .btn-cue.cue-4 { background: linear-gradient(135deg, #eab308, #ca8a04); }
 
-    .btn-cue:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.15);
-    }
-
-    .btn-cue:active {
-      transform: scale(0.95);
-    }
+    .btn-cue:hover { transform: translateY(-1px); filter: brightness(1.15); }
+    .btn-cue:active { transform: scale(0.95); }
 
     .btn-cue.empty {
       background: rgba(255, 255, 255, 0.05);
       border: 1px dashed rgba(255, 255, 255, 0.2);
       color: var(--text-muted);
       box-shadow: none;
-    }
-
-    .btn-cue.empty:hover {
-      border-color: var(--text-main);
-      color: var(--text-main);
     }
 
     .btn-cue-delete {
@@ -450,15 +439,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.15s ease;
     }
 
-    .btn-cue-delete:hover {
-      background: #f43f5e;
-      color: #fff;
-    }
+    .btn-cue-delete:hover { background: #f43f5e; color: #fff; }
 
-    /* BPM & Tap Tempo Card */
+    /* BPM & Pitch Controls */
     .bpm-card {
       background: rgba(0, 0, 0, 0.35);
       border: 1px solid var(--card-border);
@@ -499,41 +484,11 @@
       font-weight: 800;
       cursor: pointer;
       transition: all 0.15s ease;
-      letter-spacing: 0.04em;
     }
 
-    .btn-tap:active, .btn-tap.tapped {
-      transform: scale(0.95);
-    }
-
+    .btn-tap:active, .btn-tap.tapped { transform: scale(0.95); }
     .deck-a .btn-tap:hover { background: var(--cyan-main); color: #000; }
     .deck-b .btn-tap:hover { background: var(--magenta-main); color: #fff; }
-
-    .pitch-nudge-group {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .btn-nudge {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      border: 1px solid var(--card-border);
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-main);
-      font-weight: 800;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s ease;
-    }
-
-    .btn-nudge:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
 
     .btn-sync {
       background: linear-gradient(135deg, #10b981, #059669);
@@ -545,12 +500,150 @@
       font-weight: 800;
       cursor: pointer;
       box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-      transition: all 0.2s ease;
     }
 
-    .btn-sync:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 18px rgba(16, 185, 129, 0.6);
+    /* Professional ±16% Pitch Drag Fader Card */
+    .pitch-fader-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .pitch-fader-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pitch-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .pitch-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pitch-badge {
+      font-size: 0.95rem;
+      font-weight: 900;
+      font-family: monospace;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .deck-a .pitch-badge { color: var(--cyan-main); border: 1px solid var(--cyan-main); }
+    .deck-b .pitch-badge { color: var(--magenta-main); border: 1px solid var(--magenta-main); }
+
+    .rate-text {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: monospace;
+      font-weight: 700;
+    }
+
+    .btn-reset-pitch {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-reset-pitch:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .pitch-slider-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      position: relative;
+    }
+
+    .pitch-drag-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 10px;
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.4) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(16, 185, 129, 0.4) 100%);
+      border-radius: 5px;
+      cursor: pointer;
+      outline: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .deck-a .pitch-drag-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 24px;
+      border-radius: 4px;
+      background: #ffffff;
+      border: 2px solid var(--cyan-main);
+      box-shadow: 0 0 10px var(--cyan-glow);
+      cursor: grab;
+    }
+
+    .deck-b .pitch-drag-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 24px;
+      border-radius: 4px;
+      background: #ffffff;
+      border: 2px solid var(--magenta-main);
+      box-shadow: 0 0 10px var(--magenta-glow);
+      cursor: grab;
+    }
+
+    .pitch-ticks-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-family: monospace;
+      padding: 0 0.2rem;
+    }
+
+    .pitch-bend-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-pitch-bend {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.4rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+
+    .btn-pitch-bend:active, .btn-pitch-bend.active {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(0.96);
     }
 
     /* Controls Grid inside Deck */
@@ -687,9 +780,7 @@
       transition: transform 0.15s ease;
     }
 
-    .crossfader-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-    }
+    .crossfader-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
     .crossfader-actions {
       display: flex;
@@ -708,9 +799,7 @@
       transition: all 0.2s ease;
     }
 
-    .xfade-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
-    }
+    .xfade-btn:hover { background: rgba(255, 255, 255, 0.18); }
 
     @media (max-width: 1024px) {
       .decks-grid { grid-template-columns: 1fr; }
@@ -766,7 +855,7 @@
           <div id="yt-player-a" class="yt-player"></div>
         </div>
 
-        <!-- Serato / Traktor 20x Zoomable RGB Multi-Band Waveform Card Deck A -->
+        <!-- Serato 20x Zoomable Waveform Deck A -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeA">00:00</span>
@@ -784,7 +873,6 @@
             <canvas id="waveformA" class="waveform-canvas"></canvas>
           </div>
 
-          <!-- Overview Pan Scrollbar Slider -->
           <div class="overview-scroll-wrap">
             <input id="panScrollA" type="range" class="overview-scroll" min="0" max="100" value="0">
           </div>
@@ -816,17 +904,40 @@
           </div>
         </div>
 
-        <!-- Tap Tempo BPM Reader Card A -->
+        <!-- BPM & Sync Card A -->
         <div class="bpm-card">
           <div class="bpm-badge-wrap">
             <button id="btnTapA" class="btn-tap">TAP (Key: T)</button>
             <span id="bpmValA" class="bpm-badge">120.0 BPM</span>
           </div>
-          <div class="pitch-nudge-group">
-            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">PITCH</span>
-            <button id="btnNudgeMinusA" class="btn-nudge" title="-0.01x Pitch Shift">-</button>
-            <button id="btnNudgePlusA" class="btn-nudge" title="+0.01x Pitch Shift">+</button>
-            <button id="btnSyncA" class="btn-sync" title="Sync Deck A to Deck B BPM">SYNC A</button>
+          <button id="btnSyncA" class="btn-sync" title="Sync Deck A to Deck B BPM">SYNC A</button>
+        </div>
+
+        <!-- Professional ±16% Pitch Drag Fader Deck A -->
+        <div class="pitch-fader-card">
+          <div class="pitch-fader-header">
+            <span class="pitch-title">🎚️ PITCH CONTROL (±16%)</span>
+            <div class="pitch-badge-wrap">
+              <span id="pitchValBadgeA" class="pitch-badge">+0.00%</span>
+              <span id="rateValTextA" class="rate-text">(1.00x)</span>
+              <button id="btnResetPitchA" class="btn-reset-pitch" title="Reset Pitch to 0%">0% RESET</button>
+            </div>
+          </div>
+
+          <div class="pitch-slider-box">
+            <input id="pitchSliderA" type="range" class="pitch-drag-slider" min="-16" max="16" step="0.05" value="0">
+            <div class="pitch-ticks-row">
+              <span>-16%</span>
+              <span>-8%</span>
+              <span>0%</span>
+              <span>+8%</span>
+              <span>+16%</span>
+            </div>
+          </div>
+
+          <div class="pitch-bend-actions">
+            <button id="btnBendMinusA" class="btn-pitch-bend" title="Hold to Bend -2%">◀ BEND -2%</button>
+            <button id="btnBendPlusA" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▶</button>
           </div>
         </div>
 
@@ -846,14 +957,6 @@
             </div>
             <input id="volSliderA" type="range" class="dj-slider" min="0" max="100" value="100">
           </div>
-        </div>
-
-        <div class="slider-card">
-          <div class="slider-header">
-            <span>🎚️ Speed / Pitch</span>
-            <span id="speedValTextA" class="val-text">1.00x</span>
-          </div>
-          <input id="speedSliderA" type="range" class="dj-slider" min="0.5" max="2.0" step="0.01" value="1.0">
         </div>
 
         <div id="eqBarsA" class="eq-bars">
@@ -885,7 +988,7 @@
           <div id="yt-player-b" class="yt-player"></div>
         </div>
 
-        <!-- Serato / Traktor 20x Zoomable RGB Multi-Band Waveform Card Deck B -->
+        <!-- Serato 20x Zoomable Waveform Deck B -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeB">00:00</span>
@@ -903,7 +1006,6 @@
             <canvas id="waveformB" class="waveform-canvas"></canvas>
           </div>
 
-          <!-- Overview Pan Scrollbar Slider -->
           <div class="overview-scroll-wrap">
             <input id="panScrollB" type="range" class="overview-scroll" min="0" max="100" value="0">
           </div>
@@ -935,17 +1037,40 @@
           </div>
         </div>
 
-        <!-- Tap Tempo BPM Reader Card B -->
+        <!-- BPM & Sync Card B -->
         <div class="bpm-card">
           <div class="bpm-badge-wrap">
             <button id="btnTapB" class="btn-tap">TAP (Key: Y)</button>
             <span id="bpmValB" class="bpm-badge">128.0 BPM</span>
           </div>
-          <div class="pitch-nudge-group">
-            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">PITCH</span>
-            <button id="btnNudgeMinusB" class="btn-nudge" title="-0.01x Pitch Shift">-</button>
-            <button id="btnNudgePlusB" class="btn-nudge" title="+0.01x Pitch Shift">+</button>
-            <button id="btnSyncB" class="btn-sync" title="Sync Deck B to Deck A BPM">SYNC B</button>
+          <button id="btnSyncB" class="btn-sync" title="Sync Deck B to Deck A BPM">SYNC B</button>
+        </div>
+
+        <!-- Professional ±16% Pitch Drag Fader Deck B -->
+        <div class="pitch-fader-card">
+          <div class="pitch-fader-header">
+            <span class="pitch-title">🎚️ PITCH CONTROL (±16%)</span>
+            <div class="pitch-badge-wrap">
+              <span id="pitchValBadgeB" class="pitch-badge">+0.00%</span>
+              <span id="rateValTextB" class="rate-text">(1.00x)</span>
+              <button id="btnResetPitchB" class="btn-reset-pitch" title="Reset Pitch to 0%">0% RESET</button>
+            </div>
+          </div>
+
+          <div class="pitch-slider-box">
+            <input id="pitchSliderB" type="range" class="pitch-drag-slider" min="-16" max="16" step="0.05" value="0">
+            <div class="pitch-ticks-row">
+              <span>-16%</span>
+              <span>-8%</span>
+              <span>0%</span>
+              <span>+8%</span>
+              <span>+16%</span>
+            </div>
+          </div>
+
+          <div class="pitch-bend-actions">
+            <button id="btnBendMinusB" class="btn-pitch-bend" title="Hold to Bend -2%">◀ BEND -2%</button>
+            <button id="btnBendPlusB" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▶</button>
           </div>
         </div>
 
@@ -965,14 +1090,6 @@
             </div>
             <input id="volSliderB" type="range" class="dj-slider" min="0" max="100" value="100">
           </div>
-        </div>
-
-        <div class="slider-card">
-          <div class="slider-header">
-            <span>🎚️ Speed / Pitch</span>
-            <span id="speedValTextB" class="val-text">1.00x</span>
-          </div>
-          <input id="speedSliderB" type="range" class="dj-slider" min="0.5" max="2.0" step="0.01" value="1.0">
         </div>
 
         <div id="eqBarsB" class="eq-bars">
@@ -1013,8 +1130,8 @@
 
     // Waveform & Deck State
     const deckState = {
-      A: { peaks: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, zoom: 1.0, panPct: 0.0, userPanning: false, cues: { 1: null, 2: null, 3: null, 4: null } },
-      B: { peaks: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, zoom: 1.0, panPct: 0.0, userPanning: false, cues: { 1: null, 2: null, 3: null, 4: null } }
+      A: { peaks: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, cues: { 1: null, 2: null, 3: null, 4: null } },
+      B: { peaks: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, cues: { 1: null, 2: null, 3: null, 4: null } }
     };
 
     /**
@@ -1034,7 +1151,6 @@
         else if (pct >= 0.42 && pct < 0.78) sectionFactor = 0.88 + Math.sin(i * 0.03) * 0.12;
         else if (pct >= 0.78) sectionFactor = 0.75 - (pct - 0.78) * 2.5;
 
-        // Sharp beat hit spikes (kick/snare hits) with decay valleys
         const spike = Math.pow(Math.abs(Math.sin(i * 0.07 + hash * 0.05)), 6.5);
         const height = Math.max(0.08, Math.min(0.98, (spike * 0.85 + 0.15) * sectionFactor));
 
@@ -1061,6 +1177,37 @@
         return parseFloat(baseBpm.toFixed(1));
       }
       return 124.0;
+    }
+
+    /**
+     * PITCH DRAG SLIDER & SPEED MAPPING (±16%)
+     * Playback Rate = 1 + (Pitch % / 100)
+     */
+    function applyPitchShift(deck, pitchPercent, bendOffset = 0.0) {
+      pitchPercent = Math.max(-16.0, Math.min(16.0, pitchPercent));
+      deckState[deck].pitch = pitchPercent;
+
+      const effectivePitch = pitchPercent + bendOffset;
+      const rate = 1.0 + (effectivePitch / 100.0);
+
+      const slider = document.getElementById(`pitchSlider${deck}`);
+      const badge = document.getElementById(`pitchValBadge${deck}`);
+      const rateText = document.getElementById(`rateValText${deck}`);
+
+      if (slider && bendOffset === 0.0) slider.value = pitchPercent;
+      
+      if (badge) {
+        const sign = pitchPercent >= 0 ? '+' : '';
+        badge.textContent = `${sign}${pitchPercent.toFixed(2)}%`;
+      }
+      if (rateText) {
+        rateText.textContent = `(${rate.toFixed(2)}x)`;
+      }
+
+      const player = deck === 'A' ? playerA : playerB;
+      if (player && typeof player.setPlaybackRate === 'function') {
+        player.setPlaybackRate(rate);
+      }
     }
 
     /**
@@ -1165,6 +1312,7 @@
       deckState.A.bpm = detectAutoBPM(videoId, deckState.A.peaks);
       document.getElementById('bpmValA').textContent = `${deckState.A.bpm.toFixed(1)} BPM`;
       loadCuesFromStorage('A', videoId);
+      applyPitchShift('A', 0.0);
 
       if (playerA && typeof playerA.loadVideoById === 'function') {
         playerA.loadVideoById(videoId);
@@ -1186,6 +1334,7 @@
       deckState.B.bpm = detectAutoBPM(videoId, deckState.B.peaks);
       document.getElementById('bpmValB').textContent = `${deckState.B.bpm.toFixed(1)} BPM`;
       loadCuesFromStorage('B', videoId);
+      applyPitchShift('B', 0.0);
 
       if (playerB && typeof playerB.loadVideoById === 'function') {
         playerB.loadVideoById(videoId);
@@ -1246,32 +1395,15 @@
       }
     }
 
-    function setSpeed(deck, val) {
-      val = Math.max(0.5, Math.min(2.0, Math.round(val * 100) / 100));
-      const slider = document.getElementById(`speedSlider${deck}`);
-      const valText = document.getElementById(`speedValText${deck}`);
-      if (slider) slider.value = val;
-      if (valText) valText.textContent = `${val.toFixed(2)}x`;
-
-      const player = deck === 'A' ? playerA : playerB;
-      if (player && typeof player.setPlaybackRate === 'function') {
-        player.setPlaybackRate(val);
-      }
-    }
-
-    function nudgeSpeed(deck, delta) {
-      const slider = document.getElementById(`speedSlider${deck}`);
-      const curr = parseFloat(slider.value) || 1.0;
-      setSpeed(deck, curr + delta);
-    }
-
     function syncDecks(targetDeck, sourceDeck) {
       const targetBPM = deckState[sourceDeck].bpm;
       const sourceBPM = deckState[targetDeck].bpm;
 
       if (targetBPM && sourceBPM) {
         const ratio = targetBPM / sourceBPM;
-        setSpeed(targetDeck, ratio);
+        const requiredPitch = (ratio - 1.0) * 100.0;
+        applyPitchShift(targetDeck, requiredPitch);
+
         const btnSync = document.getElementById(`btnSync${targetDeck}`);
         if (btnSync) {
           const origText = btnSync.textContent;
@@ -1279,7 +1411,7 @@
           setTimeout(() => btnSync.textContent = origText, 1200);
         }
       } else if (targetBPM) {
-        setSpeed(targetDeck, 1.0);
+        applyPitchShift(targetDeck, 0.0);
       }
     }
 
@@ -1307,7 +1439,7 @@
     }
 
     /**
-     * 20X ZOOMABLE SERATO RGB / TRAKTOR SPECTRUM MULTI-BAND WAVEFORM CANVAS RENDERER
+     * SERATO RGB MULTI-BAND WAVEFORM CANVAS RENDERER
      */
     function renderWaveformCanvas(deck, player) {
       const canvas = document.getElementById(`waveform${deck}`);
@@ -1358,7 +1490,7 @@
       const visibleCount = visiblePeaks.length;
       const barWidth = w / visibleCount;
 
-      // 1. Draw Serato RGB / Traktor Spectrum Multi-Band Layered Peaks
+      // 1. Draw Multi-Band RGB Spectrum Peaks
       for (let i = 0; i < visibleCount; i++) {
         const x = i * barWidth;
         const peak = visiblePeaks[i];
@@ -1368,27 +1500,23 @@
         const barHalfH = Math.max(2, (peak.height * (h - 8)) / 2);
         const drawW = Math.max(1, barWidth - 0.2);
 
-        // Multi-Band Spectrum Colors (Bass Red, Mid Cyan, High White Tips)
         const cBass = isPast ? '#ef4444' : 'rgba(239, 68, 68, 0.45)';
         const cMid = isPast ? '#00f2fe' : 'rgba(0, 242, 254, 0.45)';
         const cHigh = isPast ? '#ffffff' : 'rgba(255, 255, 255, 0.45)';
 
-        // Layer 1: Outer High Needle Tips (Full Height)
         ctx.fillStyle = cHigh;
         ctx.fillRect(x, yCenter - barHalfH, drawW, barHalfH * 2);
 
-        // Layer 2: Mid Frequency Body (80% Height)
         const midH = barHalfH * 0.80;
         ctx.fillStyle = cMid;
         ctx.fillRect(x, yCenter - midH, drawW, midH * 2);
 
-        // Layer 3: Deep Bass / Kick Core (45% Height)
         const bassH = barHalfH * 0.45;
         ctx.fillStyle = cBass;
         ctx.fillRect(x, yCenter - bassH, drawW, bassH * 2);
       }
 
-      // 2. Draw Serato Beat Grid Overlay & Beat Numbers (1, 2, 3, 4)
+      // 2. Draw Beat Grid & Numbers
       const bpm = state.bpm || 124.0;
       if (dur > 0 && bpm > 0) {
         const totalBeats = (dur / 60.0) * bpm;
@@ -1419,7 +1547,7 @@
         ctx.restore();
       }
 
-      // 3. Draw On-Waveform Visual HOT CUE FLAGS (C1, C2, C3, C4)
+      // 3. Draw HOT CUE FLAGS
       if (dur > 0) {
         for (let slot = 1; slot <= 4; slot++) {
           const cueTime = state.cues[slot];
@@ -1458,7 +1586,7 @@
       ctx.fillRect(0, yCenter - 0.5, w, 1);
       ctx.restore();
 
-      // 5. Glowing Playhead Line if within Visible Range
+      // 5. Glowing Playhead Line
       if (playheadPct >= startPct && playheadPct <= endPct) {
         const playheadX = ((playheadPct - startPct) / visibleFraction) * w;
         ctx.save();
@@ -1478,10 +1606,13 @@
       const btnPause = document.getElementById(`btnPause${deck}`);
       const volSlider = document.getElementById(`volSlider${deck}`);
       const volValText = document.getElementById(`volValText${deck}`);
-      const speedSlider = document.getElementById(`speedSlider${deck}`);
       const zoomSlider = document.getElementById(`zoomSlider${deck}`);
       const zoomText = document.getElementById(`zoomText${deck}`);
       const panScroll = document.getElementById(`panScroll${deck}`);
+      const pitchSlider = document.getElementById(`pitchSlider${deck}`);
+      const btnResetPitch = document.getElementById(`btnResetPitch${deck}`);
+      const btnBendMinus = document.getElementById(`btnBendMinus${deck}`);
+      const btnBendPlus = document.getElementById(`btnBendPlus${deck}`);
 
       btnLoad.addEventListener('click', () => {
         const id = extractVideoId(input.value);
@@ -1511,11 +1642,33 @@
         updateCrossfade();
       });
 
-      speedSlider.addEventListener('input', (e) => {
-        setSpeed(deck, parseFloat(e.target.value));
+      // ±16% Pitch Slider & Reset
+      pitchSlider.addEventListener('input', (e) => {
+        applyPitchShift(deck, parseFloat(e.target.value));
       });
 
-      // 20x Zoom & Overview Pan Scroll Controls
+      btnResetPitch.addEventListener('click', () => {
+        applyPitchShift(deck, 0.0);
+      });
+
+      // Momentary Pitch Bend Buttons (+2% / -2%)
+      const startBendMinus = () => { btnBendMinus.classList.add('active'); applyPitchShift(deck, deckState[deck].pitch, -2.0); };
+      const stopBendMinus = () => { btnBendMinus.classList.remove('active'); applyPitchShift(deck, deckState[deck].pitch, 0.0); };
+      btnBendMinus.addEventListener('mousedown', startBendMinus);
+      btnBendMinus.addEventListener('mouseup', stopBendMinus);
+      btnBendMinus.addEventListener('mouseleave', stopBendMinus);
+      btnBendMinus.addEventListener('touchstart', startBendMinus);
+      btnBendMinus.addEventListener('touchend', stopBendMinus);
+
+      const startBendPlus = () => { btnBendPlus.classList.add('active'); applyPitchShift(deck, deckState[deck].pitch, 2.0); };
+      const stopBendPlus = () => { btnBendPlus.classList.remove('active'); applyPitchShift(deck, deckState[deck].pitch, 0.0); };
+      btnBendPlus.addEventListener('mousedown', startBendPlus);
+      btnBendPlus.addEventListener('mouseup', stopBendPlus);
+      btnBendPlus.addEventListener('mouseleave', stopBendPlus);
+      btnBendPlus.addEventListener('touchstart', startBendPlus);
+      btnBendPlus.addEventListener('touchend', stopBendPlus);
+
+      // Zoom & Pan Scroll Controls
       zoomSlider.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         deckState[deck].zoom = val;
@@ -1538,8 +1691,6 @@
 
       // Tap Tempo & Pitch Fine Tuning
       document.getElementById(`btnTap${deck}`).addEventListener('click', () => handleTap(deck));
-      document.getElementById(`btnNudgeMinus${deck}`).addEventListener('click', () => nudgeSpeed(deck, -0.01));
-      document.getElementById(`btnNudgePlus${deck}`).addEventListener('click', () => nudgeSpeed(deck, 0.01));
       
       if (deck === 'B') {
         document.getElementById('btnSyncB').addEventListener('click', () => syncDecks('B', 'A'));
