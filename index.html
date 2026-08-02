@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - Interactive Waveforms & Dual Decks</title>
+  <title>YouTube DJ Deck - Tap Tempo BPM Reader & Sync</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -273,6 +273,101 @@
       display: block;
     }
 
+    /* BPM & Tap Tempo Card */
+    .bpm-card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.75rem 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .bpm-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .bpm-badge {
+      font-size: 1.15rem;
+      font-weight: 900;
+      font-family: monospace;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .deck-a .bpm-badge { color: var(--cyan-main); border: 1px solid var(--cyan-main); box-shadow: 0 0 12px var(--cyan-glow); }
+    .deck-b .bpm-badge { color: var(--magenta-main); border: 1px solid var(--magenta-main); box-shadow: 0 0 12px var(--magenta-glow); }
+
+    .btn-tap {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-tap:active, .btn-tap.tapped {
+      transform: scale(0.95);
+    }
+
+    .deck-a .btn-tap:hover { background: var(--cyan-main); color: #000; }
+    .deck-b .btn-tap:hover { background: var(--magenta-main); color: #fff; }
+
+    .pitch-nudge-group {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-nudge {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .btn-nudge:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-sync {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-sync:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.6);
+    }
+
     /* Controls Grid inside Deck */
     .controls-grid {
       display: grid;
@@ -486,15 +581,29 @@
           <div id="yt-player-a" class="yt-player"></div>
         </div>
 
-        <!-- Interactive Waveform Overlay & Scrubbing Track A -->
+        <!-- Interactive Waveform Overlay Track A -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeA">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Waveform Scrub Track A</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Waveform Track A</span>
             <span id="durTimeA">00:00</span>
           </div>
           <div class="waveform-canvas-wrap">
             <canvas id="waveformA" class="waveform-canvas" width="600" height="54"></canvas>
+          </div>
+        </div>
+
+        <!-- Tap Tempo BPM Reader Card A -->
+        <div class="bpm-card">
+          <div class="bpm-badge-wrap">
+            <button id="btnTapA" class="btn-tap">TAP (Key: T)</button>
+            <span id="bpmValA" class="bpm-badge">--- BPM</span>
+          </div>
+          <div class="pitch-nudge-group">
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">PITCH</span>
+            <button id="btnNudgeMinusA" class="btn-nudge" title="-0.01x Pitch Shift">-</button>
+            <button id="btnNudgePlusA" class="btn-nudge" title="+0.01x Pitch Shift">+</button>
+            <button id="btnSyncA" class="btn-sync" title="Sync Deck A to Deck B BPM">SYNC A</button>
           </div>
         </div>
 
@@ -521,7 +630,7 @@
             <span>🎚️ Speed / Pitch</span>
             <span id="speedValTextA" class="val-text">1.00x</span>
           </div>
-          <input id="speedSliderA" type="range" class="dj-slider" min="0.5" max="2.0" step="0.05" value="1.0">
+          <input id="speedSliderA" type="range" class="dj-slider" min="0.5" max="2.0" step="0.01" value="1.0">
         </div>
 
         <div id="eqBarsA" class="eq-bars">
@@ -553,15 +662,29 @@
           <div id="yt-player-b" class="yt-player"></div>
         </div>
 
-        <!-- Interactive Waveform Overlay & Scrubbing Track B -->
+        <!-- Interactive Waveform Overlay Track B -->
         <div class="waveform-card">
           <div class="time-display">
             <span id="currTimeB">00:00</span>
-            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Waveform Scrub Track B</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Waveform Track B</span>
             <span id="durTimeB">00:00</span>
           </div>
           <div class="waveform-canvas-wrap">
             <canvas id="waveformB" class="waveform-canvas" width="600" height="54"></canvas>
+          </div>
+        </div>
+
+        <!-- Tap Tempo BPM Reader Card B -->
+        <div class="bpm-card">
+          <div class="bpm-badge-wrap">
+            <button id="btnTapB" class="btn-tap">TAP (Key: Y)</button>
+            <span id="bpmValB" class="bpm-badge">--- BPM</span>
+          </div>
+          <div class="pitch-nudge-group">
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">PITCH</span>
+            <button id="btnNudgeMinusB" class="btn-nudge" title="-0.01x Pitch Shift">-</button>
+            <button id="btnNudgePlusB" class="btn-nudge" title="+0.01x Pitch Shift">+</button>
+            <button id="btnSyncB" class="btn-sync" title="Sync Deck B to Deck A BPM">SYNC B</button>
           </div>
         </div>
 
@@ -588,7 +711,7 @@
             <span>🎚️ Speed / Pitch</span>
             <span id="speedValTextB" class="val-text">1.00x</span>
           </div>
-          <input id="speedSliderB" type="range" class="dj-slider" min="0.5" max="2.0" step="0.05" value="1.0">
+          <input id="speedSliderB" type="range" class="dj-slider" min="0.5" max="2.0" step="0.01" value="1.0">
         </div>
 
         <div id="eqBarsB" class="eq-bars">
@@ -620,15 +743,15 @@
 
   </div>
 
-  <!-- YOUTUBE IFRAME DUAL DECK & WAVEFORM ENGINE -->
+  <!-- YOUTUBE IFRAME DUAL DECK ENGINE -->
   <script>
     let playerA = null;
     let playerB = null;
 
-    // Waveform Seeds & Data
-    const waveformData = {
-      A: { seed: [], id: 'jfKfPfyJRdk' },
-      B: { seed: [], id: '4xDzrJKXOOY' }
+    // Waveform & Tap Tempo State
+    const deckState = {
+      A: { seed: [], id: 'jfKfPfyJRdk', taps: [], bpm: null, baseBpm: 120 },
+      B: { seed: [], id: '4xDzrJKXOOY', taps: [], bpm: null, baseBpm: 120 }
     };
 
     function generateWaveformSeed(id) {
@@ -665,8 +788,12 @@
     }
 
     function initDeckA(videoId) {
-      waveformData.A.id = videoId;
-      waveformData.A.seed = generateWaveformSeed(videoId);
+      deckState.A.id = videoId;
+      deckState.A.seed = generateWaveformSeed(videoId);
+      deckState.A.taps = [];
+      deckState.A.bpm = null;
+      document.getElementById('bpmValA').textContent = '--- BPM';
+
       if (playerA && typeof playerA.loadVideoById === 'function') {
         playerA.loadVideoById(videoId);
         return;
@@ -682,8 +809,12 @@
     }
 
     function initDeckB(videoId) {
-      waveformData.B.id = videoId;
-      waveformData.B.seed = generateWaveformSeed(videoId);
+      deckState.B.id = videoId;
+      deckState.B.seed = generateWaveformSeed(videoId);
+      deckState.B.taps = [];
+      deckState.B.bpm = null;
+      document.getElementById('bpmValB').textContent = '--- BPM';
+
       if (playerB && typeof playerB.loadVideoById === 'function') {
         playerB.loadVideoById(videoId);
         return;
@@ -714,6 +845,77 @@
       return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
+    /**
+     * TAP TEMPO ENGINE & ROLLING AVERAGE MATH
+     */
+    function handleTap(deck) {
+      const now = performance.now();
+      const state = deckState[deck];
+      
+      const btnTap = document.getElementById(`btnTap${deck}`);
+      if (btnTap) {
+        btnTap.classList.add('tapped');
+        setTimeout(() => btnTap.classList.remove('tapped'), 100);
+      }
+
+      if (state.taps.length > 0 && (now - state.taps[state.taps.length - 1]) > 2200) {
+        state.taps = [now];
+      } else {
+        state.taps.push(now);
+        if (state.taps.length > 8) state.taps.shift();
+      }
+
+      if (state.taps.length >= 2) {
+        const diffs = [];
+        for (let i = 1; i < state.taps.length; i++) {
+          diffs.push(state.taps[i] - state.taps[i - 1]);
+        }
+        const avgMs = diffs.reduce((a, b) => a + b, 0) / diffs.length;
+        const bpm = Math.round(60000 / avgMs);
+        state.bpm = bpm;
+        document.getElementById(`bpmVal${deck}`).textContent = `${bpm} BPM`;
+      }
+    }
+
+    function setSpeed(deck, val) {
+      val = Math.max(0.5, Math.min(2.0, Math.round(val * 100) / 100));
+      const slider = document.getElementById(`speedSlider${deck}`);
+      const valText = document.getElementById(`speedValText${deck}`);
+      if (slider) slider.value = val;
+      if (valText) valText.textContent = `${val.toFixed(2)}x`;
+
+      const player = deck === 'A' ? playerA : playerB;
+      if (player && typeof player.setPlaybackRate === 'function') {
+        player.setPlaybackRate(val);
+      }
+    }
+
+    function nudgeSpeed(deck, delta) {
+      const slider = document.getElementById(`speedSlider${deck}`);
+      const curr = parseFloat(slider.value) || 1.0;
+      setSpeed(deck, curr + delta);
+    }
+
+    function syncDecks(targetDeck, sourceDeck) {
+      const targetBPM = deckState[sourceDeck].bpm;
+      const sourceBPM = deckState[targetDeck].bpm;
+
+      if (targetBPM && sourceBPM) {
+        const ratio = targetBPM / sourceBPM;
+        setSpeed(targetDeck, ratio);
+        const btnSync = document.getElementById(`btnSync${targetDeck}`);
+        if (btnSync) {
+          const origText = btnSync.textContent;
+          btnSync.textContent = 'SYNCED!';
+          setTimeout(() => btnSync.textContent = origText, 1200);
+        }
+      } else if (targetBPM) {
+        setSpeed(targetDeck, 1.0);
+      } else {
+        alert(`Tap tempo first on Deck ${sourceDeck} to set target BPM!`);
+      }
+    }
+
     function updateCrossfade() {
       const crossVal = parseInt(document.getElementById('masterCrossfader').value, 10);
       const volA = parseInt(document.getElementById('volSliderA').value, 10);
@@ -728,7 +930,6 @@
       if (playerA && typeof playerA.setVolume === 'function') playerA.setVolume(effectiveVolA);
       if (playerB && typeof playerB.setVolume === 'function') playerB.setVolume(effectiveVolB);
 
-      // Video Opacity Crossfading
       const viewportA = document.getElementById('viewport-a');
       const viewportB = document.getElementById('viewport-b');
       if (viewportA) viewportA.style.opacity = Math.max(0.2, factorA);
@@ -757,7 +958,7 @@
       const progress = dur > 0 ? Math.min(Math.max(currTime / dur, 0), 1.0) : 0;
       const playheadX = progress * w;
 
-      const seed = waveformData[deck].seed;
+      const seed = deckState[deck].seed;
       const barCount = seed.length;
       const barGap = 2;
       const barWidth = (w - (barCount * barGap)) / barCount;
@@ -769,7 +970,6 @@
         const x = i * (barWidth + barGap);
         let barHeightFactor = seed[i];
 
-        // Micro-pulse dynamic height animation while playing
         if (isPlaying) {
           const distToPlayhead = Math.abs(x - playheadX);
           if (distToPlayhead < 60) {
@@ -794,7 +994,6 @@
         ctx.fillRect(x, y, barWidth, barH);
       }
 
-      // Draw Glowing Playhead Bar
       ctx.save();
       ctx.beginPath();
       ctx.fillStyle = '#ffffff';
@@ -812,7 +1011,6 @@
       const volSlider = document.getElementById(`volSlider${deck}`);
       const volValText = document.getElementById(`volValText${deck}`);
       const speedSlider = document.getElementById(`speedSlider${deck}`);
-      const speedValText = document.getElementById(`speedValText${deck}`);
 
       btnLoad.addEventListener('click', () => {
         const id = extractVideoId(input.value);
@@ -843,11 +1041,19 @@
       });
 
       speedSlider.addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value);
-        speedValText.textContent = `${val.toFixed(2)}x`;
-        const player = deck === 'A' ? playerA : playerB;
-        if (player && typeof player.setPlaybackRate === 'function') player.setPlaybackRate(val);
+        setSpeed(deck, parseFloat(e.target.value));
       });
+
+      // Tap Tempo & Pitch Fine Tuning
+      document.getElementById(`btnTap${deck}`).addEventListener('click', () => handleTap(deck));
+      document.getElementById(`btnNudgeMinus${deck}`).addEventListener('click', () => nudgeSpeed(deck, -0.01));
+      document.getElementById(`btnNudgePlus${deck}`).addEventListener('click', () => nudgeSpeed(deck, 0.01));
+      
+      if (deck === 'B') {
+        document.getElementById('btnSyncB').addEventListener('click', () => syncDecks('B', 'A'));
+      } else {
+        document.getElementById('btnSyncA').addEventListener('click', () => syncDecks('A', 'B'));
+      }
 
       // Waveform Canvas Click & Drag Scrubbing
       const canvas = document.getElementById(`waveform${deck}`);
@@ -870,7 +1076,7 @@
       window.addEventListener('mouseup', () => isDragging = false);
     }
 
-    // Global Setup & Animation Loop
+    // Global Setup & Keyboard Shortcuts
     document.addEventListener('DOMContentLoaded', () => {
       // Master Crossfader
       const xf = document.getElementById('masterCrossfader');
@@ -890,7 +1096,17 @@
         });
       });
 
-      // RequestAnimationFrame Loop for Waveforms & VU Meters
+      // Keyboard Shortcuts ('T' for Deck A Tap, 'Y' for Deck B Tap)
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 't' || e.key === 'T') {
+          handleTap('A');
+        } else if (e.key === 'y' || e.key === 'Y') {
+          handleTap('B');
+        }
+      });
+
+      // RequestAnimationFrame Loop
       function animLoop(t) {
         renderWaveformCanvas('A', playerA, t);
         renderWaveformCanvas('B', playerB, t);
