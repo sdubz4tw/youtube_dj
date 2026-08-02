@@ -1075,7 +1075,7 @@
               <span>-8%</span>
               <span>-16%</span>
             </div>
-            <input id="pitchSliderA" type="range" class="pitch-drag-slider-vertical" min="-16" max="16" step="0.05" value="0">
+            <input id="pitchSliderA" type="range" class="pitch-drag-slider-vertical tempo-fader" min="-16" max="16" step="0.05" value="0">
           </div>
 
           <div class="pitch-bend-vertical-actions">
@@ -1099,7 +1099,12 @@
             </div>
           </div>
 
-          <!-- 2. Pioneer LCD Waveform Display & Docked BPM Panel -->
+          <!-- 2. YouTube Video Viewport Embed Wrapper (Positioned directly below header) -->
+          <div id="viewport-a" class="video-viewport">
+            <div id="yt-player-a" class="yt-player"></div>
+          </div>
+
+          <!-- 3. Pioneer LCD Waveform Display & Docked BPM Panel (Underneath video) -->
           <div class="waveform-canvas-row">
             <div class="waveform-main-wrap">
               <div class="time-display">
@@ -1126,11 +1131,6 @@
               <button id="btnTapA" class="btn-tap">TAP (T)</button>
               <button id="btnQuantA" class="btn-quant" title="Toggle Beat Quantize Alignment">QUANT</button>
             </div>
-          </div>
-
-          <!-- 3. YouTube Video Viewport -->
-          <div id="viewport-a" class="video-viewport">
-            <div id="yt-player-a" class="yt-player"></div>
           </div>
 
           <!-- 4. Hot Cue Buttons Row -->
@@ -1243,7 +1243,12 @@
             </div>
           </div>
 
-          <!-- 2. Pioneer LCD Waveform Display & Docked BPM Panel -->
+          <!-- 2. YouTube Video Viewport Embed Wrapper (Positioned directly below header) -->
+          <div id="viewport-b" class="video-viewport">
+            <div id="yt-player-b" class="yt-player"></div>
+          </div>
+
+          <!-- 3. Pioneer LCD Waveform Display & Docked BPM Panel (Underneath video) -->
           <div class="waveform-canvas-row">
             <div class="waveform-main-wrap">
               <div class="time-display">
@@ -1270,11 +1275,6 @@
               <button id="btnTapB" class="btn-tap">TAP (Y)</button>
               <button id="btnQuantB" class="btn-quant" title="Toggle Beat Quantize Alignment">QUANT</button>
             </div>
-          </div>
-
-          <!-- 3. YouTube Video Viewport -->
-          <div id="viewport-b" class="video-viewport">
-            <div id="yt-player-b" class="yt-player"></div>
           </div>
 
           <!-- 4. Hot Cue Buttons Row -->
@@ -1336,7 +1336,7 @@
               <span>-8%</span>
               <span>-16%</span>
             </div>
-            <input id="pitchSliderB" type="range" class="pitch-drag-slider-vertical" min="-16" max="16" step="0.05" value="0">
+            <input id="pitchSliderB" type="range" class="pitch-drag-slider-vertical tempo-fader" min="-16" max="16" step="0.05" value="0">
           </div>
 
           <div class="pitch-bend-vertical-actions">
