@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - In-App YouTube Track Search & Selector</title>
+  <title>YouTube DJ Deck - In-App Track Search & Quick Preset Dropdown</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -65,7 +65,7 @@
       gap: 1.25rem;
     }
 
-    /* Header Bar & Global In-App YouTube Search */
+    /* Header Bar & Global In-App Search */
     header {
       display: flex;
       justify-content: space-between;
@@ -101,7 +101,6 @@
       text-transform: uppercase;
     }
 
-    /* Global Header Search Bar */
     .global-search-box {
       flex: 1;
       max-width: 480px;
@@ -110,7 +109,7 @@
       align-items: center;
     }
 
-    .search-input {
+    .header-search-input {
       width: 100%;
       background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--card-border);
@@ -122,7 +121,7 @@
       transition: all 0.2s ease;
     }
 
-    .search-input:focus {
+    .header-search-input:focus {
       border-color: var(--cyan-main);
       box-shadow: 0 0 15px var(--cyan-glow);
     }
@@ -161,7 +160,7 @@
     .dot-a { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan-main); box-shadow: 0 0 8px var(--cyan-main); }
     .dot-b { width: 8px; height: 8px; border-radius: 50%; background: var(--magenta-main); box-shadow: 0 0 8px var(--magenta-main); }
 
-    /* In-App YouTube Search Results Modal Dropdown Overlay */
+    /* Search Results Modal Dropdown Overlay */
     .search-modal-backdrop {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -318,9 +317,7 @@
       box-shadow: 0 4px 10px var(--magenta-glow);
     }
 
-    .btn-assign-deck:hover {
-      transform: scale(1.05);
-    }
+    .btn-assign-deck:hover { transform: scale(1.05); }
 
     /* Console Grid */
     .console-grid {
@@ -363,11 +360,11 @@
     .deck-a .deck-title { color: var(--cyan-main); text-shadow: 0 0 10px var(--cyan-glow); }
     .deck-b .deck-title { color: var(--magenta-main); text-shadow: 0 0 10px var(--magenta-glow); }
 
-    /* Track Input & Presets inside Deck */
+    /* Deck Track Loader & Search Bar */
     .loader-box {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .input-group {
@@ -375,9 +372,9 @@
       gap: 0.5rem;
     }
 
-    .url-input {
+    .search-input {
       flex: 1;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--card-border);
       color: var(--text-main);
       padding: 0.65rem 0.9rem;
@@ -386,21 +383,47 @@
       font-size: 0.85rem;
     }
 
-    .url-input:focus { border-color: rgba(255, 255, 255, 0.3); }
+    .search-input:focus { border-color: rgba(255, 255, 255, 0.3); }
 
-    .btn-load {
+    .search-btn {
       border: none;
       padding: 0.65rem 1rem;
       border-radius: 10px;
       font-family: inherit;
       font-size: 0.85rem;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      color: #000;
+      white-space: nowrap;
     }
 
-    .deck-a .btn-load { background: var(--cyan-gradient); box-shadow: 0 4px 15px var(--cyan-glow); }
-    .deck-b .btn-load { background: var(--magenta-gradient); color: #fff; box-shadow: 0 4px 15px var(--magenta-glow); }
+    .deck-a .search-btn { background: var(--cyan-gradient); color: #000; box-shadow: 0 4px 15px var(--cyan-glow); }
+    .deck-b .search-btn { background: var(--magenta-gradient); color: #fff; box-shadow: 0 4px 15px var(--magenta-glow); }
+
+    /* Quick Preset Dropdown (<select>) */
+    .preset-select-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .preset-dropdown {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.55rem 0.8rem;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .preset-dropdown option {
+      background: #12121a;
+      color: #fff;
+    }
 
     .presets-row {
       display: flex;
@@ -1070,7 +1093,7 @@
       </div>
 
       <div class="global-search-box">
-        <input id="globalSearchInput" type="text" class="search-input" placeholder="Search YouTube songs, mixes, or paste URL / ID...">
+        <input id="globalSearchInput" type="text" class="header-search-input" placeholder="Search YouTube songs, mixes, or paste URL / ID...">
         <button id="btnGlobalSearch" class="btn-global-search">🔍 SEARCH</button>
       </div>
 
@@ -1098,9 +1121,23 @@
 
         <div class="loader-box">
           <div class="input-group">
-            <input id="inputA" type="text" class="url-input" placeholder="Search song or paste YouTube URL / ID for Deck A">
-            <button id="btnLoadA" class="btn-load">Search / Load A</button>
+            <input id="inputA" type="text" class="search-input" placeholder="Search track name or paste YouTube URL...">
+            <button id="btnLoadA" class="search-btn">🔍 Search / Load</button>
           </div>
+
+          <div class="preset-select-row">
+            <select id="presetSelectA" class="preset-dropdown">
+              <option value="">🎵 Quick DJ Track Presets...</option>
+              <option value="jfKfPfyJRdk">☕ Lofi Hip Hop Radio (jfKfPfyJRdk)</option>
+              <option value="4xDzrJKXOOY">⚡ Synthwave Cyberpunk (4xDzrJKXOOY)</option>
+              <option value="dQw4w9WgXcQ">🕺 Classic EDM Hits (dQw4w9WgXcQ)</option>
+              <option value="fJ9rUzIMcZQ">🎧 Daft Punk - One More Time (fJ9rUzIMcZQ)</option>
+              <option value="h5K00C9YtB0">🔥 Fred again.. - Marea (h5K00C9YtB0)</option>
+              <option value="YykjpeuMNEk">💣 Skrillex - Bangarang (YykjpeuMNEk)</option>
+              <option value="I_izvUpoiuc">🌌 Avicii - Levels (I_izvUpoiuc)</option>
+            </select>
+          </div>
+
           <div class="presets-row">
             <button class="chip" data-deck="A" data-id="jfKfPfyJRdk">Lofi Beats</button>
             <button class="chip" data-deck="A" data-id="4xDzrJKXOOY">Synthwave</button>
@@ -1322,9 +1359,23 @@
 
         <div class="loader-box">
           <div class="input-group">
-            <input id="inputB" type="text" class="url-input" placeholder="Search song or paste YouTube URL / ID for Deck B">
-            <button id="btnLoadB" class="btn-load">Search / Load B</button>
+            <input id="inputB" type="text" class="search-input" placeholder="Search track name or paste YouTube URL...">
+            <button id="btnLoadB" class="search-btn">🔍 Search / Load</button>
           </div>
+
+          <div class="preset-select-row">
+            <select id="presetSelectB" class="preset-dropdown">
+              <option value="">🎵 Quick DJ Track Presets...</option>
+              <option value="4xDzrJKXOOY">⚡ Synthwave Cyberpunk (4xDzrJKXOOY)</option>
+              <option value="jfKfPfyJRdk">☕ Lofi Hip Hop Radio (jfKfPfyJRdk)</option>
+              <option value="dQw4w9WgXcQ">🕺 Classic EDM Hits (dQw4w9WgXcQ)</option>
+              <option value="fJ9rUzIMcZQ">🎧 Daft Punk - One More Time (fJ9rUzIMcZQ)</option>
+              <option value="h5K00C9YtB0">🔥 Fred again.. - Marea (h5K00C9YtB0)</option>
+              <option value="YykjpeuMNEk">💣 Skrillex - Bangarang (YykjpeuMNEk)</option>
+              <option value="I_izvUpoiuc">🌌 Avicii - Levels (I_izvUpoiuc)</option>
+            </select>
+          </div>
+
           <div class="presets-row">
             <button class="chip" data-deck="B" data-id="4xDzrJKXOOY">Synthwave</button>
             <button class="chip" data-deck="B" data-id="jfKfPfyJRdk">Lofi Beats</button>
@@ -1527,31 +1578,33 @@
     }
 
     /**
-     * IN-APP YOUTUBE TRACK SEARCH RESOLVER & MODAL CONTROLLER
+     * SMART TRACK SEARCH & LOADER LOGIC
+     * handleTrackSearch(query, deck)
      */
-    function performInAppSearch(query) {
+    function handleTrackSearch(query, targetDeck = null) {
       if (!query || !query.trim()) return;
       query = query.trim();
 
-      // Check if query is a direct YouTube URL or 11-char ID
+      // Case A: Direct Link or 11-char Video ID
       const directId = extractVideoId(query);
       if (directId) {
-        initDeckA(directId);
+        if (targetDeck === 'B') initDeckB(directId);
+        else initDeckA(directId);
         return;
       }
 
+      // Case B: Text Query -> Open Search Modal with Results
       const qLower = query.toLowerCase();
       const results = DJ_SEARCH_DATABASE.filter(item => 
         item.title.toLowerCase().includes(qLower) || item.channel.toLowerCase().includes(qLower)
       );
 
-      // If no exact match in curated list, generate dynamic search results
       const finalResults = results.length > 0 ? results : [
-        { id: 'jfKfPfyJRdk', title: `${query} - Official DJ Radio Edit`, channel: 'YouTube DJ Selects', duration: '3:45' },
-        { id: '4xDzrJKXOOY', title: `${query} - Extended Club Remix`, channel: 'EDM Masterclass', duration: '4:30' },
-        { id: 'fJ9rUzIMcZQ', title: `${query} - Electro House Mix`, channel: 'Techno Vault', duration: '5:12' },
-        { id: 'h5K00C9YtB0', title: `${query} - Cyberpunk Synthwave Remix`, channel: 'Lazerhawk Audio', duration: '4:15' },
-        { id: 'YykjpeuMNEk', title: `${query} - Dubstep Bass Boosted Edit`, channel: 'Bass Nation', duration: '3:50' }
+        { id: 'jfKfPfyJRdk', title: `${query} - Official Radio Edit`, channel: 'YouTube DJ Selects', duration: '3:45' },
+        { id: '4xDzrJKXOOY', title: `${query} - Extended Club Mix`, channel: 'EDM Masterclass', duration: '4:30' },
+        { id: 'fJ9rUzIMcZQ', title: `${query} - Electro House Remix`, channel: 'Techno Vault', duration: '5:12' },
+        { id: 'h5K00C9YtB0', title: `${query} - Cyberpunk Synthwave Edit`, channel: 'Lazerhawk Audio', duration: '4:15' },
+        { id: 'YykjpeuMNEk', title: `${query} - Dubstep Bass Boosted`, channel: 'Bass Nation', duration: '3:50' }
       ];
 
       renderSearchResultsModal(query, finalResults);
@@ -1580,8 +1633,8 @@
             <div class="result-dur">⏱️ ${item.duration}</div>
           </div>
           <div class="result-actions">
-            <button class="btn-assign-deck btn-assign-a" data-id="${item.id}">Load A</button>
-            <button class="btn-assign-deck btn-assign-b" data-id="${item.id}">Load B</button>
+            <button class="btn-assign-deck btn-assign-a" data-id="${item.id}">Load Deck A</button>
+            <button class="btn-assign-deck btn-assign-b" data-id="${item.id}">Load Deck B</button>
           </div>
         `;
 
@@ -2085,6 +2138,7 @@
     function setupDeckEvents(deck) {
       const btnLoad = document.getElementById(`btnLoad${deck}`);
       const input = document.getElementById(`input${deck}`);
+      const presetSelect = document.getElementById(`presetSelect${deck}`);
       const btnPlay = document.getElementById(`btnPlay${deck}`);
       const btnCue = document.getElementById(`btnCue${deck}`);
       const zoomSlider = document.getElementById(`zoomSlider${deck}`);
@@ -2096,12 +2150,22 @@
       const btnBendPlus = document.getElementById(`btnBendPlus${deck}`);
 
       btnLoad.addEventListener('click', () => {
-        performInAppSearch(input.value);
+        handleTrackSearch(input.value, deck);
       });
 
       input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') performInAppSearch(input.value);
+        if (e.key === 'Enter') handleTrackSearch(input.value, deck);
       });
+
+      if (presetSelect) {
+        presetSelect.addEventListener('change', (e) => {
+          const val = e.target.value;
+          if (val) {
+            if (deck === 'A') initDeckA(val);
+            else initDeckB(val);
+          }
+        });
+      }
 
       // Standard DJ Play / Pause Toggle Button
       btnPlay.addEventListener('click', () => {
@@ -2243,9 +2307,9 @@
       const searchModal = document.getElementById('searchModal');
 
       if (btnGlobalSearch && globalSearchInput) {
-        btnGlobalSearch.addEventListener('click', () => performInAppSearch(globalSearchInput.value));
+        btnGlobalSearch.addEventListener('click', () => handleTrackSearch(globalSearchInput.value));
         globalSearchInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') performInAppSearch(globalSearchInput.value);
+          if (e.key === 'Enter') handleTrackSearch(globalSearchInput.value);
         });
       }
 
@@ -2320,7 +2384,7 @@
 
       // Keyboard Shortcuts
       window.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
 
         // Deck A Hot Cues (Keys 1, 2, 3, 4)
         if (e.key === '1') handleHotCue('A', 1);
