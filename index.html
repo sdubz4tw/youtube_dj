@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Console - Pro UX & Symmetrical Layout</title>
+  <title>YouTube DJ Console - Pro Vertical Mixer & Symmetrical Pitch</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -325,7 +325,7 @@
       gap: 1.25rem;
     }
 
-    /* Deck Card with Side Outer Pitch Fader Strip */
+    /* Deck Card with Outer Proportionate Pitch Strip */
     .deck-card {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
@@ -728,9 +728,9 @@
       box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
     }
 
-    /* OUTER SIDE PITCH CONTROL STRIP (Left on Deck A, Right on Deck B) */
+    /* PROPORTIONATE OUTER SIDE PITCH CONTROL STRIP */
     .pitch-fader-card.outer-pitch {
-      width: 140px;
+      width: 135px;
       flex-shrink: 0;
       background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--card-border);
@@ -740,7 +740,8 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
+      height: 100%;
     }
 
     .pitch-fader-header-vertical {
@@ -812,9 +813,9 @@
       gap: 0.5rem;
       flex: 1;
       width: 100%;
-      min-height: 220px;
+      min-height: 240px;
       background: rgba(0, 0, 0, 0.3);
-      padding: 0.6rem 0.4rem;
+      padding: 0.75rem 0.4rem;
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
@@ -882,7 +883,7 @@
       gap: 1.25rem;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
     }
 
     .mixer-header {
@@ -895,30 +896,87 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Master Deck Volumes */
+    /* Master Deck Volumes (Vertical Faders Side-by-Side) */
     .master-vol-card {
       width: 100%;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1;
     }
 
-    .dj-slider {
+    .vol-header-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .vertical-vols-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
-      cursor: pointer;
+      gap: 0.85rem;
+      flex: 1;
     }
 
-    .deck-a .dj-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--cyan-main); }
-    .deck-b .dj-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--magenta-main); }
+    .vol-channel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.6rem 0.4rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .vol-channel.col-a { border-color: rgba(0, 242, 254, 0.2); }
+    .vol-channel.col-b { border-color: rgba(236, 72, 153, 0.2); }
+
+    .vol-label-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .vol-val-text {
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: var(--text-main);
+    }
+
+    .vol-slider-wrap {
+      height: 190px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.4rem 0;
+    }
+
+    .dj-vertical-vol-slider {
+      -webkit-appearance: slider-vertical;
+      writing-mode: vertical-lr;
+      direction: rtl;
+      width: 16px;
+      height: 100%;
+      background: transparent;
+      cursor: pointer;
+      outline: none;
+    }
 
     .crossfader-box {
       width: 100%;
@@ -976,6 +1034,7 @@
       .deck-card { flex-direction: column; }
       .pitch-fader-card.outer-pitch { width: 100%; height: auto; min-height: 0; }
       .pitch-slider-vertical-wrap { min-height: 120px; }
+      .vol-slider-wrap { height: 120px; }
     }
   </style>
 </head>
@@ -1013,7 +1072,7 @@
       <!-- DECK A (LEFT - CYAN) -->
       <div class="deck-card deck-a">
         
-        <!-- Outer Left Pitch Strip (Deck A) -->
+        <!-- Proportionate Outer Left Pitch Strip (Deck A) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
             <span class="pitch-title">🎚️ PITCH</span>
@@ -1132,15 +1191,31 @@
       <div class="central-mixer-card">
         <div class="mixer-header">🎛️ CENTRAL MIXER STRIP</div>
 
-        <!-- Master Deck Volumes -->
+        <!-- Master Deck Volumes (Vertical Channel Faders Side-by-Side) -->
         <div class="master-vol-card">
-          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.75rem; font-weight:800; margin-bottom:0.25rem;">
-            <span style="color:var(--cyan-main);">VOL A: <span id="volValTextA">100%</span></span>
-            <span style="color:var(--magenta-main);">VOL B: <span id="volValTextB">100%</span></span>
-          </div>
-          <div style="display:flex; gap:0.75rem;">
-            <input id="volSliderA" type="range" class="dj-slider" min="0" max="100" value="100">
-            <input id="volSliderB" type="range" class="dj-slider" min="0" max="100" value="100">
+          <div class="vol-header-title">🎚️ CHANNEL VOLUMES</div>
+          <div class="vertical-vols-container">
+            <!-- Channel A Volume -->
+            <div class="vol-channel col-a">
+              <div class="vol-label-badge">
+                <span style="color:var(--cyan-main);">VOL A</span>
+                <span id="volValTextA" class="vol-val-text">100%</span>
+              </div>
+              <div class="vol-slider-wrap">
+                <input id="volSliderA" type="range" class="dj-vertical-vol-slider slider-a" min="0" max="100" value="100">
+              </div>
+            </div>
+
+            <!-- Channel B Volume -->
+            <div class="vol-channel col-b">
+              <div class="vol-label-badge">
+                <span style="color:var(--magenta-main);">VOL B</span>
+                <span id="volValTextB" class="vol-val-text">100%</span>
+              </div>
+              <div class="vol-slider-wrap">
+                <input id="volSliderB" type="range" class="dj-vertical-vol-slider slider-b" min="0" max="100" value="100">
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1250,7 +1325,7 @@
           </div>
         </div>
 
-        <!-- Outer Right Pitch Strip (Deck B) -->
+        <!-- Proportionate Outer Right Pitch Strip (Deck B) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
             <span class="pitch-title">🎚️ PITCH</span>
