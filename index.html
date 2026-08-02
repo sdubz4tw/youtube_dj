@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube DJ Deck - Robust Track Loader & Video ID Sanitizer</title>
+  <title>YouTube DJ Deck Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -398,54 +398,6 @@
 
     .deck-a .search-btn { background: var(--cyan-gradient); color: #000; box-shadow: 0 4px 15px var(--cyan-glow); }
     .deck-b .search-btn { background: var(--magenta-gradient); color: #fff; box-shadow: 0 4px 15px var(--magenta-glow); }
-
-    /* Quick Preset Dropdown (<select>) */
-    .preset-select-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .preset-dropdown {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 0.55rem 0.8rem;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      outline: none;
-    }
-
-    .preset-dropdown option {
-      background: #12121a;
-      color: #fff;
-    }
-
-    .presets-row {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-
-    .chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-main);
-      padding: 0.25rem 0.6rem;
-      border-radius: 14px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .deck-a .chip:hover { background: var(--cyan-main); color: #000; }
-    .deck-b .chip:hover { background: var(--magenta-main); color: #fff; }
 
     /* Video Viewport */
     .video-viewport {
@@ -909,7 +861,7 @@
       transform: scale(0.96);
     }
 
-    /* CENTRAL 3-BAND MIXER STRIP */
+    /* CENTRAL MIXER STRIP */
     .central-mixer-card {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
@@ -921,6 +873,7 @@
       gap: 1.25rem;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       align-items: center;
+      justify-content: center;
     }
 
     .mixer-header {
@@ -933,97 +886,30 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .eq-columns-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      width: 100%;
-    }
-
-    .eq-column {
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 0.85rem 0.65rem;
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
-    }
-
-    .eq-column.col-a { border-color: rgba(0, 242, 254, 0.25); }
-    .eq-column.col-b { border-color: rgba(236, 72, 153, 0.25); }
-
-    .eq-col-title {
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .col-a .eq-col-title { color: var(--cyan-main); }
-    .col-b .eq-col-title { color: var(--magenta-main); }
-
-    .eq-knob-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .eq-label-row {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: var(--text-muted);
-    }
-
-    .eq-val-text {
-      font-family: monospace;
-      color: var(--text-main);
-    }
-
-    .eq-slider {
-      width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 3px;
-      cursor: pointer;
-    }
-
-    .col-a .eq-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--cyan-main);
-      box-shadow: 0 0 8px var(--cyan-glow);
-    }
-
-    .col-b .eq-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--magenta-main);
-      box-shadow: 0 0 8px var(--magenta-glow);
-    }
-
     /* Master Deck Volumes */
     .master-vol-card {
       width: 100%;
       background: rgba(0, 0, 0, 0.35);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 0.75rem;
+      padding: 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
+
+    .dj-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .deck-a .dj-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--cyan-main); }
+    .deck-b .dj-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--magenta-main); }
 
     .crossfader-box {
       width: 100%;
@@ -1067,9 +953,9 @@
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.3rem 0.2rem;
+      padding: 0.35rem 0.2rem;
       border-radius: 8px;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -1123,25 +1009,6 @@
           <div class="input-group">
             <input id="inputA" type="text" class="search-input" placeholder="Search track name or paste YouTube URL...">
             <button id="btnLoadA" class="search-btn">🔍 Search / Load</button>
-          </div>
-
-          <div class="preset-select-row">
-            <select id="presetSelectA" class="preset-dropdown">
-              <option value="">🎵 Quick DJ Track Presets...</option>
-              <option value="jfKfPfyJRdk">☕ Lofi Hip Hop Radio (jfKfPfyJRdk)</option>
-              <option value="4xDzrJKXOOY">⚡ Synthwave Cyberpunk (4xDzrJKXOOY)</option>
-              <option value="dQw4w9WgXcQ">🕺 Classic EDM Hits (dQw4w9WgXcQ)</option>
-              <option value="fJ9rUzIMcZQ">🎧 Daft Punk - One More Time (fJ9rUzIMcZQ)</option>
-              <option value="h5K00C9YtB0">🔥 Fred again.. - Marea (h5K00C9YtB0)</option>
-              <option value="YykjpeuMNEk">💣 Skrillex - Bangarang (YykjpeuMNEk)</option>
-              <option value="I_izvUpoiuc">🌌 Avicii - Levels (I_izvUpoiuc)</option>
-            </select>
-          </div>
-
-          <div class="presets-row">
-            <button class="chip" data-deck="A" data-id="jfKfPfyJRdk">Lofi Beats</button>
-            <button class="chip" data-deck="A" data-id="4xDzrJKXOOY">Synthwave</button>
-            <button class="chip" data-deck="A" data-id="dQw4w9WgXcQ">Classic EDM</button>
           </div>
         </div>
 
@@ -1253,76 +1120,13 @@
         </div>
       </div>
 
-      <!-- CENTRAL 3-BAND MIXER STRIP -->
+      <!-- CENTRAL MIXER STRIP -->
       <div class="central-mixer-card">
         <div class="mixer-header">🎛️ CENTRAL MIXER STRIP</div>
 
-        <!-- 3-Band EQ Columns Grid -->
-        <div class="eq-columns-grid">
-          
-          <!-- EQ Column A -->
-          <div class="eq-column col-a">
-            <div class="eq-col-title">DECK A EQ</div>
-            
-            <div class="eq-knob-box">
-              <div class="eq-label-row">
-                <span>HIGH</span>
-                <span id="eqHighTextA" class="eq-val-text">100%</span>
-              </div>
-              <input id="eqHighA" type="range" class="eq-slider" min="0" max="100" value="100">
-            </div>
-
-            <div class="eq-knob-box">
-              <div class="eq-label-row">
-                <span>MID</span>
-                <span id="eqMidTextA" class="eq-val-text">100%</span>
-              </div>
-              <input id="eqMidA" type="range" class="eq-slider" min="0" max="100" value="100">
-            </div>
-
-            <div class="eq-knob-box">
-              <div class="eq-label-row">
-                <span>LOW (BASS)</span>
-                <span id="eqLowTextA" class="eq-val-text">100%</span>
-              </div>
-              <input id="eqLowA" type="range" class="eq-slider" min="0" max="100" value="100">
-            </div>
-          </div>
-
-          <!-- EQ Column B -->
-          <div class="eq-column col-b">
-            <div class="eq-col-title">DECK B EQ</div>
-            
-            <div class="eq-knob-box">
-              <div class="eq-label-row">
-                <span>HIGH</span>
-                <span id="eqHighTextB" class="eq-val-text">100%</span>
-              </div>
-              <input id="eqHighB" type="range" class="eq-slider" min="0" max="100" value="100">
-            </div>
-
-            <div class="eq-knob-box">
-              <div class="eq-label-row">
-                <span>MID</span>
-                <span id="eqMidTextB" class="eq-val-text">100%</span>
-              </div>
-              <input id="eqMidB" type="range" class="eq-slider" min="0" max="100" value="100">
-            </div>
-
-            <div class="eq-knob-box">
-              <div class="eq-label-row">
-                <span>LOW (BASS)</span>
-                <span id="eqLowTextB" class="eq-val-text">100%</span>
-              </div>
-              <input id="eqLowB" type="range" class="eq-slider" min="0" max="100" value="100">
-            </div>
-          </div>
-
-        </div>
-
         <!-- Master Deck Volumes -->
         <div class="master-vol-card">
-          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.75rem; font-weight:800;">
+          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.75rem; font-weight:800; margin-bottom:0.25rem;">
             <span style="color:var(--cyan-main);">VOL A: <span id="volValTextA">100%</span></span>
             <span style="color:var(--magenta-main);">VOL B: <span id="volValTextB">100%</span></span>
           </div>
@@ -1361,25 +1165,6 @@
           <div class="input-group">
             <input id="inputB" type="text" class="search-input" placeholder="Search track name or paste YouTube URL...">
             <button id="btnLoadB" class="search-btn">🔍 Search / Load</button>
-          </div>
-
-          <div class="preset-select-row">
-            <select id="presetSelectB" class="preset-dropdown">
-              <option value="">🎵 Quick DJ Track Presets...</option>
-              <option value="4xDzrJKXOOY">⚡ Synthwave Cyberpunk (4xDzrJKXOOY)</option>
-              <option value="jfKfPfyJRdk">☕ Lofi Hip Hop Radio (jfKfPfyJRdk)</option>
-              <option value="dQw4w9WgXcQ">🕺 Classic EDM Hits (dQw4w9WgXcQ)</option>
-              <option value="fJ9rUzIMcZQ">🎧 Daft Punk - One More Time (fJ9rUzIMcZQ)</option>
-              <option value="h5K00C9YtB0">🔥 Fred again.. - Marea (h5K00C9YtB0)</option>
-              <option value="YykjpeuMNEk">💣 Skrillex - Bangarang (YykjpeuMNEk)</option>
-              <option value="I_izvUpoiuc">🌌 Avicii - Levels (I_izvUpoiuc)</option>
-            </select>
-          </div>
-
-          <div class="presets-row">
-            <button class="chip" data-deck="B" data-id="4xDzrJKXOOY">Synthwave</button>
-            <button class="chip" data-deck="B" data-id="jfKfPfyJRdk">Lofi Beats</button>
-            <button class="chip" data-deck="B" data-id="dQw4w9WgXcQ">Classic EDM</button>
           </div>
         </div>
 
@@ -1527,13 +1312,12 @@
 
     // Waveform & Deck State
     const deckState = {
-      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, eqHigh: 100, eqMid: 100, eqLow: 100, cues: { 1: null, 2: null, 3: null, 4: null } },
-      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, eqHigh: 100, eqMid: 100, eqLow: 100, cues: { 1: null, 2: null, 3: null, 4: null } }
+      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, cues: { 1: null, 2: null, 3: null, 4: null } },
+      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, cues: { 1: null, 2: null, 3: null, 4: null } }
     };
 
     /**
-     * 1. VIDEO ID SANITIZER HELPER FUNCTION
-     * Handles full URLs, short links, and raw 11-char IDs
+     * VIDEO ID SANITIZER HELPER FUNCTION
      */
     function extractYouTubeId(input) {
       if (!input) return null;
@@ -1592,8 +1376,7 @@
     }
 
     /**
-     * 2. BULLETPROOF TRACK LOADER & FALLBACK ENGINE
-     * loadTrackToDeck(deck, rawInput)
+     * TRACK LOADER & FALLBACK ENGINE
      */
     function loadTrackToDeck(deck, rawInput) {
       const videoId = extractYouTubeId(rawInput);
@@ -1620,14 +1403,12 @@
 
       const player = deck === 'A' ? playerA : playerB;
 
-      // 3. IFrame API cue/load with Fallback IFrame src re-initialization
       if (player && typeof player.cueVideoById === 'function') {
         player.cueVideoById(videoId);
       } else if (player && typeof player.loadVideoById === 'function') {
         player.loadVideoById({ videoId: videoId, startSeconds: 0 });
         player.pauseVideo();
       } else {
-        // Fallback IFrame Direct Update
         const iframe = document.querySelector(`#yt-player-${deck.toLowerCase()} iframe`) || document.getElementById(`yt-player-${deck.toLowerCase()}`);
         if (iframe) {
           iframe.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&autoplay=0`;
@@ -1636,7 +1417,7 @@
     }
 
     /**
-     * SMART TRACK SEARCH & LOADER LOGIC
+     * SMART TRACK SEARCH ENGINE
      */
     function handleTrackSearch(query, targetDeck = null) {
       if (!query || !query.trim()) return;
@@ -2015,10 +1796,6 @@
       const visibleCount = visibleSlice.length;
       const barWidth = w / visibleCount;
 
-      const eqLowFactor = (state.eqLow || 100) / 100.0;
-      const eqMidFactor = (state.eqMid || 100) / 100.0;
-      const eqHighFactor = (state.eqHigh || 100) / 100.0;
-
       // 1. Dual-Layer Waveform Drawing
       for (let i = 0; i < visibleCount; i++) {
         const x = i * barWidth;
@@ -2030,23 +1807,17 @@
         const peakHalfH = Math.max(2, (item.peak * (h - 8)) / 2);
         const rmsHalfH = Math.max(1, (item.rms * (h - 8)) / 2);
 
-        // Layer 1: Outer Peak Transients
-        if (eqHighFactor > 0.05) {
-          ctx.fillStyle = isPast ? `rgba(255, 255, 255, ${eqHighFactor})` : `rgba(255, 255, 255, ${0.45 * eqHighFactor})`;
-          ctx.fillRect(x, yCenter - peakHalfH, drawW, peakHalfH * 2);
-        }
+        // Layer 1: Outer Peak Transients (Serato RGB Frequency Colors)
+        ctx.fillStyle = isPast ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, 0.45)';
+        ctx.fillRect(x, yCenter - peakHalfH, drawW, peakHalfH * 2);
 
-        if (eqMidFactor > 0.05) {
-          const midH = peakHalfH * 0.80;
-          ctx.fillStyle = isPast ? `rgba(0, 242, 254, ${eqMidFactor})` : `rgba(0, 242, 254, ${0.45 * eqMidFactor})`;
-          ctx.fillRect(x, yCenter - midH, drawW, midH * 2);
-        }
+        const midH = peakHalfH * 0.80;
+        ctx.fillStyle = isPast ? 'rgba(0, 242, 254, 1.0)' : 'rgba(0, 242, 254, 0.45)';
+        ctx.fillRect(x, yCenter - midH, drawW, midH * 2);
 
-        if (eqLowFactor > 0.05) {
-          const bassH = peakHalfH * 0.45;
-          ctx.fillStyle = isPast ? `rgba(239, 68, 68, ${eqLowFactor})` : `rgba(239, 68, 68, ${0.45 * eqLowFactor})`;
-          ctx.fillRect(x, yCenter - bassH, drawW, bassH * 2);
-        }
+        const bassH = peakHalfH * 0.45;
+        ctx.fillStyle = isPast ? 'rgba(239, 68, 68, 1.0)' : 'rgba(239, 68, 68, 0.45)';
+        ctx.fillRect(x, yCenter - bassH, drawW, bassH * 2);
 
         // Layer 2: Inner Core (RMS Body)
         ctx.fillStyle = isPast ? 'rgba(8, 145, 178, 0.85)' : 'rgba(8, 145, 178, 0.40)';
@@ -2163,7 +1934,6 @@
     function setupDeckEvents(deck) {
       const btnLoad = document.getElementById(`btnLoad${deck}`);
       const input = document.getElementById(`input${deck}`);
-      const presetSelect = document.getElementById(`presetSelect${deck}`);
       const btnPlay = document.getElementById(`btnPlay${deck}`);
       const btnCue = document.getElementById(`btnCue${deck}`);
       const zoomSlider = document.getElementById(`zoomSlider${deck}`);
@@ -2181,15 +1951,6 @@
       input.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleTrackSearch(input.value, deck);
       });
-
-      if (presetSelect) {
-        presetSelect.addEventListener('change', (e) => {
-          const val = e.target.value;
-          if (val) {
-            loadTrackToDeck(deck, val);
-          }
-        });
-      }
 
       // Standard DJ Play / Pause Toggle Button
       btnPlay.addEventListener('click', () => {
@@ -2344,38 +2105,6 @@
         });
       }
 
-      // Central Mixer 3-Band EQs Setup
-      const setupEQ = (deck) => {
-        const high = document.getElementById(`eqHigh${deck}`);
-        const mid = document.getElementById(`eqMid${deck}`);
-        const low = document.getElementById(`eqLow${deck}`);
-
-        const highText = document.getElementById(`eqHighText${deck}`);
-        const midText = document.getElementById(`eqMidText${deck}`);
-        const lowText = document.getElementById(`eqLowText${deck}`);
-
-        high.addEventListener('input', (e) => {
-          const val = parseInt(e.target.value, 10);
-          deckState[deck].eqHigh = val;
-          if (highText) highText.textContent = `${val}%`;
-        });
-
-        mid.addEventListener('input', (e) => {
-          const val = parseInt(e.target.value, 10);
-          deckState[deck].eqMid = val;
-          if (midText) midText.textContent = `${val}%`;
-        });
-
-        low.addEventListener('input', (e) => {
-          const val = parseInt(e.target.value, 10);
-          deckState[deck].eqLow = val;
-          if (lowText) lowText.textContent = `${val}%`;
-        });
-      };
-
-      setupEQ('A');
-      setupEQ('B');
-
       // Master Deck Volume Controls
       const setupVol = (deck) => {
         const slider = document.getElementById(`volSlider${deck}`);
@@ -2395,15 +2124,6 @@
       document.getElementById('btnXfadeA').addEventListener('click', () => { xf.value = 0; updateCrossfade(); });
       document.getElementById('btnXfadeCenter').addEventListener('click', () => { xf.value = 50; updateCrossfade(); });
       document.getElementById('btnXfadeB').addEventListener('click', () => { xf.value = 100; updateCrossfade(); });
-
-      // Preset Chips
-      document.querySelectorAll('.chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-          const deck = chip.getAttribute('data-deck');
-          const id = chip.getAttribute('data-id');
-          loadTrackToDeck(deck, id);
-        });
-      });
 
       // Keyboard Shortcuts
       window.addEventListener('keydown', (e) => {
