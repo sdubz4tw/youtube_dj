@@ -48,33 +48,37 @@
       font-family: 'Outfit', sans-serif;
       background: var(--bg-dark);
       color: var(--text-main);
-      min-height: 100vh;
+      height: 100vh;
+      max-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0.45rem 0.5rem;
-      overflow-x: hidden;
+      padding: 0.4rem 0.5rem;
+      overflow: hidden;
     }
 
     .container {
       max-width: 1440px;
       width: 100%;
+      height: 100%;
+      max-height: calc(100vh - 0.8rem);
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.4rem;
     }
 
-    /* Global Header Bar - Tight & Low-Profile */
+    /* Global Header Bar - 100vh Capped Height */
     header {
+      height: 36px;
+      flex-shrink: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      padding: 0.3rem 0.75rem;
+      padding: 0.25rem 0.75rem;
       border-radius: 4px;
       gap: 0.6rem;
-      flex-wrap: wrap;
     }
 
     .brand {
@@ -264,12 +268,14 @@
     .btn-assign-a { background: var(--cyan-gradient); color: #000; }
     .btn-assign-b { background: var(--orange-gradient); color: #fff; }
 
-    /* Traktor Console Grid */
+    /* Traktor Console Grid (100vh Single Viewport Fit) */
     .console-grid {
+      flex: 1;
       display: grid;
       grid-template-columns: 1fr 240px 1fr;
       gap: 0.45rem;
       align-items: stretch;
+      min-height: 0;
     }
 
     /* Deck Card Container */
@@ -283,6 +289,9 @@
       position: relative;
       align-items: stretch;
       border: 1px solid var(--card-border);
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .deck-card.deck-a { border-color: var(--cyan-border); }
@@ -292,8 +301,11 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      justify-content: space-between;
+      gap: 0.35rem;
       min-width: 0;
+      height: 100%;
+      min-height: 0;
     }
 
     /* 1. Top Header Panel (Search & Load Bar) */
@@ -306,6 +318,7 @@
       padding: 0.3rem 0.5rem;
       border-radius: 3px;
       border: 1px solid var(--card-border);
+      flex-shrink: 0;
     }
 
     .deck-title-group {
@@ -377,6 +390,7 @@
       display: flex;
       gap: 0.35rem;
       align-items: stretch;
+      flex-shrink: 0;
     }
 
     .waveform-main-wrap {
@@ -519,10 +533,12 @@
       box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
     }
 
-    /* 3. Resized YouTube Video Viewport (Crisp 16:9 Aspect Ratio / 190px Height) */
+    /* 3. Prominent YouTube Video Viewport (16:9 Ratio / Min-Height 180px) */
     .video-viewport {
       width: 100%;
-      height: 190px;
+      flex: 1;
+      min-height: 180px;
+      max-height: 220px;
       aspect-ratio: 16 / 9;
       background: #000;
       border-radius: 4px;
@@ -542,6 +558,7 @@
       border: 1px solid var(--card-border);
       border-radius: 3px;
       padding: 0.3rem;
+      flex-shrink: 0;
     }
 
     .hot-cues-header {
@@ -621,6 +638,7 @@
       padding: 0.3rem;
       display: flex;
       gap: 0.4rem;
+      flex-shrink: 0;
     }
 
     .btn-traktor {
@@ -648,7 +666,7 @@
     .btn-traktor:hover { filter: brightness(1.15); }
     .btn-traktor:active { transform: scale(0.96); }
 
-    /* STRETCHED SIDE PITCH STRIP & FULL TRACK */
+    /* CAPPED PITCH SIDE STRIP (180px - 200px Max Height) */
     .pitch-fader-card.outer-pitch {
       width: 82px;
       flex-shrink: 0;
@@ -711,7 +729,7 @@
       width: 100%;
     }
 
-    /* Stretched Vertical Pitch Slider Track Container */
+    /* Vertical Pitch Slider Track Container (Capped ~180px - 200px Height) */
     .pitch-slider-vertical-wrap {
       display: flex;
       flex-direction: row;
@@ -720,7 +738,9 @@
       gap: 0.2rem;
       width: 100%;
       flex: 1;
-      min-height: 220px;
+      height: 180px;
+      max-height: 200px;
+      min-height: 160px;
       background: rgba(0, 0, 0, 0.4);
       padding: 0.35rem 0.15rem;
       border-radius: 3px;
@@ -775,7 +795,7 @@
       background: rgba(255, 255, 255, 0.25);
     }
 
-    /* CENTRAL MIXER STRIP (Stretched Volume Slider Container) */
+    /* CENTRAL MIXER STRIP (Capped Faders) */
     .central-mixer-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -799,7 +819,7 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Master Deck Volume Card (Filling 85-90% Container Height) */
+    /* Master Deck Volume Card (Capped ~180px - 200px Fader Height) */
     .master-vol-card {
       width: 100%;
       background: #09090b;
@@ -809,9 +829,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       flex: 1;
-      min-height: 280px;
+      min-height: 220px;
     }
 
     .vol-header-title { font-size: 0.62rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; }
@@ -849,7 +869,9 @@
     .vol-slider-wrap {
       width: 100%;
       flex: 1;
-      min-height: 200px;
+      height: 180px;
+      max-height: 200px;
+      min-height: 160px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -939,6 +961,7 @@
     }
 
     @media (max-width: 1280px) {
+      body { height: auto; max-height: none; overflow-y: auto; }
       .console-grid { grid-template-columns: 1fr; }
       .deck-card { flex-direction: column; }
       .pitch-fader-card.outer-pitch { width: 100%; height: auto; }
@@ -975,13 +998,13 @@
       </div>
     </header>
 
-    <!-- Main Console Grid (Pro Hardware Layout) -->
+    <!-- Main Console Grid (100vh Single Viewport Layout) -->
     <div class="console-grid">
       
       <!-- DECK A (LEFT - NEON CYAN) -->
       <div class="deck-card deck-a">
         
-        <!-- Stretched Outer Left Pitch Strip (Deck A) -->
+        <!-- Capped Outer Left Pitch Strip (Deck A) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
             <span class="pitch-title">PITCH</span>
@@ -1053,7 +1076,7 @@
             </div>
           </div>
 
-          <!-- 3. Resized YouTube Video Viewport (Crisp 16:9 Aspect Ratio / 190px Height) -->
+          <!-- 3. Prominent YouTube Video Viewport (Crisp 16:9 Aspect Ratio / 180px-220px Height) -->
           <div id="viewport-a" class="video-viewport">
             <div id="yt-player-a" class="yt-player"></div>
           </div>
@@ -1094,7 +1117,7 @@
 
       </div>
 
-      <!-- CENTRAL MIXER STRIP (Stretched Volume Slider Container) -->
+      <!-- CENTRAL MIXER STRIP (Capped Faders) -->
       <div class="central-mixer-card">
         <div class="mixer-header">🎛️ CENTRAL MIXER</div>
 
@@ -1191,7 +1214,7 @@
             </div>
           </div>
 
-          <!-- 3. Resized YouTube Video Viewport (Crisp 16:9 Aspect Ratio / 190px Height) -->
+          <!-- 3. Prominent YouTube Video Viewport (Crisp 16:9 Aspect Ratio / 180px-220px Height) -->
           <div id="viewport-b" class="video-viewport">
             <div id="yt-player-b" class="yt-player"></div>
           </div>
@@ -1230,7 +1253,7 @@
 
         </div>
 
-        <!-- Stretched Outer Right Pitch Strip (Deck B) -->
+        <!-- Capped Outer Right Pitch Strip (Deck B) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
             <span class="pitch-title">PITCH</span>
