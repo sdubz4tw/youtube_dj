@@ -496,7 +496,7 @@
 
     .btn-tap {
       width: 100%;
-      height: 26px;
+      height: 24px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       color: var(--text-main);
@@ -508,6 +508,28 @@
     }
 
     .btn-tap:active, .btn-tap.tapped { transform: scale(0.95); }
+
+    /* Quantize Toggle Button */
+    .btn-quant {
+      width: 100%;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 3px;
+      font-family: inherit;
+      font-size: 0.62rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-quant.active {
+      background: #10b981;
+      color: #000;
+      border-color: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    }
 
     /* Traktor Bottom Transport & Hot Cues Row (Tight 32px Height) */
     .bottom-transport-strip {
@@ -953,7 +975,7 @@
             <div id="yt-player-a" class="yt-player"></div>
           </div>
 
-          <!-- Main Waveform Row with Docked BPM Panel -->
+          <!-- Main Waveform Row with Docked BPM & QUANT Panel -->
           <div class="waveform-canvas-row">
             <div class="waveform-main-wrap">
               <div class="time-display">
@@ -973,11 +995,12 @@
               </div>
             </div>
 
-            <!-- Docked Vertical BPM Panel -->
+            <!-- Docked Vertical BPM & QUANT Panel -->
             <div class="bpm-docked-panel">
               <div class="bpm-title">BPM</div>
               <span id="bpmValA" class="bpm-badge">120.0</span>
               <button id="btnTapA" class="btn-tap">TAP (T)</button>
+              <button id="btnQuantA" class="btn-quant" title="Toggle Beat Quantize Alignment">QUANT</button>
             </div>
           </div>
 
@@ -1087,7 +1110,7 @@
             <div id="yt-player-b" class="yt-player"></div>
           </div>
 
-          <!-- Main Waveform Row with Docked BPM Panel -->
+          <!-- Main Waveform Row with Docked BPM & QUANT Panel -->
           <div class="waveform-canvas-row">
             <div class="waveform-main-wrap">
               <div class="time-display">
@@ -1107,11 +1130,12 @@
               </div>
             </div>
 
-            <!-- Docked Vertical BPM Panel -->
+            <!-- Docked Vertical BPM & QUANT Panel -->
             <div class="bpm-docked-panel">
               <div class="bpm-title">BPM</div>
               <span id="bpmValB" class="bpm-badge">128.0</span>
               <button id="btnTapB" class="btn-tap">TAP (Y)</button>
+              <button id="btnQuantB" class="btn-quant" title="Toggle Beat Quantize Alignment">QUANT</button>
             </div>
           </div>
 
@@ -1212,9 +1236,18 @@
 
     // Waveform & Deck State
     const deckState = {
-      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, cues: { 1: null, 2: null, 3: null, 4: null } },
-      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, cues: { 1: null, 2: null, 3: null, 4: null } }
+      A: { peakSummaryCache: [], id: 'jfKfPfyJRdk', taps: [], bpm: 120.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null }, offscreenCanvas: null, cachedTime: 0.0, lastPollTime: 0 },
+      B: { peakSummaryCache: [], id: '4xDzrJKXOOY', taps: [], bpm: 128.0, pitch: 0.0, zoom: 1.0, panPct: 0.0, userPanning: false, masterCue: 0.0, isCuePreview: false, quantize: false, cues: { 1: null, 2: null, 3: null, 4: null }, offscreenCanvas: null, cachedTime: 0.0, lastPollTime: 0 }
     };
+
+    let isAnimLoopActive = false;
+
+    function requestRenderLoop() {
+      if (!isAnimLoopActive) {
+        isAnimLoopActive = true;
+        requestAnimationFrame(animLoop);
+      }
+    }
 
     /**
      * VIDEO ID SANITIZER HELPER FUNCTION
@@ -1230,10 +1263,10 @@
     }
 
     /**
-     * AUDACITY PEAK-SUMMARY PYRAMID DATA GENERATOR (4000 Points)
+     * AUDACITY PEAK-SUMMARY PYRAMID DATA GENERATOR (With LocalStorage/IndexedDB Caching)
      */
     function generateTrackWaveform(id) {
-      const bars = 4000;
+      const bars = 2500;
       const arr = [];
       let hash = 0;
       for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
@@ -1253,6 +1286,64 @@
         arr.push({ peak, rms });
       }
       return arr;
+    }
+
+    function getOrGenerateTrackWaveform(id) {
+      const cacheKey = `ytdj_peaks_${id}`;
+      try {
+        const stored = localStorage.getItem(cacheKey);
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (e) {}
+
+      const peaks = generateTrackWaveform(id);
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify(peaks));
+      } catch (e) {}
+      return peaks;
+    }
+
+    /**
+     * OFFSCREEN CANVAS CACHING ENGINE
+     */
+    function buildOffscreenWaveform(deck) {
+      const state = deckState[deck];
+      const cache = state.peakSummaryCache;
+      if (!cache || cache.length === 0) return;
+
+      const off = document.createElement('canvas');
+      off.width = 2000;
+      off.height = 100;
+      const ctx = off.getContext('2d');
+      ctx.clearRect(0, 0, off.width, off.height);
+
+      const totalPoints = cache.length;
+      const barWidth = off.width / totalPoints;
+      const yCenter = off.height / 2;
+      const mainColor = deck === 'A' ? 'rgba(0, 242, 254, ' : 'rgba(249, 115, 22, ';
+
+      for (let i = 0; i < totalPoints; i++) {
+        const x = i * barWidth;
+        const item = cache[i];
+        const drawW = Math.max(0.5, barWidth);
+        const peakHalfH = Math.max(1.5, (item.peak * (off.height - 6)) / 2);
+        const rmsHalfH = Math.max(0.5, (item.rms * (off.height - 6)) / 2);
+
+        // Layer 1: Outer Peak Transients
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.fillRect(x, yCenter - peakHalfH, drawW, peakHalfH * 2);
+
+        const midH = peakHalfH * 0.80;
+        ctx.fillStyle = `${mainColor}0.45)`;
+        ctx.fillRect(x, yCenter - midH, drawW, midH * 2);
+
+        // Layer 2: Inner Core (RMS Body)
+        ctx.fillStyle = `${mainColor}0.40)`;
+        ctx.fillRect(x, yCenter - rmsHalfH, drawW, rmsHalfH * 2);
+      }
+
+      state.offscreenCanvas = off;
     }
 
     /**
@@ -1285,13 +1376,15 @@
       // Memory Garbage Collection on Peak Summary Cache
       deckState[deck].peakSummaryCache.length = 0;
 
-      // Update State & Re-generate Waveform & BPM
+      // Load cached or calculated peak summary
       deckState[deck].id = videoId;
-      deckState[deck].peakSummaryCache = generateTrackWaveform(videoId);
+      deckState[deck].peakSummaryCache = getOrGenerateTrackWaveform(videoId);
       deckState[deck].bpm = detectAutoBPM(videoId, deckState[deck].peakSummaryCache);
       deckState[deck].masterCue = 0.0;
       deckState[deck].zoom = 1.0;
       deckState[deck].panPct = 0.0;
+
+      buildOffscreenWaveform(deck);
 
       const bpmBadge = document.getElementById(`bpmVal${deck}`);
       if (bpmBadge) bpmBadge.textContent = `${deckState[deck].bpm.toFixed(1)}`;
@@ -1317,6 +1410,7 @@
           iframe.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&autoplay=0`;
         }
       }
+      requestRenderLoop();
     }
 
     /**
@@ -1430,6 +1524,28 @@
       if (player && typeof player.setPlaybackRate === 'function') {
         player.setPlaybackRate(rate);
       }
+      requestRenderLoop();
+    }
+
+    /**
+     * TRAKTOR BEAT QUANTIZE ALIGNMENT ENGINE
+     */
+    function getQuantizedTime(deck, targetSeconds) {
+      if (!deckState[deck].quantize) return targetSeconds;
+      const bpm = deckState[deck].bpm || 120.0;
+      if (bpm <= 0) return targetSeconds;
+      const beatInterval = 60.0 / bpm;
+      const nearestBeatIndex = Math.round(targetSeconds / beatInterval);
+      return nearestBeatIndex * beatInterval;
+    }
+
+    function toggleQuantize(deck) {
+      deckState[deck].quantize = !deckState[deck].quantize;
+      const btn = document.getElementById(`btnQuant${deck}`);
+      if (btn) {
+        if (deckState[deck].quantize) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
     }
 
     /**
@@ -1482,21 +1598,25 @@
 
       if (cues[slot] !== null && cues[slot] !== undefined) {
         if (player && typeof player.seekTo === 'function') {
-          player.seekTo(cues[slot], true);
+          const targetTime = getQuantizedTime(deck, cues[slot]);
+          player.seekTo(targetTime, true);
         }
       } else {
         if (player && typeof player.getCurrentTime === 'function') {
           const curr = player.getCurrentTime() || 0;
-          cues[slot] = curr;
+          const quantTime = getQuantizedTime(deck, curr);
+          cues[slot] = quantTime;
           saveCuesToStorage(deck, deckState[deck].id);
         }
       }
+      requestRenderLoop();
     }
 
     function deleteHotCue(deck, slot, e) {
       if (e) e.stopPropagation();
       deckState[deck].cues[slot] = null;
       saveCuesToStorage(deck, deckState[deck].id);
+      requestRenderLoop();
     }
 
     function formatTimeMs(seconds) {
@@ -1554,6 +1674,7 @@
       if (event.data === YT.PlayerState.PLAYING) {
         if (statusText) statusText.textContent = `Deck ${deck}: Playing`;
         if (playBtn) { playBtn.textContent = `⏸ PAUSE (${keyHint})`; playBtn.classList.add('playing'); }
+        requestRenderLoop();
       } else if (event.data === YT.PlayerState.PAUSED) {
         if (statusText) statusText.textContent = `Deck ${deck}: Paused`;
         if (playBtn) { playBtn.textContent = `▶ PLAY (${keyHint})`; playBtn.classList.remove('playing'); }
@@ -1575,6 +1696,7 @@
       } else {
         player.playVideo();
       }
+      requestRenderLoop();
     }
 
     function startCuePreview(deck) {
@@ -1583,15 +1705,17 @@
 
       const state = player.getPlayerState();
       const deckObj = deckState[deck];
+      const targetCue = getQuantizedTime(deck, deckObj.masterCue);
 
       if (state === YT.PlayerState.PLAYING) {
         player.pauseVideo();
-        player.seekTo(deckObj.masterCue, true);
+        player.seekTo(targetCue, true);
       } else {
         deckObj.isCuePreview = true;
-        player.seekTo(deckObj.masterCue, true);
+        player.seekTo(targetCue, true);
         player.playVideo();
       }
+      requestRenderLoop();
     }
 
     function stopCuePreview(deck) {
@@ -1601,7 +1725,8 @@
         const player = deck === 'A' ? playerA : playerB;
         if (player && typeof player.pauseVideo === 'function') {
           player.pauseVideo();
-          player.seekTo(deckObj.masterCue, true);
+          const targetCue = getQuantizedTime(deck, deckObj.masterCue);
+          player.seekTo(targetCue, true);
         }
       }
     }
@@ -1640,6 +1765,7 @@
         state.bpm = bpm;
         document.getElementById(`bpmVal${deck}`).textContent = `${bpm.toFixed(1)}`;
       }
+      requestRenderLoop();
     }
 
     function updateCrossfade() {
@@ -1663,10 +1789,11 @@
 
       document.getElementById('crossValTextA').textContent = `${Math.round(factorA * 100)}%`;
       document.getElementById('crossValTextB').textContent = `${Math.round(factorB * 100)}%`;
+      requestRenderLoop();
     }
 
     /**
-     * DUAL-LAYER AUDACITY PEAK-SUMMARY PYRAMID CANVAS RENDERER
+     * OFFSCREEN CANVAS FAST WAVEFORM RENDERER
      */
     function renderWaveformCanvas(deck, player) {
       const canvas = document.getElementById(`waveform${deck}`);
@@ -1688,14 +1815,22 @@
 
       ctx.clearRect(0, 0, w, h);
 
-      const currTime = (player && typeof player.getCurrentTime === 'function') ? (player.getCurrentTime() || 0) : 0;
+      // Throttled 30fps Playhead Polling
+      const state = deckState[deck];
+      const now = performance.now();
+      if (now - state.lastPollTime > 33) {
+        state.lastPollTime = now;
+        if (player && typeof player.getCurrentTime === 'function') {
+          state.cachedTime = player.getCurrentTime() || 0;
+        }
+      }
+
+      const currTime = state.cachedTime;
       const dur = (player && typeof player.getDuration === 'function') ? (player.getDuration() || 0) : 0;
       const isPlaying = (player && player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING);
 
-      const state = deckState[deck];
       const zoom = state.zoom || 1.0;
       const visibleFraction = 1.0 / zoom;
-
       const playheadPct = dur > 0 ? (currTime / dur) : 0;
 
       if (isPlaying && !state.userPanning && zoom > 1.0) {
@@ -1707,43 +1842,33 @@
       const startPct = Math.max(0, Math.min(state.panPct, 1.0 - visibleFraction));
       const endPct = startPct + visibleFraction;
 
-      const cache = state.peakSummaryCache;
-      const totalCachePoints = cache.length;
+      // Draw from Cached Offscreen Canvas
+      if (state.offscreenCanvas) {
+        const sx = startPct * state.offscreenCanvas.width;
+        const sw = visibleFraction * state.offscreenCanvas.width;
+        
+        // Draw unplayed base waveform
+        ctx.drawImage(state.offscreenCanvas, sx, 0, sw, state.offscreenCanvas.height, 0, 0, w, h);
 
-      const startIdx = Math.floor(startPct * totalCachePoints);
-      const endIdx = Math.min(totalCachePoints, Math.ceil(endPct * totalCachePoints));
+        // Draw played highlighted slice
+        if (playheadPct > startPct) {
+          const clippedPlayPct = Math.min(endPct, playheadPct);
+          const playedFraction = (clippedPlayPct - startPct) / visibleFraction;
+          const playedWidth = playedFraction * w;
+          const playedSx = startPct * state.offscreenCanvas.width;
+          const playedSw = (clippedPlayPct - startPct) * state.offscreenCanvas.width;
 
-      const visibleSlice = cache.slice(startIdx, endIdx);
-      const visibleCount = visibleSlice.length;
-      const barWidth = w / visibleCount;
-
-      const mainColor = deck === 'A' ? 'rgba(0, 242, 254, ' : 'rgba(249, 115, 22, ';
-
-      // 1. Dual-Layer Waveform Drawing
-      for (let i = 0; i < visibleCount; i++) {
-        const x = i * barWidth;
-        const item = visibleSlice[i];
-        const barPct = startPct + (i / visibleCount) * visibleFraction;
-        const isPast = (barPct <= playheadPct);
-        const drawW = Math.max(1, barWidth - 0.2);
-
-        const peakHalfH = Math.max(2, (item.peak * (h - 6)) / 2);
-        const rmsHalfH = Math.max(1, (item.rms * (h - 6)) / 2);
-
-        // Layer 1: Outer Peak Transients
-        ctx.fillStyle = isPast ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, 0.45)';
-        ctx.fillRect(x, yCenter - peakHalfH, drawW, peakHalfH * 2);
-
-        const midH = peakHalfH * 0.80;
-        ctx.fillStyle = isPast ? `${mainColor}1.0)` : `${mainColor}0.45)`;
-        ctx.fillRect(x, yCenter - midH, drawW, midH * 2);
-
-        // Layer 2: Inner Core (RMS Body)
-        ctx.fillStyle = isPast ? `${mainColor}0.85)` : `${mainColor}0.40)`;
-        ctx.fillRect(x, yCenter - rmsHalfH, drawW, rmsHalfH * 2);
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(0, 0, playedWidth, h);
+          ctx.clip();
+          ctx.filter = 'brightness(1.5) contrast(1.15)';
+          ctx.drawImage(state.offscreenCanvas, playedSx, 0, playedSw, state.offscreenCanvas.height, 0, 0, playedWidth, h);
+          ctx.restore();
+        }
       }
 
-      // 2. Draw Beat Grid & Numbers
+      // Draw Beat Grid & Numbers
       const bpm = state.bpm || 124.0;
       if (dur > 0 && bpm > 0) {
         const totalBeats = (dur / 60.0) * bpm;
@@ -1774,7 +1899,7 @@
         ctx.restore();
       }
 
-      // 3. Draw Master CUE & HOT CUE FLAGS (4 Slots)
+      // Draw Master CUE & HOT CUE FLAGS (4 Slots)
       if (dur > 0) {
         if (state.masterCue >= 0) {
           const mCuePct = state.masterCue / dur;
@@ -1827,13 +1952,12 @@
         }
       }
 
-      // 4. Center Guide Line
+      // Center Guide Line & Glowing Playhead
       ctx.save();
       ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.fillRect(0, yCenter - 0.5, w, 1);
       ctx.restore();
 
-      // 5. Glowing Playhead Line
       if (playheadPct >= startPct && playheadPct <= endPct) {
         const playheadX = ((playheadPct - startPct) / visibleFraction) * w;
         ctx.save();
@@ -1844,6 +1968,12 @@
         ctx.fillRect(playheadX - 1, 0, 2, h);
         ctx.restore();
       }
+    }
+
+    function isAnyDeckPlaying() {
+      const isPlayingA = (playerA && typeof playerA.getPlayerState === 'function' && playerA.getPlayerState() === YT.PlayerState.PLAYING);
+      const isPlayingB = (playerB && typeof playerB.getPlayerState === 'function' && playerB.getPlayerState() === YT.PlayerState.PLAYING);
+      return isPlayingA || isPlayingB || deckState.A.isCuePreview || deckState.B.isCuePreview;
     }
 
     function setupDeckEvents(deck) {
@@ -1908,14 +2038,16 @@
         const val = parseFloat(e.target.value);
         deckState[deck].zoom = val;
         if (zoomText) zoomText.textContent = `${val.toFixed(1)}x`;
+        requestRenderLoop();
       });
 
-      panScroll.addEventListener('mousedown', () => deckState[deck].userPanning = true);
+      panScroll.addEventListener('mousedown', () => { deckState[deck].userPanning = true; requestRenderLoop(); });
       panScroll.addEventListener('mouseup', () => deckState[deck].userPanning = false);
       panScroll.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         const visibleFraction = 1.0 / deckState[deck].zoom;
         deckState[deck].panPct = (val / 100.0) * (1.0 - visibleFraction);
+        requestRenderLoop();
       });
 
       // Hot Cue Buttons & Delete Listeners (4 Slots)
@@ -1924,8 +2056,9 @@
         document.getElementById(`cueDel${deck}${slot}`).addEventListener('click', (e) => deleteHotCue(deck, slot, e));
       }
 
-      // Tap Tempo
+      // Tap Tempo & Quantize
       document.getElementById(`btnTap${deck}`).addEventListener('click', () => handleTap(deck));
+      document.getElementById(`btnQuant${deck}`).addEventListener('click', () => toggleQuantize(deck));
 
       // Synchronized Scrubbing
       const canvas = document.getElementById(`waveform${deck}`);
@@ -1944,12 +2077,14 @@
 
         if (player && typeof player.getDuration === 'function') {
           const dur = player.getDuration() || 0;
-          const targetTime = targetPct * dur;
+          let targetTime = targetPct * dur;
+          targetTime = getQuantizedTime(deck, targetTime);
           player.seekTo(targetTime, true);
           if (player.getPlayerState() === YT.PlayerState.PAUSED) {
             state.masterCue = targetTime;
           }
         }
+        requestRenderLoop();
       };
 
       canvas.addEventListener('mousedown', (e) => { isDragging = true; handleScrub(e); });
@@ -2044,14 +2179,14 @@
         else if (key === 'o') stopCuePreview('B');
       });
 
-      // Optimized Canvas Render Loop
+      // Conditional Animation Loop (CPU Sleep When Paused)
       function animLoop() {
         renderWaveformCanvas('A', playerA);
         renderWaveformCanvas('B', playerB);
 
         const updateTimeDisplays = (deck, player) => {
           if (!player || typeof player.getCurrentTime !== 'function') return;
-          const currTime = player.getCurrentTime() || 0;
+          const currTime = deckState[deck].cachedTime;
           const dur = player.getDuration() || 0;
 
           const currEl = document.getElementById(`currTime${deck}`);
@@ -2063,10 +2198,14 @@
         updateTimeDisplays('A', playerA);
         updateTimeDisplays('B', playerB);
 
-        requestAnimationFrame(animLoop);
+        if (isAnyDeckPlaying()) {
+          requestAnimationFrame(animLoop);
+        } else {
+          isAnimLoopActive = false;
+        }
       }
 
-      requestAnimationFrame(animLoop);
+      requestRenderLoop();
     });
   </script>
 </body>
