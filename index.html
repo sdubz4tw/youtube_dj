@@ -1136,10 +1136,110 @@
       transition: all 0.15s ease;
     }
 
-    .rec-mode-btn.active {
-      background: linear-gradient(180deg, #ff6600 0%, #cc5200 100%);
+    /* Pioneer CDJ-350 Brushed Silver Faceplate Recording Unit */
+    .cdj350-rec-unit {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(180deg, #282932 0%, #1a1b22 100%);
+      border: 1px solid #4a4d5e;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 6px rgba(0, 0, 0, 0.7);
+      border-radius: 4px;
+      padding: 3px 6px;
+      flex-shrink: 0;
+    }
+
+    .cdj350-btn {
+      background: linear-gradient(180deg, #383a48 0%, #1c1d24 50%, #111217 100%);
+      border: 1px solid #5a5e73;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      color: #e2e4e9;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 0.68rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.12s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .cdj350-btn:hover:not(:disabled) {
+      background: linear-gradient(180deg, #484b5c 0%, #262730 50%, #181920 100%);
+      border-color: #7b809a;
       color: #ffffff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .cdj350-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+      border-color: #333644;
+    }
+
+    .rec-start-btn {
+      border-color: #ff3333;
+    }
+
+    .rec-start-btn:hover:not(:disabled) {
+      box-shadow: 0 0 8px rgba(255, 51, 51, 0.5);
+    }
+
+    .cdj350-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #050508;
+      border: 1px solid #333644;
+      padding: 2px 6px;
+      border-radius: 3px;
+      min-width: 72px;
+      justify-content: center;
+    }
+
+    .badge-led {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #44475a;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .cdj350-status-badge.idle .badge-led {
+      background: #555555;
+      box-shadow: none;
+    }
+
+    .cdj350-status-badge.idle .badge-timer-text {
+      color: #888888;
+      font-size: 0.68rem;
+      font-weight: 800;
+      font-family: 'Courier New', monospace;
+    }
+
+    @keyframes recLedPulse {
+      0% { background: #ff0000; box-shadow: 0 0 6px #ff0000; }
+      50% { background: #ff4444; box-shadow: 0 0 14px #ff0000, 0 0 20px #ff0000; }
+      100% { background: #ff0000; box-shadow: 0 0 6px #ff0000; }
+    }
+
+    .cdj350-status-badge.recording {
+      border-color: #ff3333;
+      box-shadow: inset 0 0 6px rgba(255, 0, 0, 0.4);
+    }
+
+    .cdj350-status-badge.recording .badge-led {
+      animation: recLedPulse 1s infinite ease-in-out;
+    }
+
+    .cdj350-status-badge.recording .badge-timer-text {
+      color: #ff3333;
+      font-size: 0.72rem;
+      font-weight: 900;
+      font-family: 'Courier New', monospace;
     }
   </style>
 </head>
@@ -1160,19 +1260,20 @@
         <button id="btnGlobalSearch" class="btn-global-search">🔍 SEARCH</button>
       </div>
 
-      <!-- Recording Control Group (Pioneer CDJ-350 Style LED Recording Badge) -->
-      <div class="rec-control-group">
-        <button id="btnHeaderRec" class="btn-pioneer-rec" title="Click to Record Live DJ Session">
-          <span class="rec-led-dot"></span>
-          <span id="recHeaderBtnText">🔴 REC</span>
+      <!-- Pioneer CDJ-350 Silver Recording Control Unit -->
+      <div class="cdj350-rec-unit">
+        <button id="rec-btn" class="cdj350-btn rec-start-btn" title="Start Live DJ Session Recording">
+          <span class="rec-dot-icon">🔴</span> REC
         </button>
-        <span id="recHeaderTimer" class="rec-header-timer">00:00:00</span>
-        
-        <!-- Mode Toggle Switch: Audio (MP3) vs Video (MP4) -->
-        <div class="rec-mode-toggle" title="Switch Output Format">
-          <button id="btnModeMp3" class="rec-mode-btn active" data-mode="audio/mp3">Audio (MP3)</button>
-          <button id="btnModeMp4" class="rec-mode-btn" data-mode="video/mp4">Video (MP4)</button>
+
+        <div id="rec-status-badge" class="cdj350-status-badge idle">
+          <span class="badge-led"></span>
+          <span id="rec-timer-text" class="badge-timer-text">IDLE</span>
         </div>
+
+        <button id="stop-rec-btn" class="cdj350-btn rec-stop-btn" disabled title="Stop Recording & Export MP3">
+          ⏹️ STOP & EXPORT MP3
+        </button>
       </div>
 
       <div class="master-status">
@@ -2607,206 +2708,146 @@
         requestAnimationFrame(animLoop);
       }
 
-      // Pioneer CDJ-350 Style Live Session Recorder Engine (Pure MP3 Audio & Video Capture)
-      let isRecordingSession = false;
-      let selectedRecMode = 'audio/mp3'; // 'audio/mp3' or 'video/mp4'
-      let headerMediaRecorder = null;
-      let headerRecordedChunks = [];
-      let headerRecTimerInterval = null;
-      let headerRecSeconds = 0;
-      let activeCaptureStream = null;
+      // Pioneer CDJ-350 Live DJ Session MP3 Recorder Engine
+      let cdjMp3MediaRecorder = null;
+      let cdjRecordedChunks = [];
+      let cdjRecTimerInterval = null;
+      let cdjRecSeconds = 0;
+      let cdjAudioStream = null;
 
-      // Web Audio PCM Buffers for lamejs MP3 encoding
-      let recAudioCtx = null;
-      let recAudioSource = null;
-      let recScriptProcessor = null;
-      let pcmLeftBuffers = [];
-      let pcmRightBuffers = [];
+      function initCDJ350Mp3Recorder() {
+        const recBtn = document.getElementById('rec-btn');
+        const stopBtn = document.getElementById('stop-rec-btn');
+        const badge = document.getElementById('rec-status-badge');
+        const timerText = document.getElementById('rec-timer-text');
 
-      function initPioneerHeaderRecorder() {
-        const btnRec = document.getElementById('btnHeaderRec');
-        const timerEl = document.getElementById('recHeaderTimer');
-        const textEl = document.getElementById('recHeaderBtnText');
-        const btnMp3 = document.getElementById('btnModeMp3');
-        const btnMp4 = document.getElementById('btnModeMp4');
+        if (!recBtn || !stopBtn) return;
 
-        if (!btnRec) return;
+        recBtn.addEventListener('click', async () => {
+          if (cdjMp3MediaRecorder && cdjMp3MediaRecorder.state === 'recording') return;
+          await startCDJ350Recording();
+        });
 
-        if (btnMp3 && btnMp4) {
-          btnMp3.addEventListener('click', () => {
-            if (isRecordingSession) return;
-            selectedRecMode = 'audio/mp3';
-            btnMp3.classList.add('active');
-            btnMp4.classList.remove('active');
-          });
-
-          btnMp4.addEventListener('click', () => {
-            if (isRecordingSession) return;
-            selectedRecMode = 'video/mp4';
-            btnMp4.classList.add('active');
-            btnMp3.classList.remove('active');
-          });
-        }
-
-        btnRec.addEventListener('click', async () => {
-          if (!isRecordingSession) {
-            await startRecordingSession();
-          } else {
-            await stopAndExportRecordingSession();
+        stopBtn.addEventListener('click', () => {
+          if (cdjMp3MediaRecorder && cdjMp3MediaRecorder.state === 'recording') {
+            stopAndExportCDJ350Mp3();
           }
         });
 
-        async function startRecordingSession() {
-          pcmLeftBuffers = [];
-          pcmRightBuffers = [];
-          headerRecordedChunks = [];
-          headerRecSeconds = 0;
-          if (timerEl) timerEl.textContent = '00:00:00';
-
-          // Reminder Notice
-          alert("Notice: Please ensure 'Share tab audio' is checked in the browser prompt so the recorder can capture your DJ mix!");
+        async function startCDJ350Recording() {
+          cdjRecordedChunks = [];
+          cdjRecSeconds = 0;
 
           try {
-            const rawStream = await navigator.mediaDevices.getDisplayMedia({
+            // 1. Capture browser tab audio/video stream
+            const stream = await navigator.mediaDevices.getDisplayMedia({
               video: true,
               audio: true
             });
 
-            const audioTrack = rawStream.getAudioTracks()[0];
+            // 2. Extract audio track
+            const audioTrack = stream.getAudioTracks()[0];
             if (!audioTrack) {
-              alert("Please check 'Share tab audio' so the recorder can capture your DJ mix!");
-              rawStream.getTracks().forEach(t => t.stop());
+              alert("Please ensure 'Share tab audio' is checked to record your live DJ mix!");
+              stream.getTracks().forEach(t => t.stop());
               return;
             }
 
-            activeCaptureStream = rawStream;
+            // Immediately stop video track to isolate audio
+            stream.getVideoTracks().forEach(t => t.stop());
 
-            if (selectedRecMode === 'audio/mp3') {
-              // 1. Pure Audio Capture: Immediately discard / stop video track
-              rawStream.getVideoTracks().forEach(track => track.stop());
+            // 3. Create audio-only stream
+            cdjAudioStream = new MediaStream([audioTrack]);
 
-              const audioOnlyStream = new MediaStream([audioTrack]);
-
-              // Web Audio PCM Capture Node for lamejs 320kbps MP3 encoding
-              recAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
-              recAudioSource = recAudioCtx.createMediaStreamSource(audioOnlyStream);
-              recScriptProcessor = recAudioCtx.createScriptProcessor(4096, 2, 2);
-
-              recScriptProcessor.onaudioprocess = (e) => {
-                if (!isRecordingSession) return;
-                const left = e.inputBuffer.getChannelData(0);
-                const right = e.inputBuffer.numberOfChannels > 1 ? e.inputBuffer.getChannelData(1) : left;
-                pcmLeftBuffers.push(new Float32Array(left));
-                pcmRightBuffers.push(new Float32Array(right));
-              };
-
-              recAudioSource.connect(recScriptProcessor);
-              recScriptProcessor.connect(recAudioCtx.destination);
-
-              audioTrack.onended = () => {
-                if (isRecordingSession) stopAndExportRecordingSession();
-              };
-
-            } else {
-              // 2. Video/Audio MP4 Capture via MediaRecorder
-              let options = { mimeType: 'video/webm;codecs=vp9' };
-              if (MediaRecorder.isTypeSupported('video/mp4')) {
-                options = { mimeType: 'video/mp4' };
-              } else if (MediaRecorder.isTypeSupported('video/webm')) {
-                options = { mimeType: 'video/webm' };
-              }
-
-              headerMediaRecorder = new MediaRecorder(activeCaptureStream, options);
-
-              headerMediaRecorder.ondataavailable = (e) => {
-                if (e.data && e.data.size > 0) {
-                  headerRecordedChunks.push(e.data);
-                }
-              };
-
-              activeCaptureStream.getVideoTracks().forEach(track => {
-                track.onended = () => {
-                  if (isRecordingSession) stopAndExportRecordingSession();
-                };
-              });
-
-              headerMediaRecorder.start(1000);
+            // 4. Initialize MediaRecorder with supported audio MIME types
+            let mimeType = 'audio/webm;codecs=opus';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+              mimeType = 'audio/webm';
             }
 
-            isRecordingSession = true;
-            btnRec.classList.add('rec-active');
-            if (textEl) textEl.textContent = '⏹️ STOP & EXPORT';
+            cdjMp3MediaRecorder = new MediaRecorder(cdjAudioStream, { mimeType: mimeType });
 
-            headerRecTimerInterval = setInterval(() => {
-              headerRecSeconds++;
-              const hh = String(Math.floor(headerRecSeconds / 3600)).padStart(2, '0');
-              const mm = String(Math.floor((headerRecSeconds % 3600) / 60)).padStart(2, '0');
-              const ss = String(headerRecSeconds % 60).padStart(2, '0');
-              if (timerEl) timerEl.textContent = `${hh}:${mm}:${ss}`;
+            cdjMp3MediaRecorder.ondataavailable = (e) => {
+              if (e.data && e.data.size > 0) {
+                cdjRecordedChunks.push(e.data);
+              }
+            };
+
+            audioTrack.onended = () => {
+              if (cdjMp3MediaRecorder && cdjMp3MediaRecorder.state === 'recording') {
+                stopAndExportCDJ350Mp3();
+              }
+            };
+
+            cdjMp3MediaRecorder.start(1000);
+
+            // Update UI state
+            recBtn.disabled = true;
+            stopBtn.disabled = false;
+            badge.classList.remove('idle');
+            badge.classList.add('recording');
+            timerText.textContent = 'REC 00:00';
+
+            // 5. Timer update interval
+            cdjRecTimerInterval = setInterval(() => {
+              cdjRecSeconds++;
+              const mm = String(Math.floor(cdjRecSeconds / 60)).padStart(2, '0');
+              const ss = String(cdjRecSeconds % 60).padStart(2, '0');
+              timerText.textContent = `REC ${mm}:${ss}`;
             }, 1000);
 
           } catch (err) {
-            console.warn('Recording capture cancelled or denied:', err);
-            isRecordingSession = false;
+            console.warn('Display Media capture cancelled or denied:', err);
           }
         }
 
-        async function stopAndExportRecordingSession() {
-          if (headerRecTimerInterval) clearInterval(headerRecTimerInterval);
-          isRecordingSession = false;
+        function stopAndExportCDJ350Mp3() {
+          if (cdjRecTimerInterval) clearInterval(cdjRecTimerInterval);
+          
+          recBtn.disabled = false;
+          stopBtn.disabled = true;
 
-          btnRec.classList.remove('rec-active');
-          if (textEl) textEl.textContent = '🔴 REC';
+          if (cdjMp3MediaRecorder && cdjMp3MediaRecorder.state === 'recording') {
+            cdjMp3MediaRecorder.onstop = processAndDownloadMp3;
+            cdjMp3MediaRecorder.stop();
+          } else {
+            processAndDownloadMp3();
+          }
 
-          const now = new Date();
-          const dateStr = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+          if (cdjAudioStream) {
+            cdjAudioStream.getTracks().forEach(track => track.stop());
+          }
+        }
 
-          if (selectedRecMode === 'audio/mp3') {
-            // Disconnect Web Audio processing
-            if (recScriptProcessor && recAudioSource) {
-              try {
-                recScriptProcessor.disconnect();
-                recAudioSource.disconnect();
-                if (recAudioCtx) recAudioCtx.close();
-              } catch(e){}
-            }
+        async function processAndDownloadMp3() {
+          timerText.textContent = 'ENCODING...';
 
-            if (activeCaptureStream) {
-              activeCaptureStream.getTracks().forEach(track => track.stop());
-            }
+          try {
+            // Combine raw webm Opus chunks into blob
+            const webmBlob = new Blob(cdjRecordedChunks, { type: 'audio/webm' });
+            const arrayBuffer = await webmBlob.arrayBuffer();
 
-            // Encode PCM to High-Quality 320 kbps Stereo MP3 using lamejs
-            let totalLength = 0;
-            for (let buf of pcmLeftBuffers) totalLength += buf.length;
+            // Decode WebM audio into Float32 Stereo PCM AudioBuffer using Web Audio API
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+            await audioCtx.close();
 
-            if (totalLength === 0 || typeof lamejs === 'undefined') {
-              alert('No audio samples captured or lamejs not available.');
-              if (timerEl) timerEl.textContent = '00:00:00';
-              return;
-            }
+            const sampleRate = audioBuffer.sampleRate || 44100;
+            const leftFloat = audioBuffer.getChannelData(0);
+            const rightFloat = audioBuffer.numberOfChannels > 1 ? audioBuffer.getChannelData(1) : leftFloat;
 
-            const leftMerged = new Float32Array(totalLength);
-            const rightMerged = new Float32Array(totalLength);
-            let offset = 0;
-            for (let i = 0; i < pcmLeftBuffers.length; i++) {
-              leftMerged.set(pcmLeftBuffers[i], offset);
-              rightMerged.set(pcmRightBuffers[i], offset);
-              offset += pcmLeftBuffers[i].length;
-            }
-
-            // Convert Float32 to Int16 PCM
-            const leftInt16 = new Int16Array(leftMerged.length);
-            const rightInt16 = new Int16Array(rightMerged.length);
-            for (let i = 0; i < leftMerged.length; i++) {
-              const l = Math.max(-1, Math.min(1, leftMerged[i]));
-              const r = Math.max(-1, Math.min(1, rightMerged[i]));
+            // Convert Float32 to Int16 PCM samples
+            const leftInt16 = new Int16Array(leftFloat.length);
+            const rightInt16 = new Int16Array(rightFloat.length);
+            for (let i = 0; i < leftFloat.length; i++) {
+              const l = Math.max(-1, Math.min(1, leftFloat[i]));
+              const r = Math.max(-1, Math.min(1, rightFloat[i]));
               leftInt16[i] = l < 0 ? l * 32768 : l * 32767;
               rightInt16[i] = r < 0 ? r * 32768 : r * 32767;
             }
 
-            // High-Quality Stereo 320 kbps 44.1kHz MP3 Encoder
+            // Encode PCM samples into 320 kbps Stereo MP3 using lamejs
             const channels = 2;
-            const sampleRate = 44100;
             const kbps = 320;
             const mp3encoder = new lamejs.Mp3Encoder(channels, sampleRate, kbps);
             const mp3Data = [];
@@ -2820,50 +2861,43 @@
                 mp3Data.push(mp3buf);
               }
             }
+
             const endBuf = mp3encoder.flush();
             if (endBuf.length > 0) {
               mp3Data.push(endBuf);
             }
 
+            // Create MP3 Blob & trigger download
             const mp3Blob = new Blob(mp3Data, { type: 'audio/mp3' });
-            triggerDownload(mp3Blob, `YouTube_DJ_Mix_${dateStr}.mp3`);
+            const url = URL.createObjectURL(mp3Blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
 
-          } else {
-            // Video MP4 capture export
-            if (headerMediaRecorder && headerMediaRecorder.state === 'recording') {
-              headerMediaRecorder.stop();
-            }
-            if (activeCaptureStream) {
-              activeCaptureStream.getTracks().forEach(track => track.stop());
-            }
+            const dateStr = new Date().toISOString().slice(0, 10);
+            a.download = `YouTube_DJ_Mix_${dateStr}.mp3`;
+
+            document.body.appendChild(a);
+            a.click();
 
             setTimeout(() => {
-              const videoBlob = new Blob(headerRecordedChunks, { type: 'video/mp4' });
-              triggerDownload(videoBlob, `YouTube_DJ_Mix_${dateStr}.mp4`);
-            }, 200);
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(url);
+            }, 100);
+
+          } catch (e) {
+            console.error('MP3 encoding error:', e);
+            alert('Error encoding MP3 file.');
           }
 
-          if (timerEl) timerEl.textContent = '00:00:00';
-        }
-
-        function triggerDownload(blob, filename) {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          a.download = filename;
-
-          document.body.appendChild(a);
-          a.click();
-
-          setTimeout(() => {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-          }, 100);
+          // Restore UI to IDLE
+          badge.classList.remove('recording');
+          badge.classList.add('idle');
+          timerText.textContent = 'IDLE';
         }
       }
 
-      initPioneerHeaderRecorder();
+      initCDJ350Mp3Recorder();
 
       requestAnimationFrame(animLoop);
     });
