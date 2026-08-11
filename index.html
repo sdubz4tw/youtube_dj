@@ -1004,6 +1004,51 @@
       cursor: ns-resize;
     }
 
+    /* Pioneer DDJ-FLX4 LED Volume VU Meter Segment Bar */
+    .vu-meter-bar {
+      width: 10px;
+      height: 200px;
+      background: #08090b;
+      border: 1px solid #282b36;
+      border-radius: 3px;
+      padding: 3px 2px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 2px;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+      flex-shrink: 0;
+    }
+
+    .led-seg {
+      width: 100%;
+      height: 12px;
+      border-radius: 1px;
+      opacity: 0.15;
+      transition: opacity 0.04s ease, box-shadow 0.04s ease;
+      box-shadow: none;
+    }
+
+    .led-seg.green { background: #00ff66; }
+    .led-seg.orange { background: #ff7700; }
+    .led-seg.red { background: #ff2222; }
+
+    /* Active Illuminated LED States */
+    .led-seg.green.lit {
+      opacity: 1;
+      box-shadow: 0 0 8px #00ff66, inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .led-seg.orange.lit {
+      opacity: 1;
+      box-shadow: 0 0 8px #ff7700, inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .led-seg.red.lit {
+      opacity: 1;
+      box-shadow: 0 0 10px #ff2222, inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
     .crossfader-box {
       width: 100%;
       display: flex;
@@ -1239,26 +1284,62 @@
         <!-- Master Deck Volume Card -->
         <div class="master-vol-card channel-volumes">
           <div class="vol-header-title">CHANNEL VOLUMES</div>
-          <div class="vertical-vols-container">
-            <!-- Channel A Volume -->
-            <div class="vol-channel col-a">
+          <div class="vertical-vols-container" style="display: flex; justify-content: space-around; width: 100%; gap: 10px;">
+            <!-- Channel A Volume + VU Meter Bar -->
+            <div class="vol-channel col-a" style="display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;">
               <div class="vol-label-badge">
                 <span>VOL A</span>
                 <span id="volValTextA" class="vol-val-text">100%</span>
               </div>
-              <div class="vol-slider-wrap">
-                <input id="volSliderA" type="range" class="dj-vertical-vol-slider volume-fader slider-a" min="0" max="100" value="100">
+              <div class="channel-fader-row" style="display: flex; gap: 6px; align-items: center; justify-content: center; width: 100%;">
+                <!-- VU Meter LED Bar (Channel A) -->
+                <div class="vu-meter-bar" id="vuMeterBarA" title="Channel A Output Peak Level">
+                  <div class="led-seg red" data-seg="12"></div>
+                  <div class="led-seg red" data-seg="11"></div>
+                  <div class="led-seg orange" data-seg="10"></div>
+                  <div class="led-seg orange" data-seg="9"></div>
+                  <div class="led-seg orange" data-seg="8"></div>
+                  <div class="led-seg orange" data-seg="7"></div>
+                  <div class="led-seg green" data-seg="6"></div>
+                  <div class="led-seg green" data-seg="5"></div>
+                  <div class="led-seg green" data-seg="4"></div>
+                  <div class="led-seg green" data-seg="3"></div>
+                  <div class="led-seg green" data-seg="2"></div>
+                  <div class="led-seg green" data-seg="1"></div>
+                </div>
+
+                <div class="vol-slider-wrap">
+                  <input id="volSliderA" type="range" class="dj-vertical-vol-slider volume-fader slider-a" min="0" max="100" value="100">
+                </div>
               </div>
             </div>
 
-            <!-- Channel B Volume -->
-            <div class="vol-channel col-b">
+            <!-- Channel B Volume + VU Meter Bar -->
+            <div class="vol-channel col-b" style="display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;">
               <div class="vol-label-badge">
                 <span>VOL B</span>
                 <span id="volValTextB" class="vol-val-text">100%</span>
               </div>
-              <div class="vol-slider-wrap">
-                <input id="volSliderB" type="range" class="dj-vertical-vol-slider volume-fader slider-b" min="0" max="100" value="100">
+              <div class="channel-fader-row" style="display: flex; gap: 6px; align-items: center; justify-content: center; width: 100%;">
+                <div class="vol-slider-wrap">
+                  <input id="volSliderB" type="range" class="dj-vertical-vol-slider volume-fader slider-b" min="0" max="100" value="100">
+                </div>
+
+                <!-- VU Meter LED Bar (Channel B) -->
+                <div class="vu-meter-bar" id="vuMeterBarB" title="Channel B Output Peak Level">
+                  <div class="led-seg red" data-seg="12"></div>
+                  <div class="led-seg red" data-seg="11"></div>
+                  <div class="led-seg orange" data-seg="10"></div>
+                  <div class="led-seg orange" data-seg="9"></div>
+                  <div class="led-seg orange" data-seg="8"></div>
+                  <div class="led-seg orange" data-seg="7"></div>
+                  <div class="led-seg green" data-seg="6"></div>
+                  <div class="led-seg green" data-seg="5"></div>
+                  <div class="led-seg green" data-seg="4"></div>
+                  <div class="led-seg green" data-seg="3"></div>
+                  <div class="led-seg green" data-seg="2"></div>
+                  <div class="led-seg green" data-seg="1"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -2421,10 +2502,63 @@
         else if (key === 'o') stopCuePreview('B');
       });
 
+      // Dynamic VU Level Meter Renderer for Channel A & B (Green -> Orange -> Red Peak LEDs)
+      function updateVUMeters() {
+        const crossVal = parseInt(document.getElementById('masterCrossfader').value, 10);
+        const factorA = (100 - crossVal) / 100.0;
+        const factorB = crossVal / 100.0;
+
+        const updateChannelMeter = (deck, player, crossFactor) => {
+          const isPlaying = (player && typeof player.getPlayerState === 'function' && player.getPlayerState() === YT.PlayerState.PLAYING);
+          const volSlider = document.getElementById(`volSlider${deck}`);
+          const channelVol = (volSlider ? parseInt(volSlider.value, 10) : 100) / 100.0;
+
+          let level = 0.0;
+          if (isPlaying) {
+            const state = deckState[deck];
+            const currTime = (player && typeof player.getCurrentTime === 'function') ? (player.getCurrentTime() || 0) : 0;
+            const cache = state.peakSummaryCache || [];
+            let rawPeak = 0.7;
+
+            if (cache.length > 0 && player.getDuration) {
+              const dur = player.getDuration() || 1;
+              const idx = Math.min(cache.length - 1, Math.floor((currTime / dur) * cache.length));
+              rawPeak = cache[idx] ? cache[idx].peak : 0.7;
+            }
+
+            // Dynamic RMS modulation to simulate live audio signal bounce
+            const now = performance.now();
+            const bounce = 0.7 + 0.3 * Math.abs(Math.sin(now * 0.012) * Math.cos(now * 0.007));
+            level = rawPeak * bounce * channelVol * crossFactor;
+            level += (Math.random() * 0.08 - 0.04);
+            level = Math.max(0, Math.min(1.0, level));
+          }
+
+          const meterContainer = document.getElementById(`vuMeterBar${deck}`);
+          if (!meterContainer) return;
+
+          const segments = meterContainer.querySelectorAll('.led-seg');
+          const numLit = Math.round(level * 12);
+
+          segments.forEach((seg) => {
+            const segNum = parseInt(seg.getAttribute('data-seg'), 10);
+            if (segNum <= numLit) {
+              seg.classList.add('lit');
+            } else {
+              seg.classList.remove('lit');
+            }
+          });
+        };
+
+        updateChannelMeter('A', playerA, factorA);
+        updateChannelMeter('B', playerB, factorB);
+      }
+
       // Render Loop
       function animLoop() {
         renderWaveformCanvas('A', playerA);
         renderWaveformCanvas('B', playerB);
+        updateVUMeters();
 
         const updateTimeDisplays = (deck, player) => {
           if (!player || typeof player.getCurrentTime !== 'function') return;
