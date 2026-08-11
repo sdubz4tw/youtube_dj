@@ -1107,49 +1107,9 @@
     <!-- Main Console 3-Column Grid Layout -->
     <div class="console-grid">
       
-      <!-- DECK A (LEFT PIONEER CDJ-350 FACEPLATE) -->
+      <!-- DECK A (LEFT PIONEER DDJ-FLX4 DECK) -->
       <div class="deck-card deck-a">
         
-        <!-- Restrained Outer Left Pitch Strip (Deck A) -->
-        <div class="pitch-fader-card outer-pitch">
-          <div class="pitch-fader-header-vertical">
-            <span class="pitch-title">TEMPO</span>
-            <div class="pitch-badge-wrap-vertical">
-              <span id="pitchValBadgeA" class="pitch-badge">+0.00%</span>
-              <span id="rateValTextA" class="rate-text">(1.00x)</span>
-              <button id="btnResetPitchA" class="btn-reset-pitch" title="Reset Pitch to 0%">0% RESET</button>
-            </div>
-          </div>
-
-          <div class="pitch-slider-vertical-wrap">
-            <div class="pitch-ticks-col">
-              <span>+16%</span>
-              <span>+8%</span>
-              <span>0%</span>
-              <span>-8%</span>
-              <span>-16%</span>
-            </div>
-            <input id="pitchSliderA" type="range" class="pitch-drag-slider-vertical tempo-fader" min="-16" max="16" step="0.05" value="0">
-          </div>
-
-          <div class="pitch-bend-vertical-actions">
-            <button id="btnBendPlusA" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▲</button>
-            <button id="btnBendMinusA" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2% ▼</button>
-          </div>
-
-          <!-- Side Transport Stack (CUE & PLAY circular buttons) -->
-          <div class="side-transport-stack">
-            <button id="btnCueA" class="btn-pioneer-round btn-cue" title="Master Cue / Hold Preview (Key: Q)">
-              <div class="led-dot"></div>
-              <span>CUE</span>
-            </button>
-            <button id="btnPlayA" class="btn-pioneer-round btn-play" title="Play / Pause Toggle (Key: W)">
-              <div class="led-dot"></div>
-              <span>▶/⏸</span>
-            </button>
-          </div>
-        </div>
-
         <!-- Deck A Main Flex Structure -->
         <div class="deck-main-body">
           
@@ -1165,12 +1125,12 @@
             </div>
           </div>
 
-          <!-- 2. YouTube Video Viewport Embed Wrapper (Positioned directly below header) -->
+          <!-- 2. YouTube Video Viewport Embed Wrapper -->
           <div id="viewport-a" class="video-viewport">
             <div id="yt-player-a" class="yt-player"></div>
           </div>
 
-          <!-- 3. Pioneer LCD Waveform Display & Docked BPM Panel (Underneath video) -->
+          <!-- 3. Pioneer LCD Waveform Display & Docked BPM Panel -->
           <div class="waveform-canvas-row">
             <div class="waveform-main-wrap">
               <div class="time-display">
@@ -1199,32 +1159,75 @@
             </div>
           </div>
 
-          <!-- 4. Hot Cue Buttons Row (Main Deck Column Ends Cleanly Here) -->
-          <div class="hot-cues-section">
-            <div class="hot-cues-header">
-              <span>HOT CUES (KEYS: 1, 2, 3, 4)</span>
-              <span style="color:#111;">DECK A</span>
+          <!-- 4. Lower Deck Control Row (Lower Left CUE/PLAY Stack + Performance Pads) -->
+          <div class="deck-bottom-row" style="display: flex; gap: 8px; align-items: flex-end; width: 100%;">
+            <!-- Lower Left CUE & PLAY Transport Buttons (DDJ-FLX4 Style) -->
+            <div class="transport-stack-left" style="display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+              <button id="btnCueA" class="btn-pioneer-round btn-cue" title="Master Cue / Hold Preview (Key: Q)">
+                <div class="led-dot"></div>
+                <span>CUE</span>
+              </button>
+              <button id="btnPlayA" class="btn-pioneer-round btn-play" title="Play / Pause Toggle (Key: W)">
+                <div class="led-dot"></div>
+                <span>▶/⏸</span>
+              </button>
             </div>
-            <div class="hot-cues-grid">
-              <div class="cue-slot-wrap">
-                <button id="cueBtnA1" class="btn-hotcue cue-1 empty">C1<span>+Set</span></button>
-                <button id="cueDelA1" class="btn-hotcue-delete" style="display:none;">✕</button>
+
+            <!-- Performance Pads Grid -->
+            <div class="hot-cues-section" style="flex: 1;">
+              <div class="hot-cues-header">
+                <span>HOT CUES (KEYS: 1, 2, 3, 4)</span>
+                <span style="color:#ff6600;">DECK A</span>
               </div>
-              <div class="cue-slot-wrap">
-                <button id="cueBtnA2" class="btn-hotcue cue-2 empty">C2<span>+Set</span></button>
-                <button id="cueDelA2" class="btn-hotcue-delete" style="display:none;">✕</button>
-              </div>
-              <div class="cue-slot-wrap">
-                <button id="cueBtnA3" class="btn-hotcue cue-3 empty">C3<span>+Set</span></button>
-                <button id="cueDelA3" class="btn-hotcue-delete" style="display:none;">✕</button>
-              </div>
-              <div class="cue-slot-wrap">
-                <button id="cueBtnA4" class="btn-hotcue cue-4 empty">C4<span>+Set</span></button>
-                <button id="cueDelA4" class="btn-hotcue-delete" style="display:none;">✕</button>
+              <div class="hot-cues-grid">
+                <div class="cue-slot-wrap">
+                  <button id="cueBtnA1" class="btn-hotcue cue-1 empty">C1<span>+Set</span></button>
+                  <button id="cueDelA1" class="btn-hotcue-delete" style="display:none;">✕</button>
+                </div>
+                <div class="cue-slot-wrap">
+                  <button id="cueBtnA2" class="btn-hotcue cue-2 empty">C2<span>+Set</span></button>
+                  <button id="cueDelA2" class="btn-hotcue-delete" style="display:none;">✕</button>
+                </div>
+                <div class="cue-slot-wrap">
+                  <button id="cueBtnA3" class="btn-hotcue cue-3 empty">C3<span>+Set</span></button>
+                  <button id="cueDelA3" class="btn-hotcue-delete" style="display:none;">✕</button>
+                </div>
+                <div class="cue-slot-wrap">
+                  <button id="cueBtnA4" class="btn-hotcue cue-4 empty">C4<span>+Set</span></button>
+                  <button id="cueDelA4" class="btn-hotcue-delete" style="display:none;">✕</button>
+                </div>
               </div>
             </div>
           </div>
 
+        </div>
+
+        <!-- Right Side Pitch Strip (Deck A - TEMPO Slider) -->
+        <div class="pitch-fader-card outer-pitch">
+          <div class="pitch-fader-header-vertical">
+            <span class="pitch-title">TEMPO</span>
+            <div class="pitch-badge-wrap-vertical">
+              <span id="pitchValBadgeA" class="pitch-badge">+0.00%</span>
+              <span id="rateValTextA" class="rate-text">(1.00x)</span>
+              <button id="btnResetPitchA" class="btn-reset-pitch" title="Reset Pitch to 0%">0% RESET</button>
+            </div>
+          </div>
+
+          <div class="pitch-slider-vertical-wrap">
+            <div class="pitch-ticks-col">
+              <span>+16%</span>
+              <span>+8%</span>
+              <span>0%</span>
+              <span>-8%</span>
+              <span>-16%</span>
+            </div>
+            <input id="pitchSliderA" type="range" class="pitch-drag-slider-vertical tempo-fader" min="-16" max="16" step="0.05" value="0">
+          </div>
+
+          <div class="pitch-bend-vertical-actions">
+            <button id="btnBendPlusA" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▲</button>
+            <button id="btnBendMinusA" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2% ▼</button>
+          </div>
         </div>
 
       </div>
@@ -1263,10 +1266,10 @@
 
         <!-- Master Crossfader Bar -->
         <div class="crossfader-box">
-          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.65rem; font-weight:800; color:#111;">
-            <span>◄ A (<span id="crossValTextA">50%</span>)</span>
+          <div style="display:flex; justify-content:space-between; width:100%; font-size:0.65rem; font-weight:800; color:#ffffff;">
+            <span>◄ A (<span id="crossValTextA" style="color:#ff6600;">50%</span>)</span>
             <span>CROSSFADER</span>
-            <span>(<span id="crossValTextB">50%</span>) B ►</span>
+            <span>(<span id="crossValTextB" style="color:#ff6600;">50%</span>) B ►</span>
           </div>
 
           <input id="masterCrossfader" type="range" class="crossfader-slider crossfader" min="0" max="100" value="50">
@@ -1279,7 +1282,7 @@
         </div>
       </div>
 
-      <!-- DECK B (RIGHT PIONEER CDJ-350 FACEPLATE) -->
+      <!-- DECK B (RIGHT PIONEER DDJ-FLX4 DECK) -->
       <div class="deck-card deck-b">
         
         <!-- Deck B Main Flex Structure -->
@@ -1297,12 +1300,12 @@
             </div>
           </div>
 
-          <!-- 2. YouTube Video Viewport Embed Wrapper (Positioned directly below header) -->
+          <!-- 2. YouTube Video Viewport Embed Wrapper -->
           <div id="viewport-b" class="video-viewport">
             <div id="yt-player-b" class="yt-player"></div>
           </div>
 
-          <!-- 3. Pioneer LCD Waveform Display & Docked BPM Panel (Underneath video) -->
+          <!-- 3. Pioneer LCD Waveform Display & Docked BPM Panel -->
           <div class="waveform-canvas-row">
             <div class="waveform-main-wrap">
               <div class="time-display">
@@ -1331,35 +1334,50 @@
             </div>
           </div>
 
-          <!-- 4. Hot Cue Buttons Row (Main Deck Column Ends Cleanly Here) -->
-          <div class="hot-cues-section">
-            <div class="hot-cues-header">
-              <span>HOT CUES (KEYS: 7, 8, 9, 0)</span>
-              <span style="color:#111;">DECK B</span>
+          <!-- 4. Lower Deck Control Row (Lower Left CUE/PLAY Stack + Performance Pads) -->
+          <div class="deck-bottom-row" style="display: flex; gap: 8px; align-items: flex-end; width: 100%;">
+            <!-- Lower Left CUE & PLAY Transport Buttons (DDJ-FLX4 Style) -->
+            <div class="transport-stack-left" style="display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+              <button id="btnCueB" class="btn-pioneer-round btn-cue" title="Master Cue / Hold Preview (Key: O)">
+                <div class="led-dot"></div>
+                <span>CUE</span>
+              </button>
+              <button id="btnPlayB" class="btn-pioneer-round btn-play" title="Play / Pause Toggle (Key: P)">
+                <div class="led-dot"></div>
+                <span>▶/⏸</span>
+              </button>
             </div>
-            <div class="hot-cues-grid">
-              <div class="cue-slot-wrap">
-                <button id="cueBtnB1" class="btn-hotcue cue-1 empty">C1<span>+Set</span></button>
-                <button id="cueDelB1" class="btn-hotcue-delete" style="display:none;">✕</button>
+
+            <!-- Performance Pads Grid -->
+            <div class="hot-cues-section" style="flex: 1;">
+              <div class="hot-cues-header">
+                <span>HOT CUES (KEYS: 7, 8, 9, 0)</span>
+                <span style="color:#ff6600;">DECK B</span>
               </div>
-              <div class="cue-slot-wrap">
-                <button id="cueBtnB2" class="btn-hotcue cue-2 empty">C2<span>+Set</span></button>
-                <button id="cueDelB2" class="btn-hotcue-delete" style="display:none;">✕</button>
-              </div>
-              <div class="cue-slot-wrap">
-                <button id="cueBtnB3" class="btn-hotcue cue-3 empty">C3<span>+Set</span></button>
-                <button id="cueDelB3" class="btn-hotcue-delete" style="display:none;">✕</button>
-              </div>
-              <div class="cue-slot-wrap">
-                <button id="cueBtnB4" class="btn-hotcue cue-4 empty">C4<span>+Set</span></button>
-                <button id="cueDelB4" class="btn-hotcue-delete" style="display:none;">✕</button>
+              <div class="hot-cues-grid">
+                <div class="cue-slot-wrap">
+                  <button id="cueBtnB1" class="btn-hotcue cue-1 empty">C1<span>+Set</span></button>
+                  <button id="cueDelB1" class="btn-hotcue-delete" style="display:none;">✕</button>
+                </div>
+                <div class="cue-slot-wrap">
+                  <button id="cueBtnB2" class="btn-hotcue cue-2 empty">C2<span>+Set</span></button>
+                  <button id="cueDelB2" class="btn-hotcue-delete" style="display:none;">✕</button>
+                </div>
+                <div class="cue-slot-wrap">
+                  <button id="cueBtnB3" class="btn-hotcue cue-3 empty">C3<span>+Set</span></button>
+                  <button id="cueDelB3" class="btn-hotcue-delete" style="display:none;">✕</button>
+                </div>
+                <div class="cue-slot-wrap">
+                  <button id="cueBtnB4" class="btn-hotcue cue-4 empty">C4<span>+Set</span></button>
+                  <button id="cueDelB4" class="btn-hotcue-delete" style="display:none;">✕</button>
+                </div>
               </div>
             </div>
           </div>
 
         </div>
 
-        <!-- Restrained Outer Right Pitch Strip (Deck B) -->
+        <!-- Right Side Pitch Strip (Deck B - TEMPO Slider) -->
         <div class="pitch-fader-card outer-pitch">
           <div class="pitch-fader-header-vertical">
             <span class="pitch-title">TEMPO</span>
@@ -1384,18 +1402,6 @@
           <div class="pitch-bend-vertical-actions">
             <button id="btnBendPlusB" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▲</button>
             <button id="btnBendMinusB" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2% ▼</button>
-          </div>
-
-          <!-- Side Transport Stack (CUE & PLAY circular buttons) -->
-          <div class="side-transport-stack">
-            <button id="btnCueB" class="btn-pioneer-round btn-cue" title="Master Cue / Hold Preview (Key: O)">
-              <div class="led-dot"></div>
-              <span>CUE</span>
-            </button>
-            <button id="btnPlayB" class="btn-pioneer-round btn-play" title="Play / Pause Toggle (Key: P)">
-              <div class="led-dot"></div>
-              <span>▶/⏸</span>
-            </button>
           </div>
         </div>
 
