@@ -272,12 +272,12 @@
     .btn-assign-b { background: linear-gradient(180deg, #333 0%, #111 100%); color: #fff; border: 1px solid #555; }
     .btn-assign-a:hover, .btn-assign-b:hover { border-color: #fff; filter: brightness(1.2); }
 
-    /* 3-Column Grid System: Left (Deck A), Center (240px Mixer), Right (Deck B) */
+    /* 3-Column Grid System: Left (Deck A), Center (260px Mixer), Right (Deck B) */
     .console-grid {
       display: grid;
-      grid-template-columns: 1fr 240px 1fr;
+      grid-template-columns: 1fr 260px 1fr;
       gap: 8px;
-      align-items: flex-start;
+      align-items: stretch;
       min-height: 0;
     }
 
@@ -289,12 +289,12 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 2px 4px rgba(0,0,0,0.5), 0 12px 28px rgba(0, 0, 0, 0.6);
       padding: 10px;
       display: flex;
-      flex-direction: row;
-      gap: 10px;
+      flex-direction: column;
+      gap: 8px;
       position: relative;
-      align-items: flex-start;
-      align-self: flex-start !important;
-      height: fit-content !important;
+      align-items: stretch;
+      align-self: stretch !important;
+      height: 100% !important;
       min-height: 0;
       overflow: hidden;
       color: #e2e4e9;
@@ -305,10 +305,10 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: space-between;
       gap: 8px;
       min-width: 0;
-      height: auto;
+      height: 100%;
       min-height: 0;
     }
 
@@ -562,11 +562,99 @@
 
     .yt-player { width: 100%; height: 100%; pointer-events: none; }
 
-    /* DDJ-FLX4 Performance Pads Section & Orange LED Backlight */
-    .hot-cues-section {
+    /* Horizontal Tempo Control Bar Positioned Below Video Player */
+    .tempo-bar-under-video {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid #2d303b;
+      border-radius: 6px;
+      padding: 4px 8px;
+      flex-shrink: 0;
+    }
+
+    .tempo-info-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .tempo-slider-horizontal-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .pitch-drag-slider-horizontal {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: #111111;
+      border-radius: 3px;
+      border: 1px solid #000000;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.9);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .pitch-drag-slider-horizontal::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px !important;
+      height: 24px !important;
+      border-radius: 3px !important;
+      background: linear-gradient(180deg, #444444 0%, #2a2a2a 20%, #151515 80%, #080808 100%) !important;
+      border: 1px solid #000000 !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+      background-image: linear-gradient(to bottom, transparent calc(50% - 1px), #ff6600 calc(50% - 1px), #ff6600 calc(50% + 1px), transparent calc(50% + 1px)) !important;
+      cursor: ew-resize;
+    }
+
+    .tempo-tick {
+      font-size: 0.58rem;
+      font-weight: 800;
+      color: #888d9a;
+      font-family: monospace;
+      flex-shrink: 0;
+    }
+
+    .pitch-bend-actions-inline {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    /* Hot Cues Section Height Matched to CUE/PLAY Stack */
+    .deck-bottom-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+      height: 112px;
+      flex-shrink: 0;
+    }
+
+    .transport-stack-left {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      justify-content: space-between;
+      height: 112px;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .hot-cues-section {
+      height: 112px !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid #2d303b;
       border-radius: 6px;
@@ -588,6 +676,8 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 4px;
+      flex: 1;
+      height: 100%;
     }
 
     .cue-slot-wrap {
@@ -715,180 +805,21 @@
       background: #00ff66;
       box-shadow: 0 0 8px #00ff66, 0 0 12px #00ff66;
     }
-      box-shadow: 0 0 6px var(--led-green), 0 0 10px var(--led-green);
-    }
 
-    /* Clamp Outer Tempo Box Boundaries & Remove Auto-Stretch */
-    .pitch-fader-card.outer-pitch,
-    .pitch-container,
-    .tempo-container {
-      width: 72px;
-      flex-shrink: 0;
-      background: transparent;
-      border: 1px solid var(--card-border);
-      border-radius: 3px;
-      padding: 6px 4px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      gap: 4px;
-      height: fit-content !important;
-      max-height: 460px !important;
-      align-self: flex-start !important;
-      box-sizing: border-box;
-    }
-
-    .side-transport-stack {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      width: 100%;
-      margin-top: 4px;
-      flex-shrink: 0;
-    }
-
-    .side-transport-stack .btn-pioneer-round {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      margin: 2px auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.6rem;
-    }
-
-    .pitch-fader-header-vertical {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1px;
-      width: 100%;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .pitch-title {
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #111111;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .pitch-badge-wrap-vertical {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1px;
-      width: 100%;
-    }
-
-    /* High Contrast Red LCD Pitch Percentage Readout */
-    .pitch-badge {
-      font-size: 0.72rem;
-      font-weight: 900;
-      font-family: 'Courier New', monospace;
-      padding: 1px 2px;
-      border-radius: 2px;
-      background: #000;
-      width: 100%;
-      text-align: center;
-      color: var(--led-red);
-      border: 1px solid var(--led-red);
-    }
-
-    .rate-text { font-size: 0.58rem; color: #333; font-family: monospace; font-weight: 800; }
-
-    .btn-reset-pitch {
-      background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
-      border: 1px solid #111;
-      color: #111;
-      padding: 1px 3px;
-      border-radius: 2px;
-      font-size: 0.55rem;
-      font-weight: 800;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    /* Vertical Pitch Track (Restrained Height: 200px) */
-    .pitch-slider-vertical-wrap {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      width: 100%;
-      height: 210px;
-      max-height: 210px;
-      background: rgba(0, 0, 0, 0.05);
-      padding: 4px 2px;
-      border-radius: 3px;
-      border: 1px solid rgba(0, 0, 0, 0.15);
-      box-sizing: border-box;
-    }
-
-    .pitch-ticks-col {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 200px;
-      font-size: 10px;
-      font-weight: 800;
-      color: #111111;
-      font-family: monospace;
-      opacity: 0.9;
-      margin: 8px 0;
-    }
-
-    .pitch-bend-vertical-actions {
-      display: flex;
-      flex-direction: row;
-      gap: 2px;
-      width: 100%;
-      flex-shrink: 0;
-      margin-top: 4px;
-    }
-
-    .btn-pitch-bend {
-      flex: 1;
-      height: 18px;
-      background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
-      border: 1px solid #111;
-      color: #111;
-      border-radius: 2px;
-      font-size: 0.55rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 1px;
-    }
-
-    .btn-pitch-bend:active, .btn-pitch-bend.active {
-      background: #111;
-      color: #fff;
-    }
-
-    /* Central Mixer DDJ-FLX4 Dark Charcoal Panel */
+    /* Central Mixer DDJ-FLX4 Dark Charcoal Panel (Matched to Full Deck Height) */
     .central-mixer-card, .pioneer-dj-mixer {
       background: linear-gradient(140deg, #1e1f26 0%, #15161b 50%, #101115 100%);
       border: 1px solid #2d303b;
       border-radius: 12px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 2px 4px rgba(0,0,0,0.5), 0 12px 28px rgba(0, 0, 0, 0.6);
-      padding: 8px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
-      align-self: flex-start !important;
-      height: fit-content !important;
-      gap: 6px;
+      align-self: stretch !important;
+      height: 100% !important;
+      gap: 8px;
       box-sizing: border-box;
       color: #e2e4e9;
     }
@@ -905,15 +836,15 @@
     /* Master Deck Volume Card */
     .master-vol-card {
       width: 100%;
-      background: rgba(0, 0, 0, 0.05);
+      background: rgba(0, 0, 0, 0.25);
       border: 1px solid var(--card-border);
-      border-radius: 4px;
-      padding: 6px 4px;
+      border-radius: 6px;
+      padding: 8px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
+      gap: 6px;
+      flex: 1;
     }
 
     .vol-header-title { font-size: 0.6rem; font-weight: 700; color: #111111; text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
@@ -943,8 +874,8 @@
 
     .vol-slider-wrap {
       width: 100%;
-      height: 210px;
-      max-height: 220px;
+      height: 270px;
+      max-height: 270px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -952,19 +883,17 @@
       box-sizing: border-box;
     }
 
-    /* 3D Pioneer DJ Hardware Fader Caps (Restrained 200px Track Length) */
-    .pitch-drag-slider-vertical,
+    /* 3D Pioneer DJ Hardware Fader Caps (Restrained 260px Track Length) */
     .dj-vertical-vol-slider,
-    input[type=range].volume-fader,
-    input[type=range].tempo-fader {
+    input[type=range].volume-fader {
       -webkit-appearance: none;
       appearance: none;
       writing-mode: vertical-lr;
       direction: rtl;
       width: 8px;
-      height: 200px !important;
-      max-height: 200px !important;
-      margin: 8px 0 !important;
+      height: 260px !important;
+      max-height: 260px !important;
+      margin: 4px 0 !important;
       background: #111111;
       border-radius: 4px;
       border: 1px solid #000000;
@@ -973,10 +902,8 @@
       outline: none;
     }
 
-    .pitch-drag-slider-vertical::-webkit-slider-thumb,
     .dj-vertical-vol-slider::-webkit-slider-thumb,
-    input[type=range].volume-fader::-webkit-slider-thumb,
-    input[type=range].tempo-fader::-webkit-slider-thumb {
+    input[type=range].volume-fader::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
       width: 38px !important;
@@ -984,30 +911,15 @@
       border-radius: 3px !important;
       background: linear-gradient(180deg, #444444 0%, #2a2a2a 20%, #151515 80%, #080808 100%) !important;
       border: 1px solid #000000 !important;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.8) !important;
-      /* 3px Solid White Center Line Notch matching Pioneer Reference Image */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.4) !important;
       background-image: linear-gradient(to right, transparent calc(50% - 1.5px), #ffffff calc(50% - 1.5px), #ffffff calc(50% + 1.5px), transparent calc(50% + 1.5px)) !important;
       cursor: ns-resize;
     }
 
-    .pitch-drag-slider-vertical::-moz-range-thumb,
-    .dj-vertical-vol-slider::-moz-range-thumb,
-    input[type=range].volume-fader::-moz-range-thumb,
-    input[type=range].tempo-fader::-moz-range-thumb {
-      width: 38px !important;
-      height: 18px !important;
-      border-radius: 3px !important;
-      background: linear-gradient(180deg, #444444 0%, #2a2a2a 20%, #151515 80%, #080808 100%) !important;
-      border: 1px solid #000000 !important;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.8) !important;
-      background-image: linear-gradient(to right, transparent calc(50% - 1.5px), #ffffff calc(50% - 1.5px), #ffffff calc(50% + 1.5px), transparent calc(50% + 1.5px)) !important;
-      cursor: ns-resize;
-    }
-
-    /* Pioneer DDJ-FLX4 LED Volume VU Meter Segment Bar */
+    /* Pioneer DDJ-FLX4 LED Volume VU Meter Segment Bar (Expanded Length 260px) */
     .vu-meter-bar {
       width: 10px;
-      height: 200px;
+      height: 260px;
       background: #08090b;
       border: 1px solid #282b36;
       border-radius: 3px;
@@ -1022,7 +934,7 @@
 
     .led-seg {
       width: 100%;
-      height: 12px;
+      height: 16px;
       border-radius: 1px;
       opacity: 0.15;
       transition: opacity 0.04s ease, box-shadow 0.04s ease;
@@ -1204,7 +1116,28 @@
             </div>
           </div>
 
-          <!-- 4. Lower Deck Control Row (Lower Left CUE/PLAY Stack + Performance Pads) -->
+          <!-- 4. TEMPO PITCH SLIDER BAR (Positioned Directly Below Video Player & Waveform Panel) -->
+          <div class="tempo-bar-under-video">
+            <div class="tempo-info-wrap">
+              <span class="pitch-title" style="color:#ff6600; font-weight:800; font-size:0.65rem;">TEMPO</span>
+              <span id="pitchValBadgeA" class="pitch-badge" style="font-size:0.75rem;">+0.00%</span>
+              <span id="rateValTextA" class="rate-text" style="color:#aaa;">(1.00x)</span>
+              <button id="btnResetPitchA" class="btn-reset-pitch" title="Reset Pitch to 0%">0% RESET</button>
+            </div>
+
+            <div class="tempo-slider-horizontal-wrap">
+              <span class="tempo-tick">-16%</span>
+              <input id="pitchSliderA" type="range" class="pitch-drag-slider-horizontal tempo-fader" min="-16" max="16" step="0.05" value="0">
+              <span class="tempo-tick">+16%</span>
+            </div>
+
+            <div class="pitch-bend-actions-inline">
+              <button id="btnBendMinusA" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2%</button>
+              <button id="btnBendPlusA" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2%</button>
+            </div>
+          </div>
+
+          <!-- 5. Lower Deck Control Row (Lower Left CUE/PLAY Stack + Performance Pads) -->
           <div class="deck-bottom-row" style="display: flex; gap: 8px; align-items: flex-end; width: 100%;">
             <!-- Lower Left CUE & PLAY Transport Buttons (DDJ-FLX4 Style) -->
             <div class="transport-stack-left" style="display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
@@ -1245,34 +1178,6 @@
             </div>
           </div>
 
-        </div>
-
-        <!-- Right Side Pitch Strip (Deck A - TEMPO Slider) -->
-        <div class="pitch-fader-card outer-pitch">
-          <div class="pitch-fader-header-vertical">
-            <span class="pitch-title">TEMPO</span>
-            <div class="pitch-badge-wrap-vertical">
-              <span id="pitchValBadgeA" class="pitch-badge">+0.00%</span>
-              <span id="rateValTextA" class="rate-text">(1.00x)</span>
-              <button id="btnResetPitchA" class="btn-reset-pitch" title="Reset Pitch to 0%">0% RESET</button>
-            </div>
-          </div>
-
-          <div class="pitch-slider-vertical-wrap">
-            <div class="pitch-ticks-col">
-              <span>+16%</span>
-              <span>+8%</span>
-              <span>0%</span>
-              <span>-8%</span>
-              <span>-16%</span>
-            </div>
-            <input id="pitchSliderA" type="range" class="pitch-drag-slider-vertical tempo-fader" min="-16" max="16" step="0.05" value="0">
-          </div>
-
-          <div class="pitch-bend-vertical-actions">
-            <button id="btnBendPlusA" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▲</button>
-            <button id="btnBendMinusA" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2% ▼</button>
-          </div>
         </div>
 
       </div>
@@ -1415,7 +1320,28 @@
             </div>
           </div>
 
-          <!-- 4. Lower Deck Control Row (Lower Left CUE/PLAY Stack + Performance Pads) -->
+          <!-- 4. TEMPO PITCH SLIDER BAR (Positioned Directly Below Video Player & Waveform Panel) -->
+          <div class="tempo-bar-under-video">
+            <div class="tempo-info-wrap">
+              <span class="pitch-title" style="color:#ff6600; font-weight:800; font-size:0.65rem;">TEMPO</span>
+              <span id="pitchValBadgeB" class="pitch-badge" style="font-size:0.75rem;">+0.00%</span>
+              <span id="rateValTextB" class="rate-text" style="color:#aaa;">(1.00x)</span>
+              <button id="btnResetPitchB" class="btn-reset-pitch" title="Reset Pitch to 0%">0% RESET</button>
+            </div>
+
+            <div class="tempo-slider-horizontal-wrap">
+              <span class="tempo-tick">-16%</span>
+              <input id="pitchSliderB" type="range" class="pitch-drag-slider-horizontal tempo-fader" min="-16" max="16" step="0.05" value="0">
+              <span class="tempo-tick">+16%</span>
+            </div>
+
+            <div class="pitch-bend-actions-inline">
+              <button id="btnBendMinusB" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2%</button>
+              <button id="btnBendPlusB" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2%</button>
+            </div>
+          </div>
+
+          <!-- 5. Lower Deck Control Row (Lower Left CUE/PLAY Stack + Performance Pads) -->
           <div class="deck-bottom-row" style="display: flex; gap: 8px; align-items: flex-end; width: 100%;">
             <!-- Lower Left CUE & PLAY Transport Buttons (DDJ-FLX4 Style) -->
             <div class="transport-stack-left" style="display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
@@ -1456,34 +1382,6 @@
             </div>
           </div>
 
-        </div>
-
-        <!-- Right Side Pitch Strip (Deck B - TEMPO Slider) -->
-        <div class="pitch-fader-card outer-pitch">
-          <div class="pitch-fader-header-vertical">
-            <span class="pitch-title">TEMPO</span>
-            <div class="pitch-badge-wrap-vertical">
-              <span id="pitchValBadgeB" class="pitch-badge">+0.00%</span>
-              <span id="rateValTextB" class="rate-text">(1.00x)</span>
-              <button id="btnResetPitchB" class="btn-reset-pitch" title="Reset Pitch to 0%">0% RESET</button>
-            </div>
-          </div>
-
-          <div class="pitch-slider-vertical-wrap">
-            <div class="pitch-ticks-col">
-              <span>+16%</span>
-              <span>+8%</span>
-              <span>0%</span>
-              <span>-8%</span>
-              <span>-16%</span>
-            </div>
-            <input id="pitchSliderB" type="range" class="pitch-drag-slider-vertical tempo-fader" min="-16" max="16" step="0.05" value="0">
-          </div>
-
-          <div class="pitch-bend-vertical-actions">
-            <button id="btnBendPlusB" class="btn-pitch-bend" title="Hold to Bend +2%">BEND +2% ▲</button>
-            <button id="btnBendMinusB" class="btn-pitch-bend" title="Hold to Bend -2%">BEND -2% ▼</button>
-          </div>
         </div>
 
       </div>
