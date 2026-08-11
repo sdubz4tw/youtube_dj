@@ -1136,110 +1136,124 @@
       transition: all 0.15s ease;
     }
 
-    /* Pioneer CDJ-350 Brushed Silver Faceplate Recording Unit */
-    .cdj350-rec-unit {
+    /* Master Session Recorder Block inside Central Mixer */
+    .master-recorder-block {
+      width: 100%;
+      background: linear-gradient(180deg, #1c1d25 0%, #111218 100%);
+      border: 1px solid #333646;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 10px rgba(0, 0, 0, 0.6);
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 6px;
-      background: linear-gradient(180deg, #282932 0%, #1a1b22 100%);
-      border: 1px solid #4a4d5e;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 6px rgba(0, 0, 0, 0.7);
-      border-radius: 4px;
-      padding: 3px 6px;
-      flex-shrink: 0;
     }
 
-    .cdj350-btn {
-      background: linear-gradient(180deg, #383a48 0%, #1c1d24 50%, #111217 100%);
-      border: 1px solid #5a5e73;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-      color: #e2e4e9;
-      padding: 3px 8px;
-      border-radius: 3px;
+    .master-rec-title {
       font-size: 0.68rem;
       font-weight: 900;
-      cursor: pointer;
+      color: #111111;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 1px;
+    }
+
+    .digital-lcd-window {
+      width: 100%;
+      height: 32px;
+      background: #080808;
+      border: 1px solid #333333;
+      border-radius: 4px;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.9);
       display: flex;
       align-items: center;
-      gap: 4px;
-      transition: all 0.12s ease;
-      letter-spacing: 0.02em;
-    }
-
-    .cdj350-btn:hover:not(:disabled) {
-      background: linear-gradient(180deg, #484b5c 0%, #262730 50%, #181920 100%);
-      border-color: #7b809a;
-      color: #ffffff;
-    }
-
-    .cdj350-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      box-shadow: none;
-      border-color: #333644;
-    }
-
-    .rec-start-btn {
-      border-color: #ff3333;
-    }
-
-    .rec-start-btn:hover:not(:disabled) {
-      box-shadow: 0 0 8px rgba(255, 51, 51, 0.5);
-    }
-
-    .cdj350-status-badge {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: #050508;
-      border: 1px solid #333644;
-      padding: 2px 6px;
-      border-radius: 3px;
-      min-width: 72px;
       justify-content: center;
+      gap: 8px;
     }
 
-    .badge-led {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #44475a;
-      display: inline-block;
+    .digital-lcd-dot {
+      color: #444444;
+      font-size: 10px;
       transition: all 0.2s ease;
     }
 
-    .cdj350-status-badge.idle .badge-led {
-      background: #555555;
-      box-shadow: none;
+    .digital-lcd-dot.active {
+      color: #ff0000;
+      text-shadow: 0 0 8px #ff0000;
+      animation: pulseDot 1s infinite ease-in-out;
     }
 
-    .cdj350-status-badge.idle .badge-timer-text {
-      color: #888888;
-      font-size: 0.68rem;
-      font-weight: 800;
+    @keyframes pulseDot {
+      0% { opacity: 1; }
+      50% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
+
+    .digital-lcd-timer {
       font-family: 'Courier New', monospace;
-    }
-
-    @keyframes recLedPulse {
-      0% { background: #ff0000; box-shadow: 0 0 6px #ff0000; }
-      50% { background: #ff4444; box-shadow: 0 0 14px #ff0000, 0 0 20px #ff0000; }
-      100% { background: #ff0000; box-shadow: 0 0 6px #ff0000; }
-    }
-
-    .cdj350-status-badge.recording {
-      border-color: #ff3333;
-      box-shadow: inset 0 0 6px rgba(255, 0, 0, 0.4);
-    }
-
-    .cdj350-status-badge.recording .badge-led {
-      animation: recLedPulse 1s infinite ease-in-out;
-    }
-
-    .cdj350-status-badge.recording .badge-timer-text {
-      color: #ff3333;
-      font-size: 0.72rem;
+      font-size: 1.05rem;
       font-weight: 900;
-      font-family: 'Courier New', monospace;
+      color: #ff3333;
+      text-shadow: 0 0 6px rgba(255, 51, 51, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .master-rec-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .recorder-btn {
+      width: 100%;
+      height: 42px;
+      margin: 2px 0;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 70%, #cccccc 100%);
+      border: 2px solid #111111;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), inset 0 1px 0 #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #111111;
+      transition: all 0.15s ease;
+    }
+
+    .recorder-btn:hover:not(:disabled) {
+      background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 70%, #dddddd 100%);
+      border-color: #000000;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 1px 0 #ffffff;
+    }
+
+    .recorder-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      box-shadow: none;
+      border-color: #444444;
+      background: #888888;
+      color: #333333;
+    }
+
+    .rec-start-btn.recording-active {
+      animation: pioneerPulseGlow 1s infinite ease-in-out;
+      background: linear-gradient(180deg, #ff3333 0%, #cc0000 70%, #990000 100%) !important;
+      color: #ffffff !important;
+      border-color: #ffffff !important;
+    }
+
+    @keyframes pioneerPulseGlow {
+      0% { box-shadow: 0 0 8px #ff0000, inset 0 1px 0 #ffffff; }
+      50% { box-shadow: 0 0 18px #ff0000, 0 0 24px #ff0000, inset 0 1px 0 #ffffff; }
+      100% { box-shadow: 0 0 8px #ff0000, inset 0 1px 0 #ffffff; }
     }
   </style>
 </head>
@@ -1258,22 +1272,6 @@
       <div class="global-search-box">
         <input id="globalSearchInput" type="text" class="header-search-input" placeholder="Search YouTube songs, mixes, or paste URL / ID...">
         <button id="btnGlobalSearch" class="btn-global-search">🔍 SEARCH</button>
-      </div>
-
-      <!-- Pioneer CDJ-350 Silver Recording Control Unit -->
-      <div class="cdj350-rec-unit">
-        <button id="rec-btn" class="cdj350-btn rec-start-btn" title="Start Live DJ Session Recording">
-          <span class="rec-dot-icon">🔴</span> REC
-        </button>
-
-        <div id="rec-status-badge" class="cdj350-status-badge idle">
-          <span class="badge-led"></span>
-          <span id="rec-timer-text" class="badge-timer-text">IDLE</span>
-        </div>
-
-        <button id="stop-rec-btn" class="cdj350-btn rec-stop-btn" disabled title="Stop Recording & Export MP3">
-          ⏹️ STOP & EXPORT MP3
-        </button>
       </div>
 
       <div class="master-status">
@@ -1411,7 +1409,28 @@
 
       <!-- CENTRAL MIXER PIONEER DDJ-FLX4 PANEL -->
       <div class="central-mixer-card central-mixer">
-        <div class="mixer-header" style="font-family:serif; font-style:italic; letter-spacing:1px; color:#ffffff; font-size:0.9rem;">Pioneer DJ <span style="font-style:normal; font-family:'Outfit',sans-serif; font-size:0.65rem; color:#ff6600; font-weight:800; margin-left:4px;">DDJ-FLX4</span></div>
+        <div class="mixer-header" style="font-family:serif; font-style:italic; letter-spacing:1px; color:#ffffff; font-size:0.9rem; margin-bottom: 6px;">Pioneer DJ <span style="font-style:normal; font-family:'Outfit',sans-serif; font-size:0.65rem; color:#ff6600; font-weight:800; margin-left:4px;">DDJ-FLX4</span></div>
+
+        <!-- MASTER SESSION RECORDER CONTROL BLOCK -->
+        <div class="master-recorder-block">
+          <div class="master-rec-title">MASTER SESSION RECORDER</div>
+          
+          <!-- Digital LED Timer Window -->
+          <div class="digital-lcd-window">
+            <span id="digital-lcd-dot" class="digital-lcd-dot">●</span>
+            <span id="digital-rec-timer" class="digital-lcd-timer">REC 00:00:00</span>
+          </div>
+
+          <!-- Two Large Prominent Hardware Buttons -->
+          <div class="master-rec-btn-group">
+            <button id="start-rec-btn" class="recorder-btn rec-start-btn" title="Start Live Session MP3 Recording">
+              <span class="rec-btn-dot">🔴</span> START REC
+            </button>
+            <button id="stop-rec-btn" class="recorder-btn rec-stop-btn" disabled title="Stop Recording & Export High-Quality MP3">
+              ⏹️ STOP & EXPORT MP3
+            </button>
+          </div>
+        </div>
 
         <!-- Master Deck Volume Card -->
         <div class="master-vol-card channel-volumes">
@@ -2708,35 +2727,35 @@
         requestAnimationFrame(animLoop);
       }
 
-      // Pioneer CDJ-350 Live DJ Session MP3 Recorder Engine
-      let cdjMp3MediaRecorder = null;
-      let cdjRecordedChunks = [];
-      let cdjRecTimerInterval = null;
-      let cdjRecSeconds = 0;
-      let cdjAudioStream = null;
+      // Master Session MP3 Recorder Engine inside Central Mixer
+      let masterMp3MediaRecorder = null;
+      let masterRecordedChunks = [];
+      let masterRecTimerInterval = null;
+      let masterRecSeconds = 0;
+      let masterAudioStream = null;
 
-      function initCDJ350Mp3Recorder() {
-        const recBtn = document.getElementById('rec-btn');
+      function initMasterSessionRecorder() {
+        const startBtn = document.getElementById('start-rec-btn');
         const stopBtn = document.getElementById('stop-rec-btn');
-        const badge = document.getElementById('rec-status-badge');
-        const timerText = document.getElementById('rec-timer-text');
+        const lcdTimer = document.getElementById('digital-rec-timer');
+        const lcdDot = document.getElementById('digital-lcd-dot');
 
-        if (!recBtn || !stopBtn) return;
+        if (!startBtn || !stopBtn) return;
 
-        recBtn.addEventListener('click', async () => {
-          if (cdjMp3MediaRecorder && cdjMp3MediaRecorder.state === 'recording') return;
-          await startCDJ350Recording();
+        startBtn.addEventListener('click', async () => {
+          if (masterMp3MediaRecorder && masterMp3MediaRecorder.state === 'recording') return;
+          await startMasterSessionRecording();
         });
 
         stopBtn.addEventListener('click', () => {
-          if (cdjMp3MediaRecorder && cdjMp3MediaRecorder.state === 'recording') {
-            stopAndExportCDJ350Mp3();
+          if (masterMp3MediaRecorder && masterMp3MediaRecorder.state === 'recording') {
+            stopAndExportMasterMp3();
           }
         });
 
-        async function startCDJ350Recording() {
-          cdjRecordedChunks = [];
-          cdjRecSeconds = 0;
+        async function startMasterSessionRecording() {
+          masterRecordedChunks = [];
+          masterRecSeconds = 0;
 
           try {
             // 1. Capture browser tab audio/video stream
@@ -2757,7 +2776,7 @@
             stream.getVideoTracks().forEach(t => t.stop());
 
             // 3. Create audio-only stream
-            cdjAudioStream = new MediaStream([audioTrack]);
+            masterAudioStream = new MediaStream([audioTrack]);
 
             // 4. Initialize MediaRecorder with supported audio MIME types
             let mimeType = 'audio/webm;codecs=opus';
@@ -2765,35 +2784,35 @@
               mimeType = 'audio/webm';
             }
 
-            cdjMp3MediaRecorder = new MediaRecorder(cdjAudioStream, { mimeType: mimeType });
+            masterMp3MediaRecorder = new MediaRecorder(masterAudioStream, { mimeType: mimeType });
 
-            cdjMp3MediaRecorder.ondataavailable = (e) => {
+            masterMp3MediaRecorder.ondataavailable = (e) => {
               if (e.data && e.data.size > 0) {
-                cdjRecordedChunks.push(e.data);
+                masterRecordedChunks.push(e.data);
               }
             };
 
             audioTrack.onended = () => {
-              if (cdjMp3MediaRecorder && cdjMp3MediaRecorder.state === 'recording') {
-                stopAndExportCDJ350Mp3();
+              if (masterMp3MediaRecorder && masterMp3MediaRecorder.state === 'recording') {
+                stopAndExportMasterMp3();
               }
             };
 
-            cdjMp3MediaRecorder.start(1000);
+            masterMp3MediaRecorder.start(1000);
 
             // Update UI state
-            recBtn.disabled = true;
+            startBtn.classList.add('recording-active');
             stopBtn.disabled = false;
-            badge.classList.remove('idle');
-            badge.classList.add('recording');
-            timerText.textContent = 'REC 00:00';
+            if (lcdDot) lcdDot.classList.add('active');
+            if (lcdTimer) lcdTimer.textContent = 'REC 00:00:00';
 
-            // 5. Timer update interval
-            cdjRecTimerInterval = setInterval(() => {
-              cdjRecSeconds++;
-              const mm = String(Math.floor(cdjRecSeconds / 60)).padStart(2, '0');
-              const ss = String(cdjRecSeconds % 60).padStart(2, '0');
-              timerText.textContent = `REC ${mm}:${ss}`;
+            // 5. Timer update interval (REC HH:MM:SS)
+            masterRecTimerInterval = setInterval(() => {
+              masterRecSeconds++;
+              const hh = String(Math.floor(masterRecSeconds / 3600)).padStart(2, '0');
+              const mm = String(Math.floor((masterRecSeconds % 3600) / 60)).padStart(2, '0');
+              const ss = String(masterRecSeconds % 60).padStart(2, '0');
+              if (lcdTimer) lcdTimer.textContent = `REC ${hh}:${mm}:${ss}`;
             }, 1000);
 
           } catch (err) {
@@ -2801,30 +2820,31 @@
           }
         }
 
-        function stopAndExportCDJ350Mp3() {
-          if (cdjRecTimerInterval) clearInterval(cdjRecTimerInterval);
+        function stopAndExportMasterMp3() {
+          if (masterRecTimerInterval) clearInterval(masterRecTimerInterval);
           
-          recBtn.disabled = false;
+          startBtn.classList.remove('recording-active');
           stopBtn.disabled = true;
+          if (lcdDot) lcdDot.classList.remove('active');
 
-          if (cdjMp3MediaRecorder && cdjMp3MediaRecorder.state === 'recording') {
-            cdjMp3MediaRecorder.onstop = processAndDownloadMp3;
-            cdjMp3MediaRecorder.stop();
+          if (masterMp3MediaRecorder && masterMp3MediaRecorder.state === 'recording') {
+            masterMp3MediaRecorder.onstop = processAndDownloadMasterMp3;
+            masterMp3MediaRecorder.stop();
           } else {
-            processAndDownloadMp3();
+            processAndDownloadMasterMp3();
           }
 
-          if (cdjAudioStream) {
-            cdjAudioStream.getTracks().forEach(track => track.stop());
+          if (masterAudioStream) {
+            masterAudioStream.getTracks().forEach(track => track.stop());
           }
         }
 
-        async function processAndDownloadMp3() {
-          timerText.textContent = 'ENCODING...';
+        async function processAndDownloadMasterMp3() {
+          if (lcdTimer) lcdTimer.textContent = 'ENCODING...';
 
           try {
             // Combine raw webm Opus chunks into blob
-            const webmBlob = new Blob(cdjRecordedChunks, { type: 'audio/webm' });
+            const webmBlob = new Blob(masterRecordedChunks, { type: 'audio/webm' });
             const arrayBuffer = await webmBlob.arrayBuffer();
 
             // Decode WebM audio into Float32 Stereo PCM AudioBuffer using Web Audio API
@@ -2890,14 +2910,12 @@
             alert('Error encoding MP3 file.');
           }
 
-          // Restore UI to IDLE
-          badge.classList.remove('recording');
-          badge.classList.add('idle');
-          timerText.textContent = 'IDLE';
+          // Restore UI to REC 00:00:00
+          if (lcdTimer) lcdTimer.textContent = 'REC 00:00:00';
         }
       }
 
-      initCDJ350Mp3Recorder();
+      initMasterSessionRecorder();
 
       requestAnimationFrame(animLoop);
     });
