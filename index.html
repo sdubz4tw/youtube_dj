@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 
   <style>
     :root {
@@ -1114,9 +1115,31 @@
       cursor: pointer;
     }
 
-    .rec-format-select option {
-      background: #161720;
+    .rec-mode-toggle {
+      display: flex;
+      background: #101116;
+      border: 1px solid #333745;
+      border-radius: 3px;
+      overflow: hidden;
+      padding: 1px;
+    }
+
+    .rec-mode-btn {
+      background: transparent;
+      border: none;
+      color: #9498a6;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .rec-mode-btn.active {
+      background: linear-gradient(180deg, #ff6600 0%, #cc5200 100%);
       color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
     }
   </style>
 </head>
@@ -1144,11 +1167,12 @@
           <span id="recHeaderBtnText">🔴 REC</span>
         </button>
         <span id="recHeaderTimer" class="rec-header-timer">00:00:00</span>
-        <select id="recHeaderFormatSelect" class="rec-format-select" title="Select Output File Format">
-          <option value="audio/webm">.webm (Audio)</option>
-          <option value="audio/mp3">.mp3 (Audio)</option>
-          <option value="video/mp4" selected>.mp4 (Video/Audio)</option>
-        </select>
+        
+        <!-- Mode Toggle Switch: Audio (MP3) vs Video (MP4) -->
+        <div class="rec-mode-toggle" title="Switch Output Format">
+          <button id="btnModeMp3" class="rec-mode-btn active" data-mode="audio/mp3">Audio (MP3)</button>
+          <button id="btnModeMp4" class="rec-mode-btn" data-mode="video/mp4">Video (MP4)</button>
+        </div>
       </div>
 
       <div class="master-status">
@@ -2583,77 +2607,133 @@
         requestAnimationFrame(animLoop);
       }
 
-      // Pioneer CDJ-350 Style Live Session Recorder Engine
+      // Pioneer CDJ-350 Style Live Session Recorder Engine (Pure MP3 Audio & Video Capture)
+      let isRecordingSession = false;
+      let selectedRecMode = 'audio/mp3'; // 'audio/mp3' or 'video/mp4'
       let headerMediaRecorder = null;
       let headerRecordedChunks = [];
       let headerRecTimerInterval = null;
       let headerRecSeconds = 0;
-      let headerCaptureStream = null;
+      let activeCaptureStream = null;
+
+      // Web Audio PCM Buffers for lamejs MP3 encoding
+      let recAudioCtx = null;
+      let recAudioSource = null;
+      let recScriptProcessor = null;
+      let pcmLeftBuffers = [];
+      let pcmRightBuffers = [];
 
       function initPioneerHeaderRecorder() {
         const btnRec = document.getElementById('btnHeaderRec');
         const timerEl = document.getElementById('recHeaderTimer');
         const textEl = document.getElementById('recHeaderBtnText');
-        const formatSelect = document.getElementById('recHeaderFormatSelect');
+        const btnMp3 = document.getElementById('btnModeMp3');
+        const btnMp4 = document.getElementById('btnModeMp4');
 
         if (!btnRec) return;
 
+        if (btnMp3 && btnMp4) {
+          btnMp3.addEventListener('click', () => {
+            if (isRecordingSession) return;
+            selectedRecMode = 'audio/mp3';
+            btnMp3.classList.add('active');
+            btnMp4.classList.remove('active');
+          });
+
+          btnMp4.addEventListener('click', () => {
+            if (isRecordingSession) return;
+            selectedRecMode = 'video/mp4';
+            btnMp4.classList.add('active');
+            btnMp3.classList.remove('active');
+          });
+        }
+
         btnRec.addEventListener('click', async () => {
-          if (!headerMediaRecorder || headerMediaRecorder.state === 'inactive') {
-            await startHeaderRecording();
+          if (!isRecordingSession) {
+            await startRecordingSession();
           } else {
-            stopHeaderRecording();
+            await stopAndExportRecordingSession();
           }
         });
 
-        async function startHeaderRecording() {
+        async function startRecordingSession() {
+          pcmLeftBuffers = [];
+          pcmRightBuffers = [];
           headerRecordedChunks = [];
           headerRecSeconds = 0;
           if (timerEl) timerEl.textContent = '00:00:00';
 
+          // Reminder Notice
+          alert("Notice: Please ensure 'Share tab audio' is checked in the browser prompt so the recorder can capture your DJ mix!");
+
           try {
-            // Request display media tab stream (audio + video)
-            if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
-              headerCaptureStream = await navigator.mediaDevices.getDisplayMedia({
-                video: true,
-                audio: true
-              });
-            } else {
-              const canvasA = document.getElementById('waveformA');
-              headerCaptureStream = (canvasA && canvasA.captureStream) ? canvasA.captureStream(30) : new MediaStream();
-            }
-
-            const selectedFormat = formatSelect ? formatSelect.value : 'video/mp4';
-            let options = { mimeType: 'video/webm;codecs=vp9' };
-            if (MediaRecorder.isTypeSupported(selectedFormat)) {
-              options = { mimeType: selectedFormat };
-            } else if (selectedFormat.includes('audio') && MediaRecorder.isTypeSupported('audio/webm')) {
-              options = { mimeType: 'audio/webm' };
-            } else if (MediaRecorder.isTypeSupported('video/webm')) {
-              options = { mimeType: 'video/webm' };
-            }
-
-            headerMediaRecorder = new MediaRecorder(headerCaptureStream, options);
-
-            headerMediaRecorder.ondataavailable = (e) => {
-              if (e.data && e.data.size > 0) {
-                headerRecordedChunks.push(e.data);
-              }
-            };
-
-            headerMediaRecorder.onstop = exportAndDownloadSession;
-
-            // If stream tracks end (e.g. user stops sharing window), auto stop recording
-            headerCaptureStream.getVideoTracks().forEach(track => {
-              track.onended = () => {
-                if (headerMediaRecorder && headerMediaRecorder.state === 'recording') {
-                  stopHeaderRecording();
-                }
-              };
+            const rawStream = await navigator.mediaDevices.getDisplayMedia({
+              video: true,
+              audio: true
             });
 
-            headerMediaRecorder.start(1000);
+            const audioTrack = rawStream.getAudioTracks()[0];
+            if (!audioTrack) {
+              alert("Please check 'Share tab audio' so the recorder can capture your DJ mix!");
+              rawStream.getTracks().forEach(t => t.stop());
+              return;
+            }
 
+            activeCaptureStream = rawStream;
+
+            if (selectedRecMode === 'audio/mp3') {
+              // 1. Pure Audio Capture: Immediately discard / stop video track
+              rawStream.getVideoTracks().forEach(track => track.stop());
+
+              const audioOnlyStream = new MediaStream([audioTrack]);
+
+              // Web Audio PCM Capture Node for lamejs 320kbps MP3 encoding
+              recAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+              recAudioSource = recAudioCtx.createMediaStreamSource(audioOnlyStream);
+              recScriptProcessor = recAudioCtx.createScriptProcessor(4096, 2, 2);
+
+              recScriptProcessor.onaudioprocess = (e) => {
+                if (!isRecordingSession) return;
+                const left = e.inputBuffer.getChannelData(0);
+                const right = e.inputBuffer.numberOfChannels > 1 ? e.inputBuffer.getChannelData(1) : left;
+                pcmLeftBuffers.push(new Float32Array(left));
+                pcmRightBuffers.push(new Float32Array(right));
+              };
+
+              recAudioSource.connect(recScriptProcessor);
+              recScriptProcessor.connect(recAudioCtx.destination);
+
+              audioTrack.onended = () => {
+                if (isRecordingSession) stopAndExportRecordingSession();
+              };
+
+            } else {
+              // 2. Video/Audio MP4 Capture via MediaRecorder
+              let options = { mimeType: 'video/webm;codecs=vp9' };
+              if (MediaRecorder.isTypeSupported('video/mp4')) {
+                options = { mimeType: 'video/mp4' };
+              } else if (MediaRecorder.isTypeSupported('video/webm')) {
+                options = { mimeType: 'video/webm' };
+              }
+
+              headerMediaRecorder = new MediaRecorder(activeCaptureStream, options);
+
+              headerMediaRecorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) {
+                  headerRecordedChunks.push(e.data);
+                }
+              };
+
+              activeCaptureStream.getVideoTracks().forEach(track => {
+                track.onended = () => {
+                  if (isRecordingSession) stopAndExportRecordingSession();
+                };
+              });
+
+              headerMediaRecorder.start(1000);
+            }
+
+            isRecordingSession = true;
             btnRec.classList.add('rec-active');
             if (textEl) textEl.textContent = '⏹️ STOP & EXPORT';
 
@@ -2666,38 +2746,112 @@
             }, 1000);
 
           } catch (err) {
-            console.warn('Live session display capture cancelled or not allowed:', err);
+            console.warn('Recording capture cancelled or denied:', err);
+            isRecordingSession = false;
           }
         }
 
-        function stopHeaderRecording() {
+        async function stopAndExportRecordingSession() {
           if (headerRecTimerInterval) clearInterval(headerRecTimerInterval);
+          isRecordingSession = false;
+
           btnRec.classList.remove('rec-active');
           if (textEl) textEl.textContent = '🔴 REC';
 
-          if (headerMediaRecorder && headerMediaRecorder.state === 'recording') {
-            headerMediaRecorder.stop();
+          const now = new Date();
+          const dateStr = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+
+          if (selectedRecMode === 'audio/mp3') {
+            // Disconnect Web Audio processing
+            if (recScriptProcessor && recAudioSource) {
+              try {
+                recScriptProcessor.disconnect();
+                recAudioSource.disconnect();
+                if (recAudioCtx) recAudioCtx.close();
+              } catch(e){}
+            }
+
+            if (activeCaptureStream) {
+              activeCaptureStream.getTracks().forEach(track => track.stop());
+            }
+
+            // Encode PCM to High-Quality 320 kbps Stereo MP3 using lamejs
+            let totalLength = 0;
+            for (let buf of pcmLeftBuffers) totalLength += buf.length;
+
+            if (totalLength === 0 || typeof lamejs === 'undefined') {
+              alert('No audio samples captured or lamejs not available.');
+              if (timerEl) timerEl.textContent = '00:00:00';
+              return;
+            }
+
+            const leftMerged = new Float32Array(totalLength);
+            const rightMerged = new Float32Array(totalLength);
+            let offset = 0;
+            for (let i = 0; i < pcmLeftBuffers.length; i++) {
+              leftMerged.set(pcmLeftBuffers[i], offset);
+              rightMerged.set(pcmRightBuffers[i], offset);
+              offset += pcmLeftBuffers[i].length;
+            }
+
+            // Convert Float32 to Int16 PCM
+            const leftInt16 = new Int16Array(leftMerged.length);
+            const rightInt16 = new Int16Array(rightMerged.length);
+            for (let i = 0; i < leftMerged.length; i++) {
+              const l = Math.max(-1, Math.min(1, leftMerged[i]));
+              const r = Math.max(-1, Math.min(1, rightMerged[i]));
+              leftInt16[i] = l < 0 ? l * 32768 : l * 32767;
+              rightInt16[i] = r < 0 ? r * 32768 : r * 32767;
+            }
+
+            // High-Quality Stereo 320 kbps 44.1kHz MP3 Encoder
+            const channels = 2;
+            const sampleRate = 44100;
+            const kbps = 320;
+            const mp3encoder = new lamejs.Mp3Encoder(channels, sampleRate, kbps);
+            const mp3Data = [];
+            const sampleBlockSize = 1152;
+
+            for (let i = 0; i < leftInt16.length; i += sampleBlockSize) {
+              const leftChunk = leftInt16.subarray(i, i + sampleBlockSize);
+              const rightChunk = rightInt16.subarray(i, i + sampleBlockSize);
+              const mp3buf = mp3encoder.encodeBuffer(leftChunk, rightChunk);
+              if (mp3buf.length > 0) {
+                mp3Data.push(mp3buf);
+              }
+            }
+            const endBuf = mp3encoder.flush();
+            if (endBuf.length > 0) {
+              mp3Data.push(endBuf);
+            }
+
+            const mp3Blob = new Blob(mp3Data, { type: 'audio/mp3' });
+            triggerDownload(mp3Blob, `YouTube_DJ_Mix_${dateStr}.mp3`);
+
+          } else {
+            // Video MP4 capture export
+            if (headerMediaRecorder && headerMediaRecorder.state === 'recording') {
+              headerMediaRecorder.stop();
+            }
+            if (activeCaptureStream) {
+              activeCaptureStream.getTracks().forEach(track => track.stop());
+            }
+
+            setTimeout(() => {
+              const videoBlob = new Blob(headerRecordedChunks, { type: 'video/mp4' });
+              triggerDownload(videoBlob, `YouTube_DJ_Mix_${dateStr}.mp4`);
+            }, 200);
           }
-          if (headerCaptureStream) {
-            headerCaptureStream.getTracks().forEach(track => track.stop());
-          }
+
+          if (timerEl) timerEl.textContent = '00:00:00';
         }
 
-        function exportAndDownloadSession() {
-          const selectedFormat = formatSelect ? formatSelect.value : 'video/mp4';
-          let ext = 'mp4';
-          if (selectedFormat.includes('mp3')) ext = 'mp3';
-          else if (selectedFormat.includes('webm')) ext = 'webm';
-
-          const blob = new Blob(headerRecordedChunks, { type: selectedFormat });
+        function triggerDownload(blob, filename) {
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.style.display = 'none';
           a.href = url;
-
-          const now = new Date();
-          const dateStr = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
-          a.download = `YouTube_DJ_Mix_${dateStr}.${ext}`;
+          a.download = filename;
 
           document.body.appendChild(a);
           a.click();
@@ -2706,8 +2860,6 @@
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
           }, 100);
-
-          if (timerEl) timerEl.textContent = '00:00:00';
         }
       }
 
