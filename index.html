@@ -1777,14 +1777,28 @@
 
       const player = deck === 'A' ? playerA : playerB;
 
-      if (player && typeof player.loadVideoById === 'function') {
-        player.loadVideoById({ videoId: videoId, startSeconds: 0 });
-        setTimeout(() => { try { player.pauseVideo(); } catch(e){} }, 200);
-      } else if (player && typeof player.cueVideoById === 'function') {
-        player.cueVideoById({ videoId: videoId });
-      } else {
-        if (deck === 'A') initDeckA(videoId);
-        else initDeckB(videoId);
+      let loaded = false;
+      if (player) {
+        try {
+          if (typeof player.loadVideoById === 'function') {
+            player.loadVideoById({ videoId: videoId, startSeconds: 0 });
+            setTimeout(() => { try { player.pauseVideo(); } catch(e){} }, 250);
+            loaded = true;
+          } else if (typeof player.cueVideoById === 'function') {
+            player.cueVideoById({ videoId: videoId });
+            loaded = true;
+          }
+        } catch (e) {
+          console.warn(`YT Player method call failed for Deck ${deck}, falling back to container embed:`, e);
+        }
+      }
+
+      if (!loaded) {
+        // Direct container embed fallback for instant video rendering
+        const container = document.getElementById(`yt-player-${deck.toLowerCase()}`);
+        if (container) {
+          container.innerHTML = `<iframe id="yt-iframe-${deck.toLowerCase()}" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&autoplay=0" style="width:100%; height:100%; border:none; border-radius:4px;" allow="autoplay; encrypted-media"></iframe>`;
+        }
       }
     }
 
@@ -2128,28 +2142,38 @@
     function initDeckA(videoId) {
       updateDeckMetadataUI('A', videoId, 'Track 1 (Deck A)');
       if (!playerA && typeof YT !== 'undefined' && YT.Player) {
-        playerA = new YT.Player('yt-player-a', {
-          height: '100%', width: '100%', videoId: videoId,
-          playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0, 'modestbranding': 1, 'enablejsapi': 1, 'origin': window.location.origin },
-          events: {
-            'onReady': () => { updateCrossfade(); setupDeckEvents('A'); try { playerA.pauseVideo(); } catch(e){} },
-            'onStateChange': (e) => handleStateChange(e, 'A')
-          }
-        });
+        try {
+          playerA = new YT.Player('yt-player-a', {
+            height: '100%', width: '100%', videoId: videoId,
+            playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0, 'modestbranding': 1, 'enablejsapi': 1 },
+            events: {
+              'onReady': () => { updateCrossfade(); setupDeckEvents('A'); try { playerA.pauseVideo(); } catch(e){} },
+              'onStateChange': (e) => handleStateChange(e, 'A')
+            }
+          });
+        } catch (e) {
+          const container = document.getElementById('yt-player-a');
+          if (container) container.innerHTML = `<iframe id="yt-iframe-a" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&autoplay=0" style="width:100%; height:100%; border:none;" allow="autoplay; encrypted-media"></iframe>`;
+        }
       }
     }
 
     function initDeckB(videoId) {
       updateDeckMetadataUI('B', videoId, 'Track 2 (Deck B)');
       if (!playerB && typeof YT !== 'undefined' && YT.Player) {
-        playerB = new YT.Player('yt-player-b', {
-          height: '100%', width: '100%', videoId: videoId,
-          playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0, 'modestbranding': 1, 'enablejsapi': 1, 'origin': window.location.origin },
-          events: {
-            'onReady': () => { updateCrossfade(); setupDeckEvents('B'); try { playerB.pauseVideo(); } catch(e){} },
-            'onStateChange': (e) => handleStateChange(e, 'B')
-          }
-        });
+        try {
+          playerB = new YT.Player('yt-player-b', {
+            height: '100%', width: '100%', videoId: videoId,
+            playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0, 'modestbranding': 1, 'enablejsapi': 1 },
+            events: {
+              'onReady': () => { updateCrossfade(); setupDeckEvents('B'); try { playerB.pauseVideo(); } catch(e){} },
+              'onStateChange': (e) => handleStateChange(e, 'B')
+            }
+          });
+        } catch (e) {
+          const container = document.getElementById('yt-player-b');
+          if (container) container.innerHTML = `<iframe id="yt-iframe-b" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&autoplay=0" style="width:100%; height:100%; border:none;" allow="autoplay; encrypted-media"></iframe>`;
+        }
       }
     }
 
