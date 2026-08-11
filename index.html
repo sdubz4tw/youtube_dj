@@ -1029,6 +1029,94 @@
       .pitch-fader-card.outer-pitch { width: 100%; height: auto; }
       .pitch-slider-vertical-wrap { height: 140px; min-height: 140px; }
       .vol-slider-wrap { height: 140px; min-height: 140px; }
+    /* Pioneer CDJ-350 Style LED Recording Badge & Control Group */
+    .rec-control-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid #3d4152;
+      border-radius: 4px;
+      padding: 2px 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-pioneer-rec {
+      background: linear-gradient(180deg, #e6e8ec 0%, #b0b4be 50%, #888c96 100%);
+      border: 1px solid #333333;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.8);
+      color: #111111;
+      padding: 0.2rem 0.55rem;
+      border-radius: 3px;
+      font-size: 0.68rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-pioneer-rec:hover {
+      filter: brightness(1.1);
+    }
+
+    .rec-led-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #7a0000;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.8);
+      display: inline-block;
+    }
+
+    @keyframes pioneerPulse {
+      0% { box-shadow: 0 0 6px #ff0000, inset 0 1px 0 rgba(255,255,255,0.6); }
+      50% { box-shadow: 0 0 14px #ff0000, 0 0 22px #ff0000, inset 0 1px 0 rgba(255,255,255,0.8); }
+      100% { box-shadow: 0 0 6px #ff0000, inset 0 1px 0 rgba(255,255,255,0.6); }
+    }
+
+    .btn-pioneer-rec.rec-active {
+      animation: pioneerPulse 1s infinite ease-in-out;
+      background: linear-gradient(180deg, #ff2222 0%, #cc0000 70%, #990000 100%) !important;
+      border-color: #ffffff !important;
+      color: #ffffff !important;
+    }
+
+    .btn-pioneer-rec.rec-active .rec-led-dot {
+      background: #ffffff !important;
+      box-shadow: 0 0 8px #ffffff !important;
+    }
+
+    .rec-header-timer {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: #ff3333;
+      background: #000000;
+      border: 1px solid #ff3333;
+      padding: 1px 5px;
+      border-radius: 2px;
+      min-width: 62px;
+      text-align: center;
+    }
+
+    .rec-format-select {
+      background: #1c1e28;
+      border: 1px solid #4d5268;
+      color: #ffffff;
+      padding: 1px 4px;
+      height: 24px;
+      border-radius: 3px;
+      font-family: inherit;
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .rec-format-select option {
+      background: #161720;
+      color: #ffffff;
     }
   </style>
 </head>
@@ -1047,6 +1135,20 @@
       <div class="global-search-box">
         <input id="globalSearchInput" type="text" class="header-search-input" placeholder="Search YouTube songs, mixes, or paste URL / ID...">
         <button id="btnGlobalSearch" class="btn-global-search">🔍 SEARCH</button>
+      </div>
+
+      <!-- Recording Control Group (Pioneer CDJ-350 Style LED Recording Badge) -->
+      <div class="rec-control-group">
+        <button id="btnHeaderRec" class="btn-pioneer-rec" title="Click to Record Live DJ Session">
+          <span class="rec-led-dot"></span>
+          <span id="recHeaderBtnText">🔴 REC</span>
+        </button>
+        <span id="recHeaderTimer" class="rec-header-timer">00:00:00</span>
+        <select id="recHeaderFormatSelect" class="rec-format-select" title="Select Output File Format">
+          <option value="audio/webm">.webm (Audio)</option>
+          <option value="audio/mp3">.mp3 (Audio)</option>
+          <option value="video/mp4" selected>.mp4 (Video/Audio)</option>
+        </select>
       </div>
 
       <div class="master-status">
@@ -2476,12 +2578,140 @@
           if (currEl) currEl.textContent = formatTime(currTime);
           if (durEl) durEl.textContent = formatTime(dur);
         };
-
         updateTimeDisplays('A', playerA);
         updateTimeDisplays('B', playerB);
-
         requestAnimationFrame(animLoop);
       }
+
+      // Pioneer CDJ-350 Style Live Session Recorder Engine
+      let headerMediaRecorder = null;
+      let headerRecordedChunks = [];
+      let headerRecTimerInterval = null;
+      let headerRecSeconds = 0;
+      let headerCaptureStream = null;
+
+      function initPioneerHeaderRecorder() {
+        const btnRec = document.getElementById('btnHeaderRec');
+        const timerEl = document.getElementById('recHeaderTimer');
+        const textEl = document.getElementById('recHeaderBtnText');
+        const formatSelect = document.getElementById('recHeaderFormatSelect');
+
+        if (!btnRec) return;
+
+        btnRec.addEventListener('click', async () => {
+          if (!headerMediaRecorder || headerMediaRecorder.state === 'inactive') {
+            await startHeaderRecording();
+          } else {
+            stopHeaderRecording();
+          }
+        });
+
+        async function startHeaderRecording() {
+          headerRecordedChunks = [];
+          headerRecSeconds = 0;
+          if (timerEl) timerEl.textContent = '00:00:00';
+
+          try {
+            // Request display media tab stream (audio + video)
+            if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+              headerCaptureStream = await navigator.mediaDevices.getDisplayMedia({
+                video: true,
+                audio: true
+              });
+            } else {
+              const canvasA = document.getElementById('waveformA');
+              headerCaptureStream = (canvasA && canvasA.captureStream) ? canvasA.captureStream(30) : new MediaStream();
+            }
+
+            const selectedFormat = formatSelect ? formatSelect.value : 'video/mp4';
+            let options = { mimeType: 'video/webm;codecs=vp9' };
+            if (MediaRecorder.isTypeSupported(selectedFormat)) {
+              options = { mimeType: selectedFormat };
+            } else if (selectedFormat.includes('audio') && MediaRecorder.isTypeSupported('audio/webm')) {
+              options = { mimeType: 'audio/webm' };
+            } else if (MediaRecorder.isTypeSupported('video/webm')) {
+              options = { mimeType: 'video/webm' };
+            }
+
+            headerMediaRecorder = new MediaRecorder(headerCaptureStream, options);
+
+            headerMediaRecorder.ondataavailable = (e) => {
+              if (e.data && e.data.size > 0) {
+                headerRecordedChunks.push(e.data);
+              }
+            };
+
+            headerMediaRecorder.onstop = exportAndDownloadSession;
+
+            // If stream tracks end (e.g. user stops sharing window), auto stop recording
+            headerCaptureStream.getVideoTracks().forEach(track => {
+              track.onended = () => {
+                if (headerMediaRecorder && headerMediaRecorder.state === 'recording') {
+                  stopHeaderRecording();
+                }
+              };
+            });
+
+            headerMediaRecorder.start(1000);
+
+            btnRec.classList.add('rec-active');
+            if (textEl) textEl.textContent = '⏹️ STOP & EXPORT';
+
+            headerRecTimerInterval = setInterval(() => {
+              headerRecSeconds++;
+              const hh = String(Math.floor(headerRecSeconds / 3600)).padStart(2, '0');
+              const mm = String(Math.floor((headerRecSeconds % 3600) / 60)).padStart(2, '0');
+              const ss = String(headerRecSeconds % 60).padStart(2, '0');
+              if (timerEl) timerEl.textContent = `${hh}:${mm}:${ss}`;
+            }, 1000);
+
+          } catch (err) {
+            console.warn('Live session display capture cancelled or not allowed:', err);
+          }
+        }
+
+        function stopHeaderRecording() {
+          if (headerRecTimerInterval) clearInterval(headerRecTimerInterval);
+          btnRec.classList.remove('rec-active');
+          if (textEl) textEl.textContent = '🔴 REC';
+
+          if (headerMediaRecorder && headerMediaRecorder.state === 'recording') {
+            headerMediaRecorder.stop();
+          }
+          if (headerCaptureStream) {
+            headerCaptureStream.getTracks().forEach(track => track.stop());
+          }
+        }
+
+        function exportAndDownloadSession() {
+          const selectedFormat = formatSelect ? formatSelect.value : 'video/mp4';
+          let ext = 'mp4';
+          if (selectedFormat.includes('mp3')) ext = 'mp3';
+          else if (selectedFormat.includes('webm')) ext = 'webm';
+
+          const blob = new Blob(headerRecordedChunks, { type: selectedFormat });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+
+          const now = new Date();
+          const dateStr = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+          a.download = `YouTube_DJ_Mix_${dateStr}.${ext}`;
+
+          document.body.appendChild(a);
+          a.click();
+
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 100);
+
+          if (timerEl) timerEl.textContent = '00:00:00';
+        }
+      }
+
+      initPioneerHeaderRecorder();
 
       requestAnimationFrame(animLoop);
     });
